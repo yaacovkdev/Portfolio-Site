@@ -1,4 +1,5 @@
-<script>
+
+<script lang="ts">
   import "../app.css";
   import "$lib/style/global.scss";
 </script>
