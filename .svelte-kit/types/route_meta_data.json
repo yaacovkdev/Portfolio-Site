@@ -1,7 +1,0 @@
-{
-	"/": [],
-	"/webgl": [],
-	"/webgl/[project]": [
-		"src/routes/webgl/[project]/+page.ts"
-	]
-}
