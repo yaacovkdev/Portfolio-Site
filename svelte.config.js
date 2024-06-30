@@ -26,8 +26,11 @@ const config = {
     // See https://kit.svelte.dev/docs/adapters for more information about adapters.
     adapter: adapter(),
     paths: {
-      base:
-        process.env.NODE_ENV === "production" ? "/yaacovkdev.github.io" : "",
+      base: "/Porfolio-Site",
+    },
+    prerender: {
+      // Specify entries to prerender
+      entries: ["/webgl" ,"/webgl/bouncy", "/webgl/foutier", "/webgl/spinning"],
     },
   },
 };

@@ -12,7 +12,6 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.0.0",
-		"@sveltejs/adapter-static": "^3.0.2",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"gh-pages": "^6.1.1",
@@ -24,6 +23,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sveltejs/adapter-static": "^3.0.2",
 		"sass": "^1.77.6",
 		"svelte-preprocess": "^6.0.1"
 	}
