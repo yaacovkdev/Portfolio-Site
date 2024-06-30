@@ -27,7 +27,7 @@ const config = {
     adapter: adapter(),
     paths: {
       base:
-        process.env.NODE_ENV === "production" ? "/Porfolio-Site" : "",
+        process.env.NODE_ENV === "production" ? "/yaacovkdev.github.io" : "",
     },
   },
 };
