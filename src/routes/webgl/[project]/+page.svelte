@@ -43,8 +43,8 @@
       background-color: black;
       iframe {
         margin: auto;
-        min-width: 800px;
-        min-height: 800px;
+        min-width: 700px;
+        min-height: 700px;
         width: 1300px;
         height: 1100px;
       }
@@ -52,8 +52,8 @@
 
     &--fourier {
       iframe {
-        min-width: 800px;
-        min-height: 800px;
+        min-width: 950px;
+        min-height: 950px;
         width: 100%;
         height: fit-content;
 

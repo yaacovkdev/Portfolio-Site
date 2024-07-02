@@ -19,7 +19,7 @@
   <h3>
     Also Avalible on <a href="https://boolean.yaacov.site">boolean.yaacov.site</a>
   </h3>
-  <iframe src="https://boolean.yaacov.site" title="Boolean"></iframe>
+  <iframe src="https://boolean.yaacov.site" title="Boolean Calculator"></iframe>
 </div>
 
 <style lang="scss">

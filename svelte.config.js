@@ -16,7 +16,8 @@ const config = {
   preprocess: sveltePreprocess({
     scss: {
       prependData: `@import '${sassPath}_variables.scss';
-        @import '${sassPath}_mixins.scss';`,
+        @import '${sassPath}_mixins.scss';
+        @import '${sassPath}_breakpoints.scss';`,
     },
   }),
 

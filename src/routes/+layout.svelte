@@ -28,12 +28,16 @@
       a {
         display: inline-block;
         position: relative;
-        font-size: 1.5rem;
+
         color: $white;
         line-height: 2rem;
         text-decoration: none;
         padding: 1rem;
         margin: 0 1rem;
+
+        @include desktop {
+          font-size: 1.5em;
+        }
 
         &::after {
           content: "";
@@ -50,19 +54,19 @@
 
         
 
-        @keyframes d {
+        @keyframes zoom {
           from {
             transform: scale(1);
           }
 
           to {
-            transform: scale(1.2);
+            transform: scale(1.5);
           }
         }
 
         &:hover {
           text-decoration: underline;
-          animation: d 1s forwards;
+          animation: zoom 1s forwards ease;
         }
       }
     }
