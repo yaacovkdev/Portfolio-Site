@@ -84,4 +84,11 @@
 body {
   margin: 0;
   text-align: center;
+  font-size: 2em;
+}
+
+@media screen and (min-width: 1280px) {
+  body {
+    font-size: 1em;
+  }
 }

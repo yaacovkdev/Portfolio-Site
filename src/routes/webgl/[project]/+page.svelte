@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { onDestroy, onMount } from "svelte";
+  import { onMount } from "svelte";
 
   export let data: {
-    url_name: string,
-    name: string
+    url_name: string;
+    name: string;
   };
 
   onMount(() => {
@@ -22,7 +22,8 @@
 
 <div class={`project project--${data["url_name"]}`}>
   <h1>{data["name"]}</h1>
-  <iframe src={`/p5/${data["url_name"]}/index.html`} title={data["name"]}></iframe>
+  <iframe src={`/p5/${data["url_name"]}/index.html`} title={data["name"]}
+  ></iframe>
 </div>
 
 <style lang="scss">
@@ -40,17 +41,19 @@
 
     &--spinning {
       background-color: black;
-
       iframe {
+        margin: auto;
+        min-width: 700px;
+        min-height: 700px;
         width: 1300px;
-        height: 1000px;
+        height: 1100px;
       }
     }
 
     &--fourier {
       iframe {
-        min-width: 1100px;
-        min-height: 1100px;
+        min-width: 950px;
+        min-height: 950px;
         width: 100%;
         height: fit-content;
 
