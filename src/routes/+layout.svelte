@@ -7,7 +7,7 @@
   <nav>
     <a href="/">Home</a>
     <a href="/webgl">Graphics</a>
-    <a href="/fullstack">Full Stack</a>
+    <a href="/fullstack">Boolean Calculator</a>
   </nav>
 </header>
 
