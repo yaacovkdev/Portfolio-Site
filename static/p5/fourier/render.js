@@ -52,7 +52,7 @@ function setSpeed(s) {
   drawspeed = s;
 }
 
-function resetvalues() {
+function resetValues() {
   x1 = STARTING_X;
   (y1 = STARTING_Y), (x2 = STARTING_X), (y2 = STARTING_Y), (angle = 0);
   nam = {
@@ -64,13 +64,22 @@ function resetvalues() {
   };
 
   drawspeed = 1;
-  eval(code_field);
 
   background(0);
 
   //HOLY MOLY RANDOM GUESS.
   inklayer.clear();
   linegraphics.clear();
+
+  try {
+    eval(code_field);
+    loop();
+    return false;
+  } catch (err) {
+    console.error(err);
+    noLoop();
+    return true;
+  }
 }
 
 function displayVectors(drawArm) {
@@ -129,11 +138,6 @@ function updateSequence(s) {
 function draw() {
   background(0);
 
-  if (reset_canvas) {
-    resetvalues();
-    background(0);
-    reset_canvas = false;
-  }
   if (mainArm == null) return;
 
   updateSequence(drawspeed);

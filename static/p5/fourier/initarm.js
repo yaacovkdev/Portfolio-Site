@@ -1,5 +1,4 @@
 let code_field = "";
-let reset_canvas = false;
 let mainArm;
 
 let initial_code = `/*In this field you can program in javascript anything you like and set mainArm\n vectors with any type of algorithms*/\n
@@ -13,8 +12,8 @@ code_field = document.getElementById("codefield").value;
 eval(code_field);
 
 document.getElementById("buttonfield").onclick = function () {
-  reset_canvas = true;
   code_field = document.getElementById("codefield").value;
+  resetValues();
 };
 
 document.getElementById("buttonsave").onclick = function () {

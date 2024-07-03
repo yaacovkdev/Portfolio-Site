@@ -1,5 +1,9 @@
+
+
 <script lang="ts">
+
   import { onMount } from "svelte";
+  import "$lib/projects/projects";
 
   export let data: {
     url_name: string;

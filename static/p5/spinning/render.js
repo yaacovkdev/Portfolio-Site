@@ -10,7 +10,7 @@ function setup(){
     Player.move.x = CANVSIZEX/2;
     Player.move.y = CANVSIZEY/2;
     C.parent("canvasdiv");
-    C.style("display:block; border-style: solid; border-width: 5px; border-color: darkblue;");
+    C.style("display:block; margin-left: auto; margin-right:auto; margin-top: 100px; border-style: solid; border-width: 5px; border-color: darkblue;");
     
     //defaults
     fill(colors[Player.specs.color]);
@@ -27,7 +27,6 @@ function draw(){
     background(bcolor[0], bcolor[1], bcolor[2]);
     keyboard();
     border();
-    console.log(Player.move.x);
     renderPlayer();
     renderRays();
     renderEnemies();
@@ -36,13 +35,6 @@ function draw(){
     updateMovements();
     checkOver();
 }
-
-
-/*//changes canvas on window resize
-function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
-}*/
-
 
 function renderPlayer(){
     

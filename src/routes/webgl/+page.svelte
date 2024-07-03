@@ -1,14 +1,25 @@
-
+<script lang="ts">
+  import ProjectCard from "$lib/components/ProjectCard.svelte";
+</script>
 
 <h1>Web Graphic Projects</h1>
 
-<a href="/webgl/bouncy"><p>Bouncy Ball</p></a>
-<a href="/webgl/spinning"><p>Spinning</p></a>
-<a href="/webgl/fourier"><p>Fourier Series</p></a>
+<div class="project-cards">
+  <a href="/webgl/bouncy"><ProjectCard name="bouncy"/></a>
+  <a href="/webgl/spinning"><ProjectCard name="spinning"/></a>
+  <a href="/webgl/fourier"><ProjectCard name="fourier"/></a>
+</div>
 
 <style lang="scss">
-
-  a {
-    color: $white;
+  .project-cards {
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    align-items: center;
+    a {
+      width: fit-content;
+      color: $white;
+      margin: 2rem 0;
+    }
   }
 </style>
