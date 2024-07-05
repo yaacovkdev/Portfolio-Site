@@ -24,8 +24,8 @@
   });
 </script>
 
-<div class={`project project--${data["url_name"]}`}>
-  <h1>{data["name"]}</h1>
+<div class={`project project--${data["url_name"]} flex flex-col justify-start items-center`}>
+  <h1 class='my-4'>{data["name"]}</h1>
   <iframe src={`/p5/${data["url_name"]}/index.html`} title={data["name"]}
   ></iframe>
 </div>
@@ -46,18 +46,16 @@
     &--spinning {
       background-color: black;
       iframe {
-        margin: auto;
         min-width: 700px;
-        min-height: 700px;
         width: 1300px;
-        height: 1100px;
+        height: 750px;
       }
     }
 
     &--fourier {
       iframe {
         min-width: 950px;
-        min-height: 950px;
+        min-height: 1050px;
         width: 100%;
         height: fit-content;
 

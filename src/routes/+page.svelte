@@ -1,3 +1,5 @@
-<h1>Under Development. Please Checkout Other Links!</h1>
+<script lang="ts">
+  import MainTitle from "$lib/components/MainTitle.svelte";
+</script>
 
-
+<MainTitle title="Development" />

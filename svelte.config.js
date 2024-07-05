@@ -1,4 +1,5 @@
 import adapter from "@sveltejs/adapter-auto";
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { sveltePreprocess } from "svelte-preprocess";
 import path, { dirname } from "path";
 

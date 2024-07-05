@@ -10,7 +10,7 @@ function setup(){
     Player.move.x = CANVSIZEX/2;
     Player.move.y = CANVSIZEY/2;
     C.parent("canvasdiv");
-    C.style("display:block; margin-left: auto; margin-right:auto; margin-top: 100px; border-style: solid; border-width: 5px; border-color: darkblue;");
+    C.style("display:block; margin: 0 auto; border-style: solid; border-width: 5px; border-color: darkblue;");
     
     //defaults
     fill(colors[Player.specs.color]);

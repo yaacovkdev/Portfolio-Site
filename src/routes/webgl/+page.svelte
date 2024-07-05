@@ -1,8 +1,9 @@
 <script lang="ts">
   import ProjectCard from "$lib/components/ProjectCard.svelte";
+  import MainTitle from "$lib/components/MainTitle.svelte";
 </script>
 
-<h1>Web Graphic Projects</h1>
+<MainTitle title="WebGL Projects" />
 
 <div class="project-cards">
   <a href="/webgl/bouncy"><ProjectCard name="bouncy"/></a>

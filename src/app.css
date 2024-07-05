@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
   font-family: 'Roboto';
   src: url('/src/lib/fonts/Roboto/Roboto-Thin.ttf') format('truetype');
@@ -75,7 +79,6 @@
   src: url('/src/lib/fonts/Roboto_Mono/RobotoMono-VariableFont_wght.ttf') format('truetype');
 }
 
-
 /* GLOBAL SETTINGS */
 * {
   font-family: "Roboto", sans-serif;
@@ -84,11 +87,4 @@
 body {
   margin: 0;
   text-align: center;
-  font-size: 2em;
-}
-
-@media screen and (min-width: 1280px) {
-  body {
-    font-size: 1em;
-  }
 }

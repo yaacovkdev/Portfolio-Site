@@ -12,7 +12,7 @@
 </header>
 
 <main>
-  <slot></slot>
+  <slot />
 </main>
 
 <footer>
@@ -34,10 +34,7 @@
         text-decoration: none;
         padding: 1rem;
         margin: 0 1rem;
-
-        @include desktop {
-          font-size: 1.5em;
-        }
+        font-size: 2rem;
 
         &::after {
           content: "";
