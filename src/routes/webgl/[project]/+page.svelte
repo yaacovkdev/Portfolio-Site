@@ -1,7 +1,4 @@
-
-
 <script lang="ts">
-
   import { onMount } from "svelte";
   import "$lib/projects/projects";
 
@@ -24,8 +21,10 @@
   });
 </script>
 
-<div class={`project project--${data["url_name"]} flex flex-col justify-start items-center`}>
-  <h1 class='my-4'>{data["name"]}</h1>
+<div
+  class={`project project--${data["url_name"]} flex flex-col justify-start items-center`}
+>
+  <h1 class="my-4">{data["name"]}</h1>
   <iframe src={`/p5/${data["url_name"]}/index.html`} title={data["name"]}
   ></iframe>
 </div>

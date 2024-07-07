@@ -2,4 +2,4 @@
   export let title: string;
 </script>
 
-<h1 class="text-2xl">{title}</h1>
+<h1 class="text-8xl">{title}</h1>
