@@ -1,8 +1,4 @@
-const Names: { [key: string]: string } = {
-  bouncy: "BouncyJS",
-  spinning: "SpinningJS",
-  fourier: "Fourier Series Transformation API",
-};
+import { ProjectsInfo } from "$lib/projects/projects";
 
 interface LoadParams {
   params: {
@@ -13,11 +9,13 @@ interface LoadParams {
 interface LoadResult {
   url_name: string;
   name: string;
+  description: string;
 }
 
 export const load = ({ params }: LoadParams): LoadResult => {
   return {
     url_name: params.project,
-    name: Names[params.project],
+    name: ProjectsInfo[params.project].name,
+    description: ProjectsInfo[params.project].desc,
   };
 };
