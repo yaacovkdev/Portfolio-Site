@@ -24,14 +24,21 @@
 <div
   class={`project project--${data["url_name"]} flex flex-col justify-start items-center`}
 >
-  <h1 class="my-4">{data["name"]}</h1>
-  <iframe src={`/p5/${data["url_name"]}/index.html`} title={data["name"]}
-  ></iframe>
+  <h1 class="my-4 text-2xl">{data["name"]}</h1>
+  <div class="project-iframe">
+    <iframe src={`/p5/${data["url_name"]}/index.html`} title={data["name"]}
+    ></iframe>
+  </div>
 </div>
 
 <style lang="scss">
   .project {
     flex: 1;
+    // display: flexbox;
+
+    // iframe {
+    //   position: absolute;
+    // }
 
     &--bouncy {
       background-color: pink;
@@ -52,14 +59,26 @@
     }
 
     &--fourier {
-      iframe {
-        min-width: 950px;
-        min-height: 1050px;
-        width: 100%;
-        height: fit-content;
+      width: 100vw;
 
-        @media screen and (max-width: 1700px) {
+      .project-iframe {
+        --scale: 0.4;
+        width: 100%;
+        margin: auto;
+        iframe {
+          width: 250%;
           height: 2050px;
+          transform-origin: 0 0;
+          transform: scale(var(--scale));
+          margin-bottom: calc((var(--scale) - 1) * 2050px);
+        }
+      }
+
+      @include tablet {
+        .project-iframe iframe {
+          width: 100%;
+          transform: scale(1);
+          margin-bottom: 0;
         }
       }
     }
