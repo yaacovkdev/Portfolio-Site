@@ -1,15 +1,17 @@
 <script lang="ts">
   export let name: string;
+
   import { ProjectsInfo } from "$lib/projects/projects";
   import icon_desktop from "$lib/images/icons/icon-desktop.svg";
 
   const full_name: string = ProjectsInfo[name].name;
   const description: string = ProjectsInfo[name].desc;
+  const main_image: any = ProjectsInfo[name].image;
 </script>
 
 <div class="project-card">
   <div class="project-card__picture">
-    <img src={`src/lib/images/preview/preview_${name}.jpg`} alt="img" />
+    <img src={main_image} alt="img" />
   </div>
   <div class="project-card__info flex justify-between">
     <h3 class="font-mono text-2xl">{full_name}</h3>
