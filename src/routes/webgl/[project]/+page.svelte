@@ -19,6 +19,8 @@
       main?.classList.remove("iframe-default");
     };
   });
+
+
 </script>
 
 <div
@@ -32,13 +34,20 @@
 </div>
 
 <style lang="scss">
+
   .project {
     flex: 1;
-    // display: flexbox;
+    width: 100vw;
 
-    // iframe {
-    //   position: absolute;
-    // }
+    .project-iframe {
+      width: 100%;
+
+      margin: 0 auto;
+
+      iframe {
+        margin: 0 auto;
+      }
+    }
 
     &--bouncy {
       background-color: pink;
@@ -59,12 +68,8 @@
     }
 
     &--fourier {
-      width: 100vw;
-
       .project-iframe {
         --scale: 0.4;
-        width: 100%;
-        margin: auto;
         iframe {
           width: 250%;
           height: 2050px;
@@ -74,11 +79,40 @@
         }
       }
 
-      @include tablet {
+      @media (min-width: 1060px) {
         .project-iframe iframe {
           width: 100%;
           transform: scale(1);
           margin-bottom: 0;
+          height: 2050px;
+        }
+      }
+
+      @media (min-width: 1750px) {
+        .project-iframe iframe {
+          height: 1050px;
+        }
+      }
+    }
+
+    &--pool {
+      .project-iframe {
+        --scale: 0.26;
+        
+        iframe {
+          width: 1210px;
+          height: 900px;
+          transform-origin: 0 0;
+          transform: scale(var(--scale));
+          margin-bottom: calc((var(--scale) - 1) * 2050px);
+        }
+
+        @include tablet {
+          --scale: 0.63;
+        }
+
+        @include desktop {
+          --scale: 1;
         }
       }
     }
