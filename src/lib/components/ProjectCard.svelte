@@ -14,7 +14,7 @@
     <img src={main_image} alt="img" />
   </div>
   <div class="project-card__info flex justify-between">
-    <h3 class="font-mono text-2xl">{full_name}</h3>
+    <h3 class="font-mono text-1xl">{full_name}</h3>
 
     <div class="project-card__platform">
       <img src={icon_desktop} alt="desktop" />
@@ -24,16 +24,16 @@
 
 <style lang="scss">
   .project-card {
-    width: 30rem;
-    height: 30rem;
+    width: 20rem;
+    height: 20rem;
     background-color: $purple;
 
     &__picture {
       img {
         margin: auto;
         padding: 1rem;
-        border-radius: 2rem;
-        width: 80%;
+        border-radius: 1.5rem;
+        width: 85%;
         height: auto;
       }
     }
@@ -53,7 +53,7 @@
     }
 
     &__info {
-      width: 80%;
+      width: 85%;
       margin: auto;
       padding: 0 1rem;
       h3 {

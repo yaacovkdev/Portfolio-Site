@@ -30,11 +30,16 @@
         position: relative;
 
         color: $white;
-        line-height: 2rem;
+        line-height: 1rem;
         text-decoration: none;
-        padding: 1rem;
+        padding: 0rem;
         margin: 0 1rem;
-        font-size: 2rem;
+        font-size: 1rem;
+
+        @include tablet {
+          font-size: 2rem;
+          line-height: 2rem;
+        }
 
         &::after {
           content: "";

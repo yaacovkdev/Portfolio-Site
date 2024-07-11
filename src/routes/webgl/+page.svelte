@@ -3,12 +3,13 @@
   import MainTitle from "$lib/components/MainTitle.svelte";
 </script>
 
-<MainTitle title="WebGL Projects" />
+<MainTitle title="p5.js Projects" />
 
 <div class="project-cards">
   <a href="/webgl/bouncy"><ProjectCard name="bouncy"/></a>
   <a href="/webgl/spinning"><ProjectCard name="spinning"/></a>
   <a href="/webgl/fourier"><ProjectCard name="fourier"/></a>
+  <a href="/webgl/pool"><ProjectCard name="pool"/></a>
 </div>
 
 <style lang="scss">
