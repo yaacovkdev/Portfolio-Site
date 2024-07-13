@@ -2,15 +2,11 @@
   import ProjectCard from "$lib/components/ProjectCard.svelte";
   import MainTitle from "$lib/components/MainTitle.svelte";
   import { onMount } from "svelte";
+  import setGold from "$lib/scripts/setGold";
+  import { backgroundPurple } from "$lib/scripts/setBackground";
 
-  onMount(() => {
-    const main = document.querySelector("main");
-    main.classList.add("background-purple");
-
-    return () => {
-      main.classList.remove("background-purple");
-    };
-  });
+  setGold(2);
+  backgroundPurple();
 </script>
 
 <MainTitle title="p5.js Projects" />

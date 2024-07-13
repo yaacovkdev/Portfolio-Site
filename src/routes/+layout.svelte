@@ -6,9 +6,9 @@
 
 <header>
   <nav>
-    <a href="/home">Home</a>
-    <a href="/graphics">Graphics</a>
-    <a href="/fullstack">Boolean Calculator</a>
+    <a id="nav-1" href="/home">Home</a>
+    <a id="nav-2" href="/graphics">Graphics</a>
+    <a id="nav-3" href="/fullstack">Boolean Calculator</a>
   </nav>
 </header>
 
@@ -30,12 +30,10 @@
     justify-content: center;
 
     nav {
-      //padding: 1rem;
       a {
         display: inline-block;
         position: relative;
 
-        color: $white;
         line-height: 1rem;
         text-decoration: none;
         padding: 0 1rem;

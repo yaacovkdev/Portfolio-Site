@@ -1,26 +1,27 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import "$lib/projects/projects";
+  import setGold from "$lib/scripts/setGold";
+  import { backgroundPurple } from "$lib/scripts/setBackground";
 
   export let data: {
     url_name: string;
     name: string;
   };
 
+  setGold(2);
+  backgroundPurple();
+
   onMount(() => {
     // Select the element with id 'my-element' and add a class 'new-class' to it
     const main = document.querySelector("main");
 
     main.classList.add("iframe-default");
-    main.classList.add("background-purple");
 
     return () => {
       main.classList.remove("iframe-default");
-      main.classList.remove("background-purple");
     };
   });
-
-
 </script>
 
 <div
@@ -34,7 +35,6 @@
 </div>
 
 <style lang="scss">
-
   .project {
     flex: 1;
     width: 100vw;
@@ -98,7 +98,7 @@
     &--pool {
       .project-iframe {
         --scale: 0.26;
-        
+
         iframe {
           width: 1210px;
           height: 900px;

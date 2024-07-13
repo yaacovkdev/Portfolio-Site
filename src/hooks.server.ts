@@ -4,7 +4,7 @@ import { redirect } from '@sveltejs/kit';
 
 export async function handle({ event, resolve }) {
   if(event.url.pathname.startsWith('/home')) {
-    redirect(302, "/");
+    throw redirect(302, "/");
   }
   
   const response = await resolve(event);
