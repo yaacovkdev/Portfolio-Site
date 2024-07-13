@@ -5,29 +5,33 @@
 </script>
 
 <header>
-  <nav>
-    <a id="nav-1" href="/home">Home</a>
-    <a id="nav-2" href="/graphics">Graphics</a>
-    <a id="nav-3" href="/fullstack">Boolean Calculator</a>
-  </nav>
+  <div class="content-width">
+    <nav>
+      <a id="nav-1" href="/home">Home</a>
+      <a id="nav-2" href="/graphics">Graphics</a>
+      <a id="nav-3" href="/fullstack">Boolean Calculator</a>
+    </nav>
+  </div>
 </header>
 
 <main>
-  <slot />
+  <div id="contentWidthMain" class="content-width">
+    <slot />
+  </div>
 </main>
 
 <footer>
-  <p class="text-base">By Jacob Kochatkov with power of SvelteKit</p>
-  <span class="footer-dot">·</span>
-  <img src={sveltekit_icon} alt="svelte_icon" />
+  <div class="content-width">
+    <p class="text-base">By Jacob Kochatkov with power of SvelteKit</p>
+    <span class="footer-dot">·</span>
+    <img src={sveltekit_icon} alt="svelte_icon" />
+  </div>
 </footer>
 
 <style lang="scss">
 
   header {
     background-color: $purple;
-    display: flex;
-    justify-content: center;
 
     nav {
       a {
@@ -66,12 +70,16 @@
     bottom: 0;
     background-color: $white;
     font-size: 1rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
 
-    p, .footer-dot {
+    .content-width {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+
+    p,
+    .footer-dot {
       color: gray;
     }
 

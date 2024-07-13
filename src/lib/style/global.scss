@@ -12,19 +12,25 @@ nav a {
   color: $white;
 }
 
+main, header, footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 header,
 main,
 {
   padding: $global-padding;
 }
 
+header {
+  border-bottom: 2px $gold solid;
+}
+
 main {
   color: $white;
   flex: 1;
-
-  display: flex;
-  flex-direction: column;
-  border-top: 2px $gold solid;
   z-index: 1;
 }
 
@@ -43,6 +49,10 @@ body {
   * {
     color: $white;
   }
+}
+
+.content-width {
+  max-width: $sitewidth;
 }
 
 .gold {

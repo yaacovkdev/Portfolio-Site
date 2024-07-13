@@ -1,12 +1,12 @@
 <script lang="ts">
   import ProjectCard from "$lib/components/ProjectCard.svelte";
   import MainTitle from "$lib/components/MainTitle.svelte";
-  import { onMount } from "svelte";
-  import setGold from "$lib/scripts/setGold";
-  import { backgroundPurple } from "$lib/scripts/setBackground";
+  import selectedNav from "$lib/scripts/selectedNav";
+  import { backgroundPurple, iframeDefault } from "$lib/scripts/tweaks";
 
-  setGold(2);
+  selectedNav(2);
   backgroundPurple();
+  iframeDefault();
 </script>
 
 <MainTitle title="p5.js Projects" />

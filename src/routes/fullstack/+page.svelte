@@ -1,23 +1,15 @@
 <script lang="ts">
-  import setGold from "$lib/scripts/setGold";
-  import { onMount } from "svelte";
+  import selectedNav from "$lib/scripts/selectedNav";
+  import { iframeDefault, disableContentWidthMain} from "$lib/scripts/tweaks";
 
-  setGold(3);
-
-  onMount(() => {
-    // Select the element with id 'my-element' and add a class 'new-class' to it
-    const main = document.querySelector("main");
-
-    main.classList.add("iframe-default");
-
-    return () => {
-      main.classList.remove("iframe-default");
-    };
-  });
+  selectedNav(3);
+  disableContentWidthMain();
+  iframeDefault();
+  
 </script>
 
 <div class="project">
-  <h3>
+  <h3 class="text-lg">
     Also Avalible on <a href="https://boolean.yaacov.site"
       >boolean.yaacov.site</a
     >
@@ -31,13 +23,13 @@
   }
 
   .project {
-    background-color: $white;
+    background-color: $background;
   }
 
   iframe {
     border: none;
-    background-color: $white;
-    width: 90%;
-    height: 90vh;
+    background-color: $background;
+    width: 100vw;
+    height: 100vh;
   }
 </style>

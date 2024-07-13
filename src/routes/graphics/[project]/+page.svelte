@@ -1,27 +1,17 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import "$lib/projects/projects";
-  import setGold from "$lib/scripts/setGold";
-  import { backgroundPurple } from "$lib/scripts/setBackground";
+  import selectedNav from "$lib/scripts/selectedNav";
+  import { backgroundPurple, disableContentWidthMain, iframeDefault } from "$lib/scripts/tweaks";
 
   export let data: {
     url_name: string;
     name: string;
   };
 
-  setGold(2);
+  selectedNav(2);
   backgroundPurple();
-
-  onMount(() => {
-    // Select the element with id 'my-element' and add a class 'new-class' to it
-    const main = document.querySelector("main");
-
-    main.classList.add("iframe-default");
-
-    return () => {
-      main.classList.remove("iframe-default");
-    };
-  });
+  disableContentWidthMain();
+  iframeDefault();
 </script>
 
 <div
@@ -38,6 +28,7 @@
   .project {
     flex: 1;
     width: 100vw;
+    min-height: 100vh;
 
     .project-iframe {
       width: 100%;

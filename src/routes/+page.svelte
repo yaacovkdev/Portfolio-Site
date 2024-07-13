@@ -1,8 +1,8 @@
 <script lang="ts">
   import WelcomeTitle from "$lib/components/WelcomeTitle.svelte";
-  import setGold from "$lib/scripts/setGold";
+  import selectedNav from "$lib/scripts/selectedNav";
 
-  setGold(1);
+  selectedNav(1);
 </script>
 
 <WelcomeTitle />
