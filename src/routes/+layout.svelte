@@ -1,6 +1,7 @@
 <script lang="ts">
   import "../app.css";
   import "$lib/style/global.scss";
+  import sveltekit_icon from "$lib/images/icons/favicon.png";
 </script>
 
 <header>
@@ -16,15 +17,20 @@
 </main>
 
 <footer>
-  <p>By Jacob Kochatkov</p>
+  <p class="text-base">By Jacob Kochatkov with power of SvelteKit</p>
+  <span class="footer-dot">·</span>
+  <img src={sveltekit_icon} alt="svelte_icon" />
 </footer>
 
 <style lang="scss">
+
   header {
+    background-color: $purple;
     display: flex;
     justify-content: center;
 
     nav {
+      //padding: 1rem;
       a {
         display: inline-block;
         position: relative;
@@ -32,8 +38,8 @@
         color: $white;
         line-height: 1rem;
         text-decoration: none;
-        padding: 0rem;
-        margin: 0 1rem;
+        padding: 0 1rem;
+        margin: 0;
         font-size: 1rem;
 
         @include tablet {
@@ -41,41 +47,45 @@
           line-height: 2rem;
         }
 
-        &::after {
-          content: "";
-          position: absolute;
-          width: 10px;
-          transform: scaleX(0);
-          height: 2px;
-          bottom: 0;
-          left: 0;
-          background-color: $white;
-          transform-origin: bottom right;
-          transition: transform 0.25s ease-out;
-        }
-
-        
-
-        @keyframes zoom {
+        @keyframes shine {
           from {
-            transform: scale(1);
+            color: $white;
           }
 
           to {
-            transform: scale(1.5);
+            color: $gold;
           }
         }
 
-        &:hover {
-          text-decoration: underline;
-          animation: zoom 1s forwards ease;
+        &:active {
+          animation: shine 0.5s ease forwards;
         }
       }
     }
   }
 
-  main {
-    border-top: 2px $gold solid;
-    z-index: 1;
+  footer {
+    bottom: 0;
+    background-color: $white;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    p, .footer-dot {
+      color: gray;
+    }
+
+    img {
+      width: 1.25rem;
+      position: relative;
+    }
+
+    .footer-dot {
+      font-size: 2em;
+      line-height: 1em;
+      padding: 0.25rem;
+    }
   }
 </style>
