@@ -4,6 +4,10 @@
 
 $global-padding: 1rem;
 
+* {
+  color: $black;
+}
+
 header,
 main,
 {
@@ -11,7 +15,6 @@ main,
 }
 
 main {
-  background-color: $background;
   color: $white;
   flex: 1;
 
@@ -31,6 +34,9 @@ body {
   padding: 0 !important;
 }
 
-.home-main {
-  background-color: white;
+.background-purple {
+  background-color: $darkpurple;
+  * {
+    color: $white;
+  }
 }

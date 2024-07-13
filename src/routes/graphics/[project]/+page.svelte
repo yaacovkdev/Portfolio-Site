@@ -11,12 +11,12 @@
     // Select the element with id 'my-element' and add a class 'new-class' to it
     const main = document.querySelector("main");
 
-    if (main) {
-      main.classList.add("iframe-default");
-    }
+    main.classList.add("iframe-default");
+    main.classList.add("background-purple");
 
     return () => {
-      main?.classList.remove("iframe-default");
+      main.classList.remove("iframe-default");
+      main.classList.remove("background-purple");
     };
   });
 
