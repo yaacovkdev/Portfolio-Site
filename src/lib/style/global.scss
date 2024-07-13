@@ -10,10 +10,6 @@ main,
   padding: $global-padding;
 }
 
-header {
-  background-color: $purple;
-}
-
 main {
   background-color: $background;
   color: $white;
@@ -21,18 +17,8 @@ main {
 
   display: flex;
   flex-direction: column;
-}
-
-footer {
-  //position: relative;
-  bottom: 0;
-  background-color: white;
-  font-size: 1rem;
-
-  p{
-    margin: 0.5rem;
-    color: gray;
-  }
+  border-top: 2px $gold solid;
+  z-index: 1;
 }
 
 body {
@@ -43,5 +29,8 @@ body {
 
 .iframe-default {
   padding: 0 !important;
-  
+}
+
+.home-main {
+  background-color: white;
 }
