@@ -17,37 +17,39 @@
   const updateMessage = () => {
     title.classList.remove("fade-in");
     title.classList.add("fade-out");
+    console.log("come on fade out already!");
 
     setTimeout(() => {
       message = setRandomMessage(messages);
+      console.log("switch");
       title.classList.remove("fade-out");
       title.classList.add("fade-in");
-    }, 500); // Duration of the fade-out animation
+    }, 1000); // Duration of the fade-out animation
   };
 
   onMount(() => {
     title = document.querySelector("#title");
 
-    setInterval(updateMessage, 4500);
+    setInterval(updateMessage, 6000);
   });
 </script>
 
-<h1 id="title" class="text-4xl text-amber-500 fade-in">{message}</h1>
+<h1 id="title" class="text-5xl text-amber-500 fade-in fade-out">{message}</h1>
 
 <style lang="scss">
   .fade-out {
-    animation: fadeOut 0.5s forwards;
+    animation: fadeOut 1s forwards ease-out;
   }
 
   .fade-in {
-    animation: fadeIn 0.5s forwards;
+    animation: fadeIn 2s forwards;
   }
 
   @keyframes fadeOut {
-    from {
+    0% {
       opacity: 1;
     }
-    to {
+    100% {
       opacity: 0;
     }
   }
