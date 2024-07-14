@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { messages } from "./messages.json";
-  let title: HTMLElement;
+  let homeTitle: HTMLElement;
 
   const setRandomMessage = (messages: Object): string => {
     const language =
@@ -15,26 +15,35 @@
   let message = setRandomMessage(messages);
 
   const updateMessage = () => {
-    title.classList.remove("fade-in");
-    title.classList.add("fade-out");
+    homeTitle.classList.remove("fade-in");
+    homeTitle.classList.add("fade-out");
 
     setTimeout(() => {
       message = setRandomMessage(messages);
-      title.classList.remove("fade-out");
-      title.classList.add("fade-in");
+      homeTitle.classList.remove("fade-out");
+      homeTitle.classList.add("fade-in");
     }, 500); // Duration of the fade-out animation
   };
 
   onMount(() => {
-    title = document.querySelector("#title");
+    homeTitle = document.querySelector("#homeTitle");
 
     setInterval(updateMessage, 4500);
   });
 </script>
 
-<h1 id="title" class="text-4xl text-amber-500 fade-in">{message}</h1>
+<div class="welcome-title">
+  <h1 id="homeTitle" class="text-amber-500 fade-in">{message}</h1>
+</div>
 
 <style lang="scss">
+  .welcome-title {
+    //height: 5rem;
+    #homeTitle {
+      @include scale-fonts-title;
+    }
+  }
+
   .fade-out {
     animation: fadeOut 0.5s forwards;
   }
@@ -61,7 +70,7 @@
     }
   }
 
-  #title {
+  #homeTitle {
     @include title-margin;
   }
 </style>

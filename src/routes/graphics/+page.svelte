@@ -2,11 +2,10 @@
   import ProjectCard from "$lib/components/ProjectCard.svelte";
   import MainTitle from "$lib/components/MainTitle.svelte";
   import selectedNav from "$lib/scripts/selectedNav";
-  import { backgroundPurple, iframeDefault } from "$lib/scripts/tweaks";
+  import { backgroundPurple} from "$lib/scripts/tweaks";
 
   selectedNav(2);
   backgroundPurple();
-  iframeDefault();
 </script>
 
 <MainTitle title="p5.js Projects" />
@@ -28,6 +27,10 @@
       width: fit-content;
       color: $white;
       margin: 2rem 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
     }
   }
 </style>

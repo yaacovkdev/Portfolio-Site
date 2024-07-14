@@ -2,4 +2,12 @@
   export let title: string;
 </script>
 
-<h1 class="my-6 text-4xl">{title}</h1>
+<h1 id="mainTitle">{title}</h1>
+
+<style lang="scss">
+  #mainTitle {
+    @include title-margin;
+    @include scale-fonts-title;
+  }
+</style>
+

@@ -1,7 +1,7 @@
 <script lang="ts">
   import "../app.css";
   import "$lib/style/global.scss";
-  import sveltekit_icon from "$lib/images/icons/favicon.png";
+  import sveltekit_icon from "$lib/images/icons/sveltelogo.png";
 </script>
 
 <header>
@@ -22,7 +22,7 @@
 
 <footer>
   <div class="content-width">
-    <p class="text-base">By Jacob Kochatkov with power of SvelteKit</p>
+    <p class="text-sm">By Jacob Kochatkov with power of SvelteKit</p>
     <span class="footer-dot">·</span>
     <img src={sveltekit_icon} alt="svelte_icon" />
   </div>
@@ -35,6 +35,7 @@
 
     nav {
       a {
+        @include scale-fonts-header;
         display: inline-block;
         position: relative;
 
@@ -42,12 +43,8 @@
         text-decoration: none;
         padding: 0 1rem;
         margin: 0;
-        font-size: 1rem;
 
-        @include tablet {
-          font-size: 2rem;
-          line-height: 2rem;
-        }
+
 
         @keyframes shine {
           from {
@@ -63,6 +60,12 @@
           animation: shine 0.5s ease forwards;
         }
       }
+    }
+  }
+
+  main {
+    .content-width {
+      width: 100%;
     }
   }
 
@@ -84,7 +87,7 @@
     }
 
     img {
-      width: 1.25rem;
+      width: 1rem;
       position: relative;
     }
 

@@ -14,6 +14,7 @@ const config = {
   // Consult https://kit.svelte.dev/docs/integrations#preprocessors
   // for more information about preprocessors
   preprocess: sveltePreprocess({
+    postcss: true,
     scss: {
       prependData: `@import '${sassPath}_variables.scss';
         @import '${sassPath}_mixins.scss';

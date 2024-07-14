@@ -1,4 +1,51 @@
+@use "./breakpoints" as *;
+
 @mixin title-margin {
-  margin-top: 3rem;
-  margin-bottom: 3rem;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+@mixin scale-fonts-header {
+  @apply text-xl;
+
+  @include tablet {
+    @apply text-2xl;
+  }
+
+  @include desktop {
+    @apply text-4xl;
+  }
+}
+
+@mixin scale-fonts-title {
+  @apply text-xl;
+  @include tablet {
+    @apply text-2xl;
+  }
+
+  @include desktop {
+    @apply text-4xl;
+  }
+}
+
+@mixin scale-fonts-regular {
+  @apply text-base;
+  @include tablet {
+    @apply text-lg;
+  }
+
+  @include desktop {
+    @apply text-xl;
+  }
+}
+
+@mixin scale-fonts-small {
+  @apply text-xs;
+  @include tablet {
+    @apply text-sm;
+  }
+
+  @include desktop {
+    @apply text-base;
+  }
 }

@@ -2,8 +2,6 @@
 @use "./breakpoints" as *;
 @use "./mixins" as *;
 
-$global-padding: 1rem;
-
 * {
   color: $black;
 }
@@ -18,10 +16,20 @@ main, header, footer {
   align-items: center;
 }
 
-header,
-main,
+header
 {
-  padding: $global-padding;
+  padding: $mobile-padding;
+
+  @include tablet {
+    padding: $desktop-padding;
+  }
+}
+
+main{
+  @include tablet{
+    padding: $desktop-padding;
+    padding-top: 0;
+  }
 }
 
 header {
@@ -40,10 +48,6 @@ body {
   min-height: 100vh;
 }
 
-.iframe-default {
-  padding: 0 !important;
-}
-
 .background-purple {
   background-color: $darkpurple;
   * {
@@ -57,4 +61,8 @@ body {
 
 .gold {
   color: $gold;
+}
+
+.iframe-default {
+  padding:0;
 }

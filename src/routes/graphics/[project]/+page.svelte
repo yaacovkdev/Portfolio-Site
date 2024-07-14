@@ -1,7 +1,11 @@
 <script lang="ts">
   import "$lib/projects/projects";
   import selectedNav from "$lib/scripts/selectedNav";
-  import { backgroundPurple, disableContentWidthMain, iframeDefault } from "$lib/scripts/tweaks";
+  import {
+    backgroundPurple,
+    disableContentWidthMain,
+    iframeDefault,
+  } from "$lib/scripts/tweaks";
 
   export let data: {
     url_name: string;
@@ -29,6 +33,10 @@
     flex: 1;
     width: 100vw;
     min-height: 100vh;
+
+    @include tablet {
+      padding: $desktop-padding;
+    }
 
     .project-iframe {
       width: 100%;
