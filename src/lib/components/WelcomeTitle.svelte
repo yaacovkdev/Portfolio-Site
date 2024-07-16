@@ -20,43 +20,46 @@
 
     setTimeout(() => {
       message = setRandomMessage(messages);
+
       homeTitle.classList.remove("fade-out");
       homeTitle.classList.add("fade-in");
-    }, 500); // Duration of the fade-out animation
+    }, 750); // Duration of the fade-out animation
   };
 
   onMount(() => {
     homeTitle = document.querySelector("#homeTitle");
 
-    setInterval(updateMessage, 4500);
+    setInterval(updateMessage, 6000);
   });
 </script>
 
 <div class="welcome-title">
-  <h1 id="homeTitle" class="text-amber-500 fade-in">{message}</h1>
+  <h1 id="homeTitle" class="text-5xl text-amber-500 fade-in fade-out">
+    {message}
+  </h1>
 </div>
 
 <style lang="scss">
   .welcome-title {
-    //height: 5rem;
+    height: 5rem;
     #homeTitle {
       @include scale-fonts-title;
     }
   }
 
   .fade-out {
-    animation: fadeOut 0.5s forwards;
+    animation: fadeOut 0.75s forwards ease-out;
   }
 
   .fade-in {
-    animation: fadeIn 0.5s forwards;
+    animation: fadeIn 2s forwards;
   }
 
   @keyframes fadeOut {
-    from {
+    0% {
       opacity: 1;
     }
-    to {
+    100% {
       opacity: 0;
     }
   }
