@@ -1,26 +1,21 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import "$lib/projects/projects";
+  import selectedNav from "$lib/scripts/selectedNav";
+  import {
+    backgroundPurple,
+    disableContentWidthMain,
+    iframeDefault,
+  } from "$lib/scripts/tweaks";
 
   export let data: {
     url_name: string;
     name: string;
   };
 
-  onMount(() => {
-    // Select the element with id 'my-element' and add a class 'new-class' to it
-    const main = document.querySelector("main");
-
-    if (main) {
-      main.classList.add("iframe-default");
-    }
-
-    return () => {
-      main?.classList.remove("iframe-default");
-    };
-  });
-
-
+  selectedNav(2);
+  backgroundPurple();
+  disableContentWidthMain();
+  iframeDefault();
 </script>
 
 <div
@@ -34,10 +29,14 @@
 </div>
 
 <style lang="scss">
-
   .project {
     flex: 1;
     width: 100vw;
+    min-height: 100vh;
+
+    @include tablet {
+      padding: $desktop-padding;
+    }
 
     .project-iframe {
       width: 100%;
@@ -98,7 +97,7 @@
     &--pool {
       .project-iframe {
         --scale: 0.26;
-        
+
         iframe {
           width: 1210px;
           height: 900px;

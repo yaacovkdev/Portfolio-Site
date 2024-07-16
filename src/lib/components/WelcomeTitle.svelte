@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { messages } from "./messages.json";
-  let title: HTMLElement;
+  let homeTitle: HTMLElement;
 
   const setRandomMessage = (messages: Object): string => {
     const language =
@@ -15,30 +15,40 @@
   let message = setRandomMessage(messages);
 
   const updateMessage = () => {
-    title.classList.remove("fade-in");
-    title.classList.add("fade-out");
-    console.log("come on fade out already!");
+    homeTitle.classList.remove("fade-in");
+    homeTitle.classList.add("fade-out");
 
     setTimeout(() => {
       message = setRandomMessage(messages);
-      console.log("switch");
-      title.classList.remove("fade-out");
-      title.classList.add("fade-in");
-    }, 1000); // Duration of the fade-out animation
+
+      homeTitle.classList.remove("fade-out");
+      homeTitle.classList.add("fade-in");
+    }, 750); // Duration of the fade-out animation
   };
 
   onMount(() => {
-    title = document.querySelector("#title");
+    homeTitle = document.querySelector("#homeTitle");
 
     setInterval(updateMessage, 6000);
   });
 </script>
 
-<h1 id="title" class="text-5xl text-amber-500 fade-in fade-out">{message}</h1>
+<div class="welcome-title">
+  <h1 id="homeTitle" class="text-5xl text-amber-500 fade-in fade-out">
+    {message}
+  </h1>
+</div>
 
 <style lang="scss">
+  .welcome-title {
+    height: 5rem;
+    #homeTitle {
+      @include scale-fonts-title;
+    }
+  }
+
   .fade-out {
-    animation: fadeOut 1s forwards ease-out;
+    animation: fadeOut 0.75s forwards ease-out;
   }
 
   .fade-in {
@@ -63,7 +73,7 @@
     }
   }
 
-  #title {
+  #homeTitle {
     @include title-margin;
   }
 </style>

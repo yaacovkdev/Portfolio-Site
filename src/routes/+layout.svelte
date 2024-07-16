@@ -1,51 +1,50 @@
 <script lang="ts">
   import "../app.css";
   import "$lib/style/global.scss";
-  import sveltekit_icon from "$lib/images/icons/favicon.png";
+  import sveltekit_icon from "$lib/images/icons/sveltelogo.png";
 </script>
 
 <header>
-  <nav>
-    <a href="/">Home</a>
-    <a href="/webgl">Graphics</a>
-    <a href="/fullstack">Boolean Calculator</a>
-  </nav>
+  <div class="content-width">
+    <nav>
+      <a id="nav-1" href="/home">Home</a>
+      <a id="nav-2" href="/graphics">Graphics</a>
+      <a id="nav-3" href="/fullstack">Boolean Calculator</a>
+    </nav>
+  </div>
 </header>
 
 <main>
-  <slot />
+  <div id="contentWidthMain" class="content-width">
+    <slot />
+  </div>
 </main>
 
 <footer>
-  <p class="text-base">By Jacob Kochatkov with power of SvelteKit</p>
-  <span class="footer-dot">·</span>
-  <img src={sveltekit_icon} alt="svelte_icon" />
+  <div class="content-width">
+    <p class="text-sm">By Jacob Kochatkov with power of SvelteKit</p>
+    <span class="footer-dot">·</span>
+    <img src={sveltekit_icon} alt="svelte_icon" />
+  </div>
 </footer>
 
 <style lang="scss">
 
   header {
     background-color: $purple;
-    display: flex;
-    justify-content: center;
 
     nav {
-      //padding: 1rem;
       a {
+        @include scale-fonts-header;
         display: inline-block;
         position: relative;
 
-        color: $white;
         line-height: 1rem;
         text-decoration: none;
         padding: 0 1rem;
         margin: 0;
-        font-size: 1rem;
 
-        @include tablet {
-          font-size: 2rem;
-          line-height: 2rem;
-        }
+
 
         @keyframes shine {
           from {
@@ -64,21 +63,31 @@
     }
   }
 
+  main {
+    .content-width {
+      width: 100%;
+    }
+  }
+
   footer {
     bottom: 0;
     background-color: $white;
     font-size: 1rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
 
-    p, .footer-dot {
+    .content-width {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+
+    p,
+    .footer-dot {
       color: gray;
     }
 
     img {
-      width: 1.25rem;
+      width: 1rem;
       position: relative;
     }
 
