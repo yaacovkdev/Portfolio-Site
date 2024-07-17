@@ -1,18 +1,18 @@
 <script lang="ts">
   import MainTitle from "$lib/components/MainTitle.svelte";
-import selectedNav from "$lib/scripts/selectedNav";
+  import selectedNav from "$lib/scripts/selectedNav";
   import { disableContentWidthMain } from "$lib/scripts/tweaks";
+  import { blueLink } from "$lib/scripts/blueLink";
 
   selectedNav(3);
   disableContentWidthMain();
 </script>
 
 <div class="project">
-  <MainTitle title="Boolean Symbolic Calcuator"/>
+  <MainTitle title="Symbolic Boolean Calcuator" />
   <h3 class="text-lg">
-    Also Avalible on <a href="https://boolean.yaacov.site"
-      >boolean.yaacov.site</a
-    >
+    {@html `Also Avalible on 
+    ${blueLink("https://boolean.yaacov.site", "boolean.yaacov.site", true)}`}
   </h3>
   <iframe src="https://boolean.yaacov.site" title="Boolean Calculator"></iframe>
 </div>

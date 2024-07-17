@@ -22,7 +22,7 @@
   <img class="icon" src={icons[icon]} alt="icon" />
   <div class="subcard__content">
     <h3 class="text-lg font-semibold">{title}</h3>
-    <p class="text-base">{content}</p>
+    <p class="text-base">{@html content}</p>
   </div>
 </div>
 
