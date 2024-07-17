@@ -3,6 +3,7 @@
 
   import { ProjectsInfo } from "$lib/projects/projects";
   import icon_desktop from "$lib/images/icons/icon-desktop.svg";
+  import icon_mobile from "$lib/images/icons/icon-mobile.svg";
 
   const full_name: string = ProjectsInfo[name].name;
   const description: string = ProjectsInfo[name].desc;
@@ -17,7 +18,8 @@
     <h3 class="font-mono text-1xl">{full_name}</h3>
 
     <div class="project-card__platform">
-      <img src={icon_desktop} alt="desktop" />
+      {@html ProjectsInfo[name].mobileIcon ? `<img src=${icon_mobile} alt='mobile_icon' />` : ""}
+      <img src={icon_desktop} alt="desktop_icon" />
     </div>
   </div>
 </div>
