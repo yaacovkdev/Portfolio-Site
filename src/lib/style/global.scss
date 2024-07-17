@@ -55,9 +55,15 @@ body {
   }
 }
 
-.content-width {
+main .content-width {
   max-width: $sitewidth;
+  margin-bottom: 2rem;
   
+  > * {
+    @include margin-top;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .gold {
