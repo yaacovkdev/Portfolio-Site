@@ -3,6 +3,19 @@
 @mixin title-margin {
   margin-top: 1.5em;
   margin-bottom: 1.5em;
+
+  @include tablet {
+    margin-top: 2em;
+    margin-bottom: 2.5em;
+  }
+}
+
+@mixin margin-top {
+  margin-top: 1.5rem;
+
+  @include tablet {
+    margin-top: 2rem;
+  }
 }
 
 @mixin scale-fonts-header {
@@ -18,9 +31,9 @@
 }
 
 @mixin scale-fonts-title {
-  @apply text-xl;
+  @apply text-2xl;
   @include tablet {
-    @apply text-2xl;
+    @apply text-3xl;
   }
 
   @include desktop {
@@ -52,4 +65,37 @@
 
 @mixin box-shadow {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+@mixin interactive-radius {
+  border-radius: 0.25rem;
+}
+
+@mixin shine-effect{
+  @keyframes shine {
+    from {
+      color: $white;
+    }
+
+    to {
+      color: $gold;
+    }
+  }
+
+  &:active {
+    animation: shine 0.25s forwards;
+  }
+  @keyframes shine {
+    from {
+      color: $white;
+    }
+  
+    to {
+      color: $gold;
+    }
+  }
+  
+  &:active {
+    animation: shine 0.5s ease forwards;
+  }
 }

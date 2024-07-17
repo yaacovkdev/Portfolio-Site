@@ -24,6 +24,8 @@
 
 <style lang="scss">
   .project-card {
+    @include interactive-radius;
+    
     width: 20rem;
     height: 20rem;
     background-color: $purple;

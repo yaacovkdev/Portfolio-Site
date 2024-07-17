@@ -29,13 +29,13 @@
 </footer>
 
 <style lang="scss">
-
   header {
     background-color: $purple;
 
     nav {
       a {
         @include scale-fonts-header;
+        @include shine-effect;
         display: inline-block;
         position: relative;
 
@@ -43,22 +43,6 @@
         text-decoration: none;
         padding: 0 1rem;
         margin: 0;
-
-
-
-        @keyframes shine {
-          from {
-            color: $white;
-          }
-
-          to {
-            color: $gold;
-          }
-        }
-
-        &:active {
-          animation: shine 0.5s ease forwards;
-        }
       }
     }
   }
