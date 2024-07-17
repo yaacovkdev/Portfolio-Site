@@ -6,14 +6,15 @@
 
   selectedNav(1);
 
-  let playCard;
+  let dropCard;
+  let returnCard;
 </script>
 
 <WelcomeTitle />
-<ProfileCard bind:dropCard={playCard} />
+<ProfileCard bind:dropCard={dropCard} bind:returnCard={returnCard} />
 
 <ConnectButton
-  id="profileButton"
   text="Let's Stay in Touch!"
-  action={playCard}
+  action={dropCard}
+  revAction={returnCard}
 />
