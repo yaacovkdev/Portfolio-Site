@@ -40,6 +40,7 @@
           card.classList.remove("rotate-anim");
           card.style.top = "0";
           time = 0;
+          handleResize();
         }
       }, msInterval);
     };
@@ -48,8 +49,10 @@
       const card = document.querySelector(".card");
       card.style.display = "block";
       card.style.top = "0";
+      handleResize();
     };
 
+    //function to resize 
     const handleResize = () => {
       if (card.style.display !== "none")
         cardBack.style.height = `${card.getBoundingClientRect().height}px`;
@@ -57,12 +60,6 @@
     };
 
     handleResize();
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
   });
 </script>
 
@@ -148,7 +145,7 @@
 
       <ProfileInfoCard
         title="Skills"
-        content="NodeJS, Flutter, Python, AWS..."
+        content="NodeJS, Flutter, Python, Restful API, Pendo SDK, MySQL, Airtable"
         icon="skills"
       />
 
