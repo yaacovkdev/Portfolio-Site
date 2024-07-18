@@ -71,30 +71,20 @@
   border-radius: 0.25rem;
 }
 
-@mixin shine-effect{
-  @keyframes shine {
-    from {
-      color: $white;
-    }
-
-    to {
-      color: $gold;
-    }
-  }
-
+@mixin shine-effect {
   &:active {
     animation: shine 0.25s forwards;
   }
   @keyframes shine {
     from {
-      color: $white;
+      color: $purple;
     }
-  
+
     to {
       color: $gold;
     }
   }
-  
+
   &:active {
     animation: shine 0.5s ease forwards;
   }

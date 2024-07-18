@@ -26,6 +26,9 @@
     <iframe src={`/p5/${data["url_name"]}/index.html`} title={data["name"]}
     ></iframe>
   </div>
+  <div class="project-description">
+    
+  </div>
 </div>
 
 <style lang="scss">
