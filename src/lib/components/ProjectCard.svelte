@@ -4,22 +4,29 @@
   import { ProjectsInfo } from "$lib/projects/projects";
   import icon_desktop from "$lib/images/icons/icon-desktop.svg";
   import icon_mobile from "$lib/images/icons/icon-mobile.svg";
+  import { onMount } from "svelte";
 
   const full_name: string = ProjectsInfo[name].name;
   const description: string = ProjectsInfo[name].desc;
   const main_image: any = ProjectsInfo[name].image;
+
+  onMount(() => {
+    const mobileIcon = document.querySelector(`#${name} .img--mobile`);
+    if(ProjectsInfo[name].mobileIcon) mobileIcon.style.display = "block";
+
+  });
 </script>
 
-<div class="project-card">
+<div id={`${name}`} class="project-card">
   <div class="project-card__picture">
     <img src={main_image} alt="img" />
   </div>
   <div class="project-card__info flex justify-between">
-    <h3 class="font-mono text-1xl">{full_name}</h3>
+    <h3 class="font-mono text-base">{full_name}</h3>
 
     <div class="project-card__platform">
-      {@html ProjectsInfo[name].mobileIcon ? `<img src=${icon_mobile} alt='mobile_icon' />` : ""}
-      <img src={icon_desktop} alt="desktop_icon" />
+      <img class="img img--mobile" src={icon_mobile} alt="mobile_icon" />
+      <img class="img img--desktop" src={icon_desktop} alt="desktop_icon" />
     </div>
   </div>
 </div>
@@ -27,12 +34,13 @@
 <style lang="scss">
   .project-card {
     @include interactive-radius;
-    
+
     width: 20rem;
     height: 20rem;
     background-color: $purple;
 
     &__picture {
+      height: 83%;
       img {
         margin: auto;
         padding: 1rem;
@@ -60,22 +68,29 @@
       width: 85%;
       margin: auto;
       padding: 0 1rem;
+
       h3 {
-        flex: 5;
+        flex: 4;
         text-align: start;
       }
     }
 
     &__platform {
-      flex: 1;
-      img {
-        height: 3rem;
-        display: inline;
-        fill: red;
-        width: fit-content;
+      flex: 2;
+      display: flex;
+      flex-direction: row;
+      justify-content: end;
+      align-items: center;
+      flex-wrap: wrap;
+      .img {
+        width: 2.5rem;
+        &--mobile {
+          display: none;
+        }
       }
     }
   }
+
 
   .icon-colors {
     fill: hsl(from color 1 2 3);

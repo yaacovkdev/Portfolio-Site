@@ -27,7 +27,7 @@ export const ProjectsInfo: { [key: string]: { name: string; desc: string, mobile
   pool: {
     name: "Playing Pool With PI",
     desc: "",
-    mobileIcon: false,
+    mobileIcon: true,
     image: preview_pool
   },
 };
