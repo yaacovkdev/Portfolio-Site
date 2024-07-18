@@ -30,7 +30,7 @@
 
 <style lang="scss">
   header {
-    background-color: $purple;
+    background-color: $background;
 
     nav {
       a {
