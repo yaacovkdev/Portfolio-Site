@@ -28,9 +28,6 @@ var flag = false;
 
 var color = new Uint8Array(4);
 
-//left up right down
-var arrowdirection = [false, false, false, false];
-
 //arrowdirection keys
 var arrowdirection = [false, false];
 
@@ -146,6 +143,7 @@ const Move = "Move";
 const Look = "Look";
 const Rotate = "Rotate";
 const Present = "Present";
+
 var Mode;
 
 //Sounds
@@ -330,7 +328,6 @@ window.onload = function init() {
         x = event.clientX;
         y = canvas.height -event.clientY;
         isclicked = true;
-        
     });
 
 
@@ -350,20 +347,19 @@ window.onload = function init() {
     gl.uniformMatrix4fv( gl.getUniformLocation(program, "uProjectionMatrix"),
        false, flatten(projectionMatrix) );
 
-    
-    
+    //changed to WASD keys to prevent browser window from scrolling
     document.addEventListener('keydown', function(event){
         switch(event.keyCode){
-            case 37: //left
+            case 65: //left
                 arrowdirection[0] = true;
                 break;
-            case 38: //up
+            case 87: //up
                 arrowdirection[1] = true;
                 break;
-            case 39: //right
+            case 68: //right
                 arrowdirection[2] = true;
                 break;
-            case 40: //down
+            case 83: //down
                 arrowdirection[3] = true;
                 break;
 

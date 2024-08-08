@@ -1,0 +1,19 @@
+/*
+design.css
+Yaacov Kochatkov
+Special design layout for certain buttons in the main.html
+*/
+
+/*side buttons that are under the canvas
+*/
+.buttons2 > * {
+    width: 0 auto;
+    margin: 0 auto;
+}
+
+/*start and stop buttons
+*/
+#start, #stop{
+    width: 0 auto;
+    margin: 0 auto;
+}
