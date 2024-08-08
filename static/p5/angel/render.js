@@ -2,7 +2,7 @@ function setup(){
     var Canv;
     sizeMode();
     initGrid();
-    Canv = createCanvas(CANVSIZEX, CANVSIZEY+MENU);
+    Canv = createCanvas(CANVSIZEX, CANVSIZEY);
     Canv.parent("canvdiv0");
     Canv.style("display:block; position:absolute; left: 0; right: 0; margin: auto; ")
     background(240);

@@ -1,4 +1,3 @@
-
 let surround = [[-1,-1] ,[0, -1],[1,-1],
                 [-1,0]       ,[1,0],
                 [-1,1],[0,1],[1,1]];
@@ -95,18 +94,7 @@ function angelDepthFirst(){
         }
         
     }
-    
 
-    //this will run when the stack gets popped to 0
-    if(!loopbreak){
-        //lostcondition = true;
-        //return;
-
-        //this will not likely print now because even if the path is unreachable the algorithm still takes in direciton
-        //won't be the case in a successful shortest path DFS
-        console.log('location blocked');
-
-    }
 
     Angel.x += bestdirection[0];
     Angel.y += bestdirection[1];
@@ -170,18 +158,6 @@ function angelBreadthFirst(){
         }
         
     }
-    
-
-    //this will run when the stack gets popped to 0
-    if(!loopbreak){
-        //lostcondition = true;
-        //return;
-
-        //this will not likely print now because even if the path is unreachable the algorithm still takes in direciton
-        //won't be the case in a successful shortest path DFS
-        console.log('location blocked');
-
-    }
 
     Angel.x += bestdirection[0];
     Angel.y += bestdirection[1];
@@ -244,9 +220,8 @@ function calcCondition(){
         return;
     }
 
-    if(inPerimiter([Angel.x, Angel.y])){
+    if(inPerimiter([Angel.x, Angel.y])) {
         wincondition = true;
         return;
     }
-    
 }

@@ -122,29 +122,17 @@
     }
 
     &--angel {
-        background-color: $background;
-        h1{
-          color: $black;
+      background-color: $background;
+      h1{
+        color: $black;
+      }
+      .project-iframe {
+        iframe {
+          width: 850px;
+          height: 850px;
+
         }
-        .project-iframe {
-                --scale: 0.26;
-
-                iframe {
-                  width: 900px;
-                  height: 1000px;
-                  transform-origin: 0 0;
-                  transform: scale(var(--scale));
-                  margin-bottom: calc((var(--scale) - 1) * 2050px);
-                }
-
-                @include tablet {
-                  --scale: 0.63;
-                }
-
-                @include desktop {
-                  --scale: 1;
-                }
-              }
+      }
     }
 
     &--cube {
@@ -153,22 +141,28 @@
         color: $black;
       }
       .project-iframe {
-        --scale: 0.26;
+        //--scale: 0.26;
 
         iframe {
           width: 900px;
           height: 1200px;
-          transform-origin: 0 0;
-          transform: scale(var(--scale));
-          margin-bottom: calc((var(--scale) - 1) * 2050px);
-        }
 
-        @include tablet {
-          --scale: 0.63;
         }
+      }
+    }
 
-        @include desktop {
-          --scale: 1;
+    &--rocket {
+      background-color: $background;
+      h1{
+        color: $black;
+      }
+      .project-iframe {
+        //--scale: 0.26;
+
+        iframe {
+          width: 1050px;
+          height: 1200px;
+
         }
       }
     }

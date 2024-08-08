@@ -41,7 +41,7 @@ void main()
 }
 </script>
 <body>
-    <div id="game_speed">
+    <div id="game_speed" class="dashboard">
         0 <input id="speed" type="range" min="0" max="100" step="1"> 100
         <div>
             <button id="start" type="submit">Start</button>
@@ -51,7 +51,7 @@ void main()
 
     <canvas id="gl-canvas" width="1000" height="1000"> </canvas>
 
-    <div class="buttons2">
+    <div class="buttons2 dashboard" >
         <button id="button1" type="submit">Add Orb</button>
         <button id="button2" type="submit">Clear Orbs</button>
         <button id="button3" type="submit">Change Direction</button>
@@ -74,12 +74,12 @@ void main()
             <option value="5">Rainbow</option>
         </select>
     </div>
-    <div>
+    <div class="dashboard">
         <p>Press A to rotate left and D to rotate right</p>
     </div>
 </body>
-<script type="text/javascript" src="./Common/initShaders.js"></script>
-<script type="text/javascript" src="util.js"></script>
-<script type="text/javascript" src="main.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="./util.js"></script>
+<script type="text/javascript" src="./main.js"></script>
 
 </html>

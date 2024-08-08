@@ -10,7 +10,9 @@
 
 <MainTitle>WebGL Projects</MainTitle>
 <div class="project-cards">
+  <a href="/graphics/rocket"><ProjectCard name="rocket" /></a>
   <a href="/graphics/cube"><ProjectCard name="cube" /></a>
+
 </div>
 
 <MainTitle>p5.js Projects</MainTitle>

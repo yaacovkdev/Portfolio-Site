@@ -1,5 +1,5 @@
 //default canvas size
-let CANVSIZEX = 800, CANVSIZEY = 800, MENU = 0, MINIMUM = 800;
+let CANVSIZEX = 800, CANVSIZEY = 800, MINIMUM = 800;
 
 let gridinfo = {
     size: 2,
@@ -12,7 +12,6 @@ function initGrid(){
     gridinfo.increment = int(CANVSIZEX/gridinfo.grids);
     CANVSIZEX = gridinfo.increment * gridinfo.grids+gridinfo.size;
     CANVSIZEY = gridinfo.increment * gridinfo.grids+gridinfo.size;
-    MENU = int(CANVSIZEY / 8);
 }
 
 function toPos(x, y){

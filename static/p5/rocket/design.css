@@ -6,6 +6,11 @@ Special design layout for certain buttons in the main.html
 
 /*side buttons that are under the canvas
 */
+
+.dashboard {
+    width: fit-content;
+}
+
 .buttons2 > * {
     width: 0 auto;
     margin: 0 auto;

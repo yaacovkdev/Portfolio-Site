@@ -3,13 +3,22 @@ import preview_spinning from "$lib/images/preview/preview_spinning.jpg";
 import preview_fourier from "$lib/images/preview/preview_fourier.jpg";
 import preview_pool from "$lib/images/preview/preview_pool.png";
 import preview_angel from "$lib/images/preview/preview_angel.png";
+import preview_cube from "$lib/images/preview/preview_cube.png";
+import preview_rocket from "$lib/images/preview/preview_rocket.png";
 
 export const ProjectsInfo: { [key: string]: { name: string; desc: string, mobileIcon: boolean, image: any } } = {
+  rocket: {
+    name: "Rocket",
+    desc: "",
+    mobileIcon: false,
+    image: preview_rocket,
+  },
+
   cube: {
     name: "Cube Game",
     desc: "",
     mobileIcon: false,
-    image: null
+    image: preview_cube
   },
 
   bouncy: {
@@ -18,6 +27,7 @@ export const ProjectsInfo: { [key: string]: { name: string; desc: string, mobile
     mobileIcon: false,
     image: preview_bouncy
   },
+
   spinning: {
     name: "SpinningJS",
     desc: "",
