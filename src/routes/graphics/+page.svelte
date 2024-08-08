@@ -15,6 +15,7 @@
   <a href="/graphics/spinning"><ProjectCard name="spinning" /></a>
   <a href="/graphics/fourier"><ProjectCard name="fourier" /></a>
   <a href="/graphics/pool"><ProjectCard name="pool" /></a>
+  <a href="/graphics/angel"><ProjectCard name="angel" /></a>
 </div>
 
 <style lang="scss">
