@@ -5,6 +5,13 @@ import preview_pool from "$lib/images/preview/preview_pool.png";
 import preview_angel from "$lib/images/preview/preview_angel.png";
 
 export const ProjectsInfo: { [key: string]: { name: string; desc: string, mobileIcon: boolean, image: any } } = {
+  cube: {
+    name: "Cube Game",
+    desc: "",
+    mobileIcon: false,
+    image: null
+  },
+
   bouncy: {
     name: "BouncyJS",
     desc: "",

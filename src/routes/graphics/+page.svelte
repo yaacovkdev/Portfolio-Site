@@ -8,14 +8,20 @@
   backgroundPurple();
 </script>
 
-<MainTitle title="p5.js Projects" />
+<MainTitle>WebGL Projects</MainTitle>
+<div class="project-cards">
+  <a href="/graphics/cube"><ProjectCard name="cube" /></a>
+</div>
+
+<MainTitle>p5.js Projects</MainTitle>
 
 <div class="project-cards">
   <a href="/graphics/bouncy"><ProjectCard name="bouncy" /></a>
   <a href="/graphics/spinning"><ProjectCard name="spinning" /></a>
+  <a href="/graphics/angel"><ProjectCard name="angel" /></a>
   <a href="/graphics/fourier"><ProjectCard name="fourier" /></a>
   <a href="/graphics/pool"><ProjectCard name="pool" /></a>
-  <a href="/graphics/angel"><ProjectCard name="angel" /></a>
+
 </div>
 
 <style lang="scss">
