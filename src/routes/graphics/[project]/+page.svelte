@@ -29,7 +29,7 @@
 
 <!--  Description goes here-->
   <div class="project-description">
-    
+
   </div>
 </div>
 
@@ -141,7 +141,7 @@
         color: $black;
       }
       .project-iframe {
-        //--scale: 0.26;
+
 
         iframe {
           width: 900px;
@@ -157,12 +157,11 @@
         color: $black;
       }
       .project-iframe {
-        //--scale: 0.26;
+        --scale: 0.36;
 
         iframe {
           width: 1050px;
           height: 1200px;
-
         }
       }
     }
