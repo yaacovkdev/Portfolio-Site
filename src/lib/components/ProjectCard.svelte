@@ -17,12 +17,12 @@
   });
 </script>
 
-<div id={`${name}`} class="project-card">
+<div id={`${name}`} class="project-card w-[20rem] h-[20rem] md:w-[25rem] md:h-[25rem] xl:w-[30rem] xl:h-[30rem]">
   <div class="project-card__picture">
     <img src={main_image} alt="img" />
   </div>
   <div class="project-card__info flex justify-between">
-    <h3 class="font-mono text-base">{full_name}</h3>
+    <h3 class="font-mono text-sm md:text-lg xl:text-2xl">{full_name}</h3>
 
     <div class="project-card__platform">
       <img class="img img--mobile" src={icon_mobile} alt="mobile_icon" />
@@ -35,8 +35,6 @@
   .project-card {
     @include interactive-radius;
 
-    width: 20rem;
-    height: 20rem;
     background-color: $purple;
 
     &__picture {
@@ -90,7 +88,6 @@
       }
     }
   }
-
 
   .icon-colors {
     fill: hsl(from color 1 2 3);

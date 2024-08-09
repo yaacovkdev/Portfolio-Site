@@ -26,8 +26,10 @@
     <iframe src={`/p5/${data["url_name"]}/index.html`} title={data["name"]}
     ></iframe>
   </div>
+
+<!--  Description goes here-->
   <div class="project-description">
-    
+
   </div>
 </div>
 
@@ -115,6 +117,51 @@
 
         @include desktop {
           --scale: 1;
+        }
+      }
+    }
+
+    &--angel {
+      background-color: $background;
+      h1{
+        color: $black;
+      }
+      .project-iframe {
+        iframe {
+          width: 850px;
+          height: 850px;
+
+        }
+      }
+    }
+
+    &--cube {
+      background-color: $background;
+      h1{
+        color: $black;
+      }
+      .project-iframe {
+
+
+        iframe {
+          width: 900px;
+          height: 1200px;
+
+        }
+      }
+    }
+
+    &--rocket {
+      background-color: $background;
+      h1{
+        color: $black;
+      }
+      .project-iframe {
+        --scale: 0.36;
+
+        iframe {
+          width: 1050px;
+          height: 1200px;
         }
       }
     }

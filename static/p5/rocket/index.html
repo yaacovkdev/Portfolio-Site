@@ -1,0 +1,85 @@
+<!--
+main.html
+Yaacov Kochatkov
+Main html page that displays canvas and interactive elements as well as shader language
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <link rel="stylesheet" href="design.css">
+</head>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+#version 300 es
+
+in vec4 aPosition;
+in vec4 aColor;
+
+out vec4 vColor;
+
+void main()
+{
+  gl_Position = aPosition;
+  vColor = aColor;
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+#version 300 es
+
+precision highp float;
+
+in vec4 vColor;
+out vec4 fColor;
+
+void main()
+{
+    fColor = vColor;
+}
+</script>
+<body>
+    <div id="game_speed" class="dashboard">
+        0 <input id="speed" type="range" min="0" max="100" step="1"> 100
+        <div>
+            <button id="start" type="submit">Start</button>
+            <button id="stop" type="submit">Stop</button>
+        </div>
+    </div>
+
+    <canvas id="gl-canvas" width="1000" height="1000"> </canvas>
+
+    <div class="buttons2 dashboard" >
+        <button id="button1" type="submit">Add Orb</button>
+        <button id="button2" type="submit">Clear Orbs</button>
+        <button id="button3" type="submit">Change Direction</button>
+        <label for="background">Choose background:</label>
+        <select name="background" id="background_color">
+            <option value="0">Grey</option>
+            <option value="1">Red</option>
+            <option value="2">Green</option>
+            <option value="3">Blue</option>
+            <option value="4">Dynamic</option>
+        </select>
+
+        <label for="shape">Choose shape color:</label>
+        <select name="shape" id="shape_color">
+            <option value="0">Black</option>
+            <option value="1">Red</option>
+            <option value="2">Green</option>
+            <option value="3">Blue</option>
+            <option value="4">Yellow</option>
+            <option value="5">Rainbow</option>
+        </select>
+    </div>
+    <div class="dashboard">
+        <p>Press A to rotate left and D to rotate right</p>
+    </div>
+</body>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="./util.js"></script>
+<script type="text/javascript" src="./main.js"></script>
+
+</html>

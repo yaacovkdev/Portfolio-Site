@@ -1,0 +1,134 @@
+<!--
+Yaacov Kochatkov
+624280
+CMPT 370 A
+7 Dec, 2021
+-->
+<!DOCTYPE html>
+<html>
+<style>
+    .indent{
+        margin-left: 40px;
+    }
+</style>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MVnew.js"></script>
+<script type="text/javascript" src="CubeBuilder.js"></script>
+<img id = "texImage" src = "woodtex.png" hidden></img>
+<script id="vertex-shader" type="x-shader/x-vertex">
+#version 300 es
+
+in vec4 aPosition;
+in vec3 aNormal;
+in vec4 aColor;
+in vec2 aTexCoord;
+
+out vec4 vColor;
+out vec4 bColor;
+out vec2 vTexCoord;
+
+
+uniform vec4 uAmbientProduct, uDiffuseProduct, uSpecularProduct;
+uniform mat4 uModelViewMatrix;
+uniform mat4 uProjectionMatrix;
+uniform vec4 uLightPosition;
+uniform float uShininess;
+
+void main()
+{
+    vec3 pos = -(uModelViewMatrix * aPosition).xyz;
+    vec3 light = uLightPosition.xyz;
+    vec3 L = normalize(light - pos);
+
+    vec3 E = normalize(-pos);
+    vec3 H = normalize(L + E);
+
+    vec4 NN = vec4(aNormal,0);
+
+    // Transform vertex normal into eye coordinates
+
+    vec3 N = normalize((uModelViewMatrix*NN).xyz);
+
+    // Compute terms in the illumination equation
+    vec4 ambient = uAmbientProduct;
+    
+    float Kd = max(dot(L, N), 0.0);
+    vec4  diffuse = Kd*uDiffuseProduct;
+
+    float Ks = pow(max(dot(N, H), 0.0), uShininess );
+    vec4  specular = Ks * uSpecularProduct;
+
+    if(dot(L, N) < 0.0) {
+	       specular = vec4(0.0, 0.0, 0.0, 1.0);
+    }
+
+    gl_Position = uProjectionMatrix * uModelViewMatrix * aPosition;
+    vTexCoord = aTexCoord;
+    vColor = ambient + diffuse +specular;
+    bColor = aColor;
+    vColor.a = 1.0;
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+#version 300 es
+
+precision mediump float;
+
+in vec4 vColor; //for texture shaders
+in vec4 bColor; //for usable block
+in vec2 vTexCoord;
+
+out vec4 fColor;
+
+uniform sampler2D uTextureMap;
+uniform bool multicolor;
+
+void main()
+{
+    vec4 T = texture(uTextureMap, vTexCoord);
+
+    if(multicolor)
+        fColor = bColor;
+    else
+        fColor = T * vColor;
+}
+</script>
+
+
+<body>
+<div>
+<canvas id="gl-canvas" width="720" height="720">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+</div>
+<div>
+
+<button id = "ButtonU">Undo</button>
+
+    <label>Mode:</label>
+    <select id="ModeS">
+        <option value="0">Fixed</option>
+        <option value="1" selected="selected">Move</option>
+        <option value="2">Look</option>
+        <option value="3">Rotation</option>
+        <option value="4">Presentation</option>
+    </select>
+
+</div>
+<div>
+    <h3>How To Use:</h3>
+    <p>Press on the coloured cubes faces to build onto that cube.</p>
+    <p>Click Undo to detroy the last placed cube.</p>
+    <p>The Second button selects the Mode of the visualization of the cubes:</p>
+    <div class="indent">
+        <p>Fixed disables all interactions with the cube.</p>
+        <p>Move mode allows the user to move the camera away and towards the cubes (W -> Up, S -> Down)</p>
+        <p>Look mode allows the uer to look around their camera position (WASD keys)</p>
+        <p>Rotation mode allows the user to rotate the shape along the x and y axis (WASD)</p>
+        <p>Presentation mode colors the coloured block in the texture and disables the ability to build and disables the ability to accidentaly Undo build</p>
+    </div>
+</div>
+
+</body>
+</html>
