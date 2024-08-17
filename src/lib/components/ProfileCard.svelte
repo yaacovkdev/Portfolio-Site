@@ -175,8 +175,7 @@
     position: relative;
     max-width: 64rem;
     min-height: 42rem;
-    visibility: hidden;
-    margin:auto;
+    @include margin-top;
   }
 
   .card-back {

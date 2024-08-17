@@ -19,7 +19,6 @@
 }
 
 @mixin scale-fonts-header {
-  @apply text-xl;
 
   @include tablet {
     @apply text-2xl;
