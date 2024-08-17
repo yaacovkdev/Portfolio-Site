@@ -2,20 +2,22 @@
   import "../app.css";
   import "$lib/style/global.scss";
   import sveltekit_icon from "$lib/images/icons/sveltelogo.png";
+  import HeaderMenu from "$lib/components/HeaderMenu.svelte";
+  import HeaderMobileSlide from "$lib/components/HeaderMobileSlide.svelte";
+  import {clickedMobileNav} from "$lib/scripts/resetNavButton";
 </script>
 
 <header>
-  <div class="content-width">
-    <nav>
-      <a id="nav-1" href="/home">Home</a>
-      <a id="nav-2" href="/graphics">Graphics</a>
-      <a id="nav-3" href="/fullstack">Boolean Calculator</a>
-    </nav>
+  <div class="header-menu content-width">
+    <HeaderMenu bind:mobileNavClicked={$clickedMobileNav} />
   </div>
 </header>
 
 <main>
-  <div id="contentWidthMain" class="content-width">
+  <div class="header-slider">
+    <HeaderMobileSlide clickedButton={$clickedMobileNav} />
+  </div>
+  <div id="contentWidthMain" class="main-content content-width">
     <slot />
   </div>
 </main>
@@ -31,25 +33,38 @@
 <style lang="scss">
   header {
     background-color: $background;
+    z-index: 1;
 
-    nav {
-      a {
-        @include scale-fonts-header;
-        @include shine-effect;
-        display: inline-block;
-        position: relative;
-
-        line-height: 1rem;
-        text-decoration: none;
-        padding: 0 1rem;
-        margin: 0;
-      }
+    .content-width {
+      width: 100%;
+      height: 100%;
+      max-width: $sitewidth;
     }
   }
 
   main {
+    z-index: 0;
+
+    .header-slider {
+      //position: fixed;
+      z-index: 10;
+    }
+
+    .main-content {
+      z-index: 0;
+    }
+
     .content-width {
       width: 100%;
+
+      max-width: $sitewidth;
+      margin-bottom: 2rem;
+
+      > * {
+        @include margin-top;
+        margin-left: auto;
+        margin-right: auto;
+      }
     }
   }
 
