@@ -40,11 +40,6 @@
 </div>
 
 <style lang="scss">
-  .welcome-title {
-    height: 5rem;
-
-  }
-
   .fade-out {
     animation: fadeOut 0.75s forwards ease-out;
   }
