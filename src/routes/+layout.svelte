@@ -45,7 +45,7 @@
   }
 
   main {
-    z-index: 1;
+    z-index: 0;
 
     .header-slider {
       z-index: 10;
