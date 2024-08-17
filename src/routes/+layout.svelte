@@ -7,7 +7,7 @@
 <header>
   <div class="content-width">
     <nav>
-      <a id="nav-1" href="/home">Home</a>
+      <a id="nav-1" href="/">Home</a>
       <a id="nav-2" href="/graphics">Graphics</a>
       <a id="nav-3" href="/fullstack">Boolean Calculator</a>
     </nav>
