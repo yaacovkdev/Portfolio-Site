@@ -176,6 +176,7 @@
     max-width: 64rem;
     min-height: 42rem;
     visibility: hidden;
+    margin:auto;
   }
 
   .card-back {

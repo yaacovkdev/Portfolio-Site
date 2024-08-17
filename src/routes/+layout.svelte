@@ -40,6 +40,8 @@
       height: 100%;
       max-width: $sitewidth;
     }
+
+    @include box-shadow
   }
 
   main {
@@ -51,7 +53,7 @@
     }
 
     .main-content {
-      z-index: 0;
+      z-index: 1;
     }
 
     .content-width {
