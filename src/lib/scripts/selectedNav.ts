@@ -5,11 +5,17 @@ import { onMount } from "svelte";
 
 const selectedNav = (n: number): void => {
   onMount(() => {
-    const link = document.querySelector(`#nav-${n}`);
-    link.classList.add("gold");
+    const link = document.querySelectorAll(`.nav-link--${n}`);
+
+    for(let i = 0; i < link.length; i++) {
+      link[i].classList.add("shine");
+    }
+
 
     return (() => {
-      link.classList.remove("gold");
+      for(let i = 0; i < link.length; i++) {
+        link[i].classList.remove("shine");
+      }
     })
   });
 }

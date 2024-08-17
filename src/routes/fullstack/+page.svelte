@@ -3,8 +3,10 @@
   import selectedNav from "$lib/scripts/selectedNav";
   import { disableContentWidthMain } from "$lib/scripts/tweaks";
   import { blueLink } from "$lib/scripts/blueLink";
+  import {resetNavButton} from "$lib/scripts/resetNavButton";
 
   selectedNav(3);
+  resetNavButton();
   disableContentWidthMain();
 </script>
 

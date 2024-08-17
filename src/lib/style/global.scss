@@ -6,10 +6,6 @@
   color: $black;
 }
 
-nav a {
-  color: $purple;
-}
-
 main, header, footer {
   display: flex;
   flex-direction: column;
@@ -18,30 +14,24 @@ main, header, footer {
 
 header
 {
-  padding: $mobile-padding;
+  border-bottom: 2px $gold solid;
+  padding: 0 $mobile-padding;
+
+  height: $mobile-header-height;
 
   @include tablet {
     padding: $desktop-padding;
+    height: auto;
   }
-}
-
-main{
-  padding: $mobile-padding;
-  padding-top: 0;
-  @include tablet{
-    padding: $desktop-padding;
-    padding-top: 0;
-  }
-}
-
-header {
-  border-bottom: 2px $gold solid;
 }
 
 main {
-  color: $white;
-  flex: 1;
-  z-index: 1;
+  padding: $mobile-padding;
+  padding-top: 0;
+  @include tablet {
+    padding: $desktop-padding;
+    padding-top: 0;
+  }
 }
 
 body {
@@ -57,19 +47,38 @@ body {
   }
 }
 
-main .content-width {
-  max-width: $sitewidth;
-  margin-bottom: 2rem;
-  
-  > * {
-    @include margin-top;
-    margin-left: auto;
-    margin-right: auto;
-  }
+.nav-link {
+  color: $purple;
 }
 
-.gold {
-  color: $amber;
+.shine {
+  background: linear-gradient(45deg, rgba($darkgold,0.75), rgba($gold,0.8), rgba($amber, 0.75)),
+              linear-gradient(100deg, rgba($amber,0.75), rgba($gold,0.8), rgba($darkgold,0.75));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: $gold 1px;
+
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
+
+  @include mobile {
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -5px; /* Adjust based on your text size */
+      width: 100%;
+      height: 3px; /* Adjust thickness of the underline */
+      background: $amber;
+    }
+  }
+
+
+  @include tablet {
+    text-decoration: none;
+  }
+
+
 }
 
 .iframe-default {
@@ -79,6 +88,4 @@ main .content-width {
 .blue-link {
   color: $diamondblue;
   font-weight: 500;
-  letter-spacing: .1rem;
-  text-shadow: 1px 1px 2px $black;
 }

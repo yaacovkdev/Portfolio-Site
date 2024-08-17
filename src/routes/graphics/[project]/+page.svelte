@@ -6,6 +6,7 @@
     disableContentWidthMain,
     iframeDefault,
   } from "$lib/scripts/tweaks";
+  import {resetNavButton} from "$lib/scripts/resetNavButton";
 
   export let data: {
     url_name: string;
@@ -13,6 +14,7 @@
   };
 
   selectedNav(2);
+  resetNavButton();
   backgroundPurple();
   disableContentWidthMain();
   iframeDefault();
