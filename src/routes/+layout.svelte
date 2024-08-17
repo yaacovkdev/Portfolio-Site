@@ -17,7 +17,7 @@
   <div class="header-slider">
     <HeaderMobileSlide clickedButton={$clickedMobileNav} />
   </div>
-  <div id="contentWidthMain" class="main-content content-width">
+  <div id="contentWidthMain" class="content-width">
     <slot />
   </div>
 </main>
@@ -40,31 +40,23 @@
       height: 100%;
       max-width: $sitewidth;
     }
+
+    @include box-shadow;
   }
 
   main {
-    z-index: 0;
+    z-index: 1;
 
     .header-slider {
-      //position: fixed;
       z-index: 10;
     }
 
-    .main-content {
-      z-index: 0;
-    }
-
     .content-width {
+      z-index: 1;
       width: 100%;
 
       max-width: $sitewidth;
       margin-bottom: 2rem;
-
-      > * {
-        @include margin-top;
-        margin-left: auto;
-        margin-right: auto;
-      }
     }
   }
 
