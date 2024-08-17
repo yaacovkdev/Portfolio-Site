@@ -12,9 +12,9 @@
             mobileNavClicked = !mobileNavClicked;
             if (mobileNavClicked) {
                 window.scrollTo(0,0);
-                bodyElement.style.overflow = "hidden";
+                bodyElement.classList.add("overflow-hidden");
             } else {
-                bodyElement.style.overflow = "scroll"
+                bodyElement.classList.remove("overflow-hidden");
             }
         }
     }

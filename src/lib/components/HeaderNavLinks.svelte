@@ -8,13 +8,12 @@
     position: relative;
 
     @apply text-3xl;
-    padding: 0 1rem;
     margin: 1rem 0;
 
     @include tablet {
       @include scale-fonts-header;
+      padding: 0 1rem;
       display: inline-block;
-      text-decoration: none;
       margin: 0;
     }
   }

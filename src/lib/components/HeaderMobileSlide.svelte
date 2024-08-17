@@ -4,17 +4,22 @@
 
     export let clickedButton;
     let headerMobileSlider: Element;
+    let animationTimeout: number;
 
     $: if(headerMobileSlider) {
         console.log(clickedButton);
         if(clickedButton) {
             headerMobileSlider.classList.remove("hidden");
             headerMobileSlider.classList.add("slide-down");
-
+            clearTimeout(animationTimeout);
+            animationTimeout = setTimeout(()=>{
+                headerMobileSlider.classList.remove("slide-down");
+            }, 400);
         }
         else {
             headerMobileSlider.classList.add("hidden");
             headerMobileSlider.classList.remove("slide-down");
+            clearTimeout(animationTimeout);
         }
     }
 
@@ -25,9 +30,9 @@
 
 </script>
 
-<div class="header-mobile-slider slide-down hidden flex justify-center items-center flex-col  md:hidden">
+<nav class="header-mobile-slider slide-down hidden flex justify-center items-center flex-col  md:hidden">
     <HeaderNavLinks />
-</div>
+</nav>
 
 <style lang="scss">
   @keyframes slide-d {
@@ -36,7 +41,7 @@
   }
 
   .slide-down {
-    animation: slide-d 1s forwards;
+    animation: slide-d 400ms forwards;
   }
 
   .header-mobile-slider {

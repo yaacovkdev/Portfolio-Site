@@ -5,7 +5,6 @@
   import HeaderMenu from "$lib/components/HeaderMenu.svelte";
   import HeaderMobileSlide from "$lib/components/HeaderMobileSlide.svelte";
   import {clickedMobileNav} from "$lib/scripts/resetNavButton";
-
 </script>
 
 <header>
