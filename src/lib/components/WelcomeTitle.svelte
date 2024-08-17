@@ -34,19 +34,12 @@
 </script>
 
 <div class="welcome-title">
-  <h1 id="homeTitle" class="text-5xl text-amber-500 fade-in fade-out">
+  <h1 id="homeTitle" class="text-4xl md:text-5xl xl:text-6xl text-amber-500 fade-in fade-out">
     {message}
   </h1>
 </div>
 
 <style lang="scss">
-  .welcome-title {
-    height: 5rem;
-    #homeTitle {
-      @include scale-fonts-title;
-    }
-  }
-
   .fade-out {
     animation: fadeOut 0.75s forwards ease-out;
   }
