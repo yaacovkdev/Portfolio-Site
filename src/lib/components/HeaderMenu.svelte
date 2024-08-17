@@ -48,7 +48,7 @@
 <div class="header-menu relative flex justify-start items-center w-full h-full md:justify-center">
     <button id="button" class="relative w-18 h-18 md:hidden" on:click={navButton}>
         <div class="relative flex overflow-hidden items-center justify-center w-[4rem] h-[4rem]">
-            <div class="dash-stack flex flex-col justify-between w-8 h-[1.5rem] overflow-hidden ">
+            <div class="dash-stack flex flex-col justify-between items-center w-[2.1rem] h-[1.5rem] overflow-hidden ">
                 <div class="hamburger-dash hamburger-dash--1 rotate-down paused"></div>
                 <div class="hamburger-dash hamburger-dash--2 slide-left paused"></div>
                 <div class="hamburger-dash hamburger-dash--3 rotate-up paused"></div>
@@ -85,7 +85,7 @@
       transform: translateX(0);
     }
     to {
-      transform: translateX(-2rem);
+      transform: translateX(-3rem);
     }
   }
 
