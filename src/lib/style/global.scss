@@ -18,10 +18,14 @@ main, header, footer {
 
 header
 {
-  padding: $mobile-padding;
+  border-bottom: 2px $gold solid;
+  padding: 0 $mobile-padding;
+
+  height: $mobile-header-height;
 
   @include tablet {
     padding: $desktop-padding;
+    height: auto;
   }
 }
 
@@ -34,14 +38,9 @@ main{
   }
 }
 
-header {
-  border-bottom: 2px $gold solid;
-}
-
 main {
   color: $white;
   flex: 1;
-  z-index: 1;
 }
 
 body {
@@ -54,17 +53,6 @@ body {
   background-color: $darkpurple;
   * {
     color: $white;
-  }
-}
-
-main .content-width {
-  max-width: $sitewidth;
-  margin-bottom: 2rem;
-  
-  > * {
-    @include margin-top;
-    margin-left: auto;
-    margin-right: auto;
   }
 }
 

@@ -3,8 +3,10 @@
   import MainTitle from "$lib/components/MainTitle.svelte";
   import selectedNav from "$lib/scripts/selectedNav";
   import { backgroundPurple} from "$lib/scripts/tweaks";
+  import {resetNavButton} from "$lib/scripts/resetNavButton";
 
   selectedNav(2);
+  resetNavButton();
   backgroundPurple();
 </script>
 

@@ -5,7 +5,7 @@ import { onMount } from "svelte";
 
 const selectedNav = (n: number): void => {
   onMount(() => {
-    const link = document.querySelector(`#nav-${n}`);
+    const link = document.querySelector(`.nav-link--${n}`);
     link.classList.add("gold");
 
     return (() => {
