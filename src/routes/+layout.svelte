@@ -45,22 +45,20 @@
   }
 
   main {
-    z-index: 0;
+    z-index: 1;
 
     .header-slider {
       //position: fixed;
       z-index: 10;
     }
 
-    .main-content {
-      z-index: 1;
-    }
-
     .content-width {
+      z-index: 1;
       width: 100%;
 
       max-width: $sitewidth;
       margin-bottom: 2rem;
+      background: red;
 
       > * {
         @include margin-top;
