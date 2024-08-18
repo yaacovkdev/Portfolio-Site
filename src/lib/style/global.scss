@@ -39,6 +39,8 @@ header
 main {
   padding: $mobile-padding;
   padding-top: 0;
+  flex: 1;
+
   @include tablet {
     padding: $desktop-padding;
     padding-top: 0;
