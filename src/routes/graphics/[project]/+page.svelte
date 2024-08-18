@@ -37,8 +37,6 @@
 
 <style lang="scss">
   .project {
-    flex: 1;
-    width: 100vw;
     min-height: 100vh;
 
     @include tablet {
