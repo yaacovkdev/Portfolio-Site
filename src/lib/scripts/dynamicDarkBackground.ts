@@ -3,15 +3,14 @@ import { onMount } from "svelte";
 const dynamicDarkBackground = () => {
     onMount(() => {
         // Select the element with id 'my-element' and add a class 'new-class' to it
-        const mainElement: HTMLElement = document.querySelector("main");
-        const bodyElement: HTMLElement = document.querySelector("body");
+        const svelteBody: HTMLElement = document.querySelector("#svelteBody");
         const background:number[] = [14,47,85];
 
         let r: number = background[0];
         let g: number = background[1];
         let b: number = background[2];
 
-        mainElement.style.backgroundImage = `linear-gradient(60deg, rgba(14,47,85,1) 0%, rgba(14,47,85,1) 50%, rgba(14,47,85,1) 100%)`;
+        svelteBody.style.backgroundImage = `linear-gradient(60deg, rgba(14,47,85,1) 0%, rgba(14,47,85,1) 50%, rgba(14,47,85,1) 100%)`;
 
         let t: number = 0;
         // 60hz update
@@ -20,7 +19,7 @@ const dynamicDarkBackground = () => {
                 ${g + f(t,0.0174532925200,20)},
                 ${b + f(t, -0.0401196102078,30)}, 1)`;
 
-            mainElement.style.backgroundImage = `
+            svelteBody.style.backgroundImage = `
             linear-gradient(60deg, rgba(14,47,85,0.7), ${midcolor} ${33 + f(t, Math.PI/60, 30)}%, rgba(14,47,85,0.7)),
             linear-gradient(120deg, rgba(14,47,85,0.7), ${midcolor} ${50 + f(t, Math.PI/30, 45)}%, rgba(14,47,85,0.7)),
             linear-gradient(180deg, rgba(14,47,85,0.7), ${midcolor} ${77 + f(t, Math.PI/20, 20)}%, rgba(14,47,85,0.7))`;
@@ -32,7 +31,7 @@ const dynamicDarkBackground = () => {
 
         return(() => {
             clearInterval(colorInterval);
-            mainElement.style.backgroundImage = "";
+            svelteBody.style.backgroundImage = "";
 
         });
     });

@@ -45,7 +45,6 @@
   }
 
   main {
-    background-color: $background;
     z-index: 0;
 
     .header-slider {

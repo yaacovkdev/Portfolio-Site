@@ -8,7 +8,7 @@
 
   selectedNav(2);
   resetNavButton();
-  backgroundPurple();
+  backgroundPurple(); //needed for light text color
   dynamicDarkBackground();
 </script>
 

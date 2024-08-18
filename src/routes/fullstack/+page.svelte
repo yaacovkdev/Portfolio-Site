@@ -2,8 +2,8 @@
   import MainTitle from "$lib/components/MainTitle.svelte";
   import selectedNav from "$lib/scripts/selectedNav";
   import { disableContentWidthMain } from "$lib/scripts/tweaks";
-  import { blueLink } from "$lib/scripts/blueLink";
   import {resetNavButton} from "$lib/scripts/resetNavButton";
+  import BlueLink from "$lib/components/BlueLink.svelte";
 
   selectedNav(3);
   resetNavButton();
@@ -15,8 +15,7 @@
     Symbolic Boolean Calculator
   </MainTitle>
   <h3 class="text-lg">
-    {@html `Also Avalible on 
-    ${blueLink("https://boolean.yaacov.site", "boolean.yaacov.site", true)}`}
+    Also Available on <BlueLink href="https://boolean.yaacov.site" end={true}>boolean.yaacov.site</BlueLink>
   </h3>
   <iframe src="https://boolean.yaacov.site" title="Boolean Calculator"></iframe>
 </div>
