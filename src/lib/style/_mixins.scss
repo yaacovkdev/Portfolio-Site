@@ -1,11 +1,10 @@
 @use "./breakpoints" as *;
 
 @mixin title-margin {
-  margin-top: 1em;
+  margin-top: 4rem;
   margin-bottom: 1em;
 
   @include tablet {
-    margin-top: 1.5em;
     margin-bottom: 1.5em;
   }
 }
@@ -30,13 +29,14 @@
 }
 
 @mixin scale-fonts-title {
-  @apply text-2xl;
+  @apply text-3xl;
+
   @include tablet {
-    @apply text-3xl;
+    @apply text-4xl;
   }
 
   @include desktop {
-    @apply text-4xl;
+    @apply text-5xl;
   }
 }
 

@@ -10,9 +10,10 @@
   import { fallDistance } from "$lib/scripts/gravityFall";
   import { onMount } from "svelte";
   import { blueLink } from "$lib/scripts/blueLink";
+  import ConnectButton from "$lib/components/ProfileCard/ConnectButton.svelte";
 
-  export let dropCard;
-  export let returnCard;
+  let dropCard;
+  let returnCard;
 
   const msInterval = 16; //to run animation at 60FPS.
   const timeInterval = 400 / 1000;
@@ -151,7 +152,7 @@
 
       <ProfileInfoCard
         title="Skills"
-        content="NodeJS, Flutter, Python, Restful API, Pendo SDK, MySQL, Airtable"
+        content="Amazon Web Services, TypeScript, NodeJS, Flutter, Python, Restful API, Pendo SDK, MySQL, Airtable"
         icon="skills"
       />
 
@@ -168,6 +169,11 @@
       />
     </div>
   </div>
+
+  <ConnectButton
+    action={dropCard}
+    revAction={returnCard}
+  />
 </div>
 
 <style lang="scss">
@@ -182,6 +188,7 @@
     @include scale-fonts-regular;
     position: relative;
     width: 100%;
+    min-height: 42rem;
     padding: $mobile-padding;
     display: flex;
     flex-direction: row;

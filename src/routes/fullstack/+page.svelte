@@ -11,7 +11,9 @@
 </script>
 
 <div class="project">
-  <MainTitle title="Symbolic Boolean Calcuator" />
+  <MainTitle>
+    Symbolic Boolean Calculator
+  </MainTitle>
   <h3 class="text-lg">
     {@html `Also Avalible on 
     ${blueLink("https://boolean.yaacov.site", "boolean.yaacov.site", true)}`}
