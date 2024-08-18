@@ -62,7 +62,6 @@
   }
 
   footer {
-    bottom: 0;
     background-color: $white;
     font-size: 1rem;
 
