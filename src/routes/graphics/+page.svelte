@@ -4,10 +4,12 @@
   import selectedNav from "$lib/scripts/selectedNav";
   import { backgroundPurple} from "$lib/scripts/tweaks";
   import {resetNavButton} from "$lib/scripts/resetNavButton";
+  import dynamicDarkBackground from "$lib/scripts/dynamicDarkBackground";
 
   selectedNav(2);
   resetNavButton();
-  backgroundPurple();
+  backgroundPurple(); //needed for light text color
+  dynamicDarkBackground();
 </script>
 
 <MainTitle>WebGL Projects</MainTitle>

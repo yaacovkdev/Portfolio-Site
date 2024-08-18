@@ -1,5 +1,5 @@
 <script lang="ts">
-    import HeaderNavLinks from "$lib/components/HeaderNavLinks.svelte";
+    import HeaderNavLinks from "$lib/components/Header/HeaderNavLinks.svelte";
     import {onMount} from "svelte";
 
     export let mobileNavClicked: boolean = false;
