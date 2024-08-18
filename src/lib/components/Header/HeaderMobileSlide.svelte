@@ -1,13 +1,12 @@
 <script lang="ts">
-    import HeaderNavLinks from "$lib/components/HeaderNavLinks.svelte";
+    import HeaderNavLinks from "$lib/components/Header/HeaderNavLinks.svelte";
     import {onMount} from "svelte";
 
-    export let clickedButton;
+    export let clickedButton: boolean;
     let headerMobileSlider: Element;
     let animationTimeout: number;
 
     $: if(headerMobileSlider) {
-        console.log(clickedButton);
         if(clickedButton) {
             headerMobileSlider.classList.remove("hidden");
             headerMobileSlider.classList.add("slide-down");

@@ -1,6 +1,5 @@
 <script lang="ts">
   export let title: string;
-  export let content: string;
   export let icon: string;
 
   import bachelors_icon from "$lib/images/icons/bachelors.svg";
@@ -22,7 +21,9 @@
   <img class="icon" src={icons[icon]} alt="icon" />
   <div class="subcard__content">
     <h3 class="text-lg font-semibold">{title}</h3>
-    <p class="text-base">{@html content}</p>
+    <p class="text-base">
+      <slot />
+    </p>
   </div>
 </div>
 

@@ -2,8 +2,8 @@
   import "../app.css";
   import "$lib/style/global.scss";
   import sveltekit_icon from "$lib/images/icons/sveltelogo.png";
-  import HeaderMenu from "$lib/components/HeaderMenu.svelte";
-  import HeaderMobileSlide from "$lib/components/HeaderMobileSlide.svelte";
+  import HeaderMenu from "$lib/components/Header/HeaderMenu.svelte";
+  import HeaderMobileSlide from "$lib/components/Header/HeaderMobileSlide.svelte";
   import {clickedMobileNav} from "$lib/scripts/resetNavButton";
 </script>
 

@@ -9,10 +9,11 @@
 
   import { fallDistance } from "$lib/scripts/gravityFall";
   import { onMount } from "svelte";
-  import { blueLink } from "$lib/scripts/blueLink";
+  import ConnectButton from "$lib/components/ProfileCard/ConnectButton.svelte";
+  import BlueLink from "$lib/components/BlueLink.svelte";
 
-  export let dropCard;
-  export let returnCard;
+  let dropCard;
+  let returnCard;
 
   const msInterval = 16; //to run animation at 60FPS.
   const timeInterval = 400 / 1000;
@@ -131,43 +132,48 @@
     </div>
 
     <div class="card__content">
-      <ProfileInfoCard
-        title="Bachelor's Degree"
-        content={`BSc. in Computing Science from ${blueLink("https://www.twu.ca/", "Trinity Western University", true)}`}
-        icon="bachelors"
-      />
+      <ProfileInfoCard title="Bachelor's Degree" icon="bachelors">
+        BSc. in Computing Science from <BlueLink href="https://twu.ca/" end={true}>Trinity Western University</BlueLink>
+      </ProfileInfoCard>
 
-      <ProfileInfoCard
-        title="Junior Software Developer"
-        content={`1 year as a Junior Software Engineer for ${blueLink("https://www.happinessmountain.com/", "Happiness Mountain", true)}`}
-        icon="work"
-      />
+      <ProfileInfoCard title="Junior Software Developer" icon="work">
+        1 year as a Junior Software Engineer for <BlueLink href="https://www.happinessmountain.com/" end={true}>Happiness Mountain</BlueLink>
+      </ProfileInfoCard>
 
       <ProfileInfoCard
         title="Teaching Assistant"
-        content="1+ years as a Teaching Assistant for Department of Computing Science and Mathematics at Trinity Western University"
         icon="work"
-      />
+      >
+        1+ years as a Teaching Assistant for Department of Computing Science and Mathematics at Trinity Western University
+      </ProfileInfoCard>
 
       <ProfileInfoCard
         title="Skills"
-        content="NodeJS, Flutter, Python, Restful API, Pendo SDK, MySQL, Airtable"
         icon="skills"
-      />
+      >
+        Amazon Web Services, TypeScript, NodeJS, Flutter, Python, Restful API, Pendo SDK, MySQL, Airtable
+      </ProfileInfoCard>
 
       <ProfileInfoCard
         title="Bilingual"
-        content="Fluent in English and Russian"
         icon="language"
-      />
+      >
+        Fluent in English and Russian
+      </ProfileInfoCard>
 
       <ProfileInfoCard
-        title="Capstone Project"
-        content="Quality Flooring - app to advertise flooring installation services and to contractors"
+        title="BrainStation Capstone Project"
         icon="project"
-      />
+      >
+        <BlueLink href="https://github.com/yaacovkdev/Quality-Flooring">Quality Flooring</BlueLink> - Web app with <BlueLink href="https://github.com/yaacovkdev/Flooring-API">API</BlueLink> to advertise flooring installation services and to contractors
+      </ProfileInfoCard>
     </div>
   </div>
+
+  <ConnectButton
+    action={dropCard}
+    revAction={returnCard}
+  />
 </div>
 
 <style lang="scss">
@@ -182,6 +188,7 @@
     @include scale-fonts-regular;
     position: relative;
     width: 100%;
+    min-height: 42rem;
     padding: $mobile-padding;
     display: flex;
     flex-direction: row;

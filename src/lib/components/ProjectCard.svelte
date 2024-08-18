@@ -33,8 +33,6 @@
 
 <style lang="scss">
   .project-card {
-    @include interactive-radius;
-
     background-color: $purple;
 
     &__picture {
@@ -70,6 +68,7 @@
       h3 {
         flex: 4;
         text-align: start;
+        color: $white;
       }
     }
 
