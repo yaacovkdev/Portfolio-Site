@@ -37,21 +37,15 @@ header
 }
 
 main {
-  padding: $mobile-padding;
-  padding-top: 0;
-
-  @include tablet {
-    padding: $desktop-padding;
-    padding-top: 0;
-  }
-
   //make all outer children centered in main
   #contentWidthMain {
     width: 100%;
-    > * {
-      margin-left: auto;
-      margin-right: auto;
-    }
+  }
+
+  .content-width > * {
+    width: fit-content;
+    margin-right: auto;
+    margin-left:auto;
   }
 }
 

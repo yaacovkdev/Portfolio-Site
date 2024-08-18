@@ -4,6 +4,7 @@
   import { disableContentWidthMain } from "$lib/scripts/tweaks";
   import {resetNavButton} from "$lib/scripts/resetNavButton";
   import BlueLink from "$lib/components/BlueLink.svelte";
+  import {iframeDefault} from "$lib/scripts/tweaks.js";
 
   selectedNav(3);
   resetNavButton();
@@ -32,7 +33,7 @@
   iframe {
     border: none;
     background-color: $background;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
   }
 </style>
