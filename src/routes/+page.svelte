@@ -9,10 +9,28 @@
   resetNavButton();
 </script>
 
-<WelcomeTitle />
+<div class="content-width">
+    <WelcomeTitle />
+</div>
 
-<ProfileCard />
+<div class="content-width">
+    <ProfileCard />
+</div>
 
-<!--<MainTitle>-->
-<!--    News-->
-<!--</MainTitle>-->
+<!--<div class="content-width background-news">-->
+<!--    <MainTitle>-->
+<!--        News-->
+<!--    </MainTitle>-->
+<!--</div>-->
+
+
+<style lang="scss">
+  .content-width {
+    z-index: 1;
+    @include main-outer-div;
+  }
+
+  .background-news {
+    background-color: $lightgreen;
+  }
+</style>

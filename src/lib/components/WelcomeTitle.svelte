@@ -67,6 +67,6 @@
   }
 
   #homeTitle {
-    @include title-margin;
+    @include title-padding;
   }
 </style>
