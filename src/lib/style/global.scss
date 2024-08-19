@@ -43,7 +43,7 @@ main {
   }
 
   .content-width > * {
-    width: fit-content;
+    max-width: $sitewidth;
     margin-right: auto;
     margin-left:auto;
   }
