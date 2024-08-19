@@ -20,9 +20,9 @@ const dynamicDarkBackground = () => {
                 ${b + f(t, -0.0401196102078,30)}, 1)`;
 
             svelteBody.style.backgroundImage = `
-            linear-gradient(60deg, rgba(14,47,85,0.7), ${midcolor} ${33 + f(t, Math.PI/60, 30)}%, rgba(14,47,85,0.7)),
-            linear-gradient(120deg, rgba(14,47,85,0.7), ${midcolor} ${50 + f(t, Math.PI/30, 45)}%, rgba(14,47,85,0.7)),
-            linear-gradient(180deg, rgba(14,47,85,0.7), ${midcolor} ${77 + f(t, Math.PI/20, 20)}%, rgba(14,47,85,0.7))`;
+            linear-gradient(60deg, rgba(14,47,85,0.7)  0%, ${midcolor} ${100 + f(t, Math.PI/60, 30)}%),
+            linear-gradient(120deg, ${midcolor} ${ 20 -f(t, Math.PI/30, 20)}%, rgba(14,47,85,0.7) 100%),
+            linear-gradient(180deg, rgba(14,47,85,0.7) 0%, ${midcolor} ${100 + f(t, Math.PI/20, 20)}%)`;
 
             t++;
 
