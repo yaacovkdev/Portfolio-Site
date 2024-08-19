@@ -2,10 +2,8 @@
 
 <style lang="scss">
   .main-title {
-    @include title-margin;
+    @include title-padding;
     @include scale-fonts-title;
-    text-decoration: 2px solid underline;
-    text-underline-offset: 0.25rem;
   }
 </style>
 

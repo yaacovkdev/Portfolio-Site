@@ -1,11 +1,11 @@
 @use "./breakpoints" as *;
 
-@mixin title-margin {
-  margin-top: 4rem;
-  margin-bottom: 1em;
+@mixin title-padding {
+  padding-top: 4rem;
+  padding-bottom: 1em;
 
   @include tablet {
-    margin-bottom: 1.5em;
+    padding-bottom: 1.5em;
   }
 }
 
@@ -17,14 +17,28 @@
   }
 }
 
-@mixin scale-fonts-header {
+@mixin main-outer-div {
+  width: 100%;
+
+  padding-bottom: 2rem;
 
   @include tablet {
-    @apply text-2xl;
+    padding-bottom: 3rem;
   }
 
   @include desktop {
+    padding-bottom: 4rem;
+  }
+}
+
+@mixin scale-fonts-header {
+
+  @include tablet {
     @apply text-3xl;
+  }
+
+  @include desktop {
+    @apply text-4xl;
   }
 }
 
