@@ -49,6 +49,6 @@
     height: calc(100vh - $mobile-header-height);
     background-color: $background;
     top: $mobile-header-height;
-    right: 0;
+    left: 0;
   }
 </style>
