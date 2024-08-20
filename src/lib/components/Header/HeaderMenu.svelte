@@ -7,12 +7,9 @@
     let dashes: NodeListOf<HTMLElement>;
 
     const navButton = () => {
-        //Why Didn't I just make header position fixed
-        //Because I want to feel special :)
         if(bodyElement) {
             mobileNavClicked = !mobileNavClicked;
             if (mobileNavClicked) {
-                window.scrollTo(0,0);
                 bodyElement.classList.add("overflow-hidden");
 
                 for (let i = 0; i< 3; i++){

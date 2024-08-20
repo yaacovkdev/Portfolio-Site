@@ -8,6 +8,7 @@
 </script>
 
 <header>
+  <div class="header-hidden-block"></div>
   <div class="header-menu content-width">
     <HeaderMenu bind:mobileNavClicked={$clickedMobileNav} />
   </div>
@@ -31,20 +32,22 @@
 </footer>
 
 <style lang="scss">
+
   header {
-    background-color: $background;
     z-index: 1;
+    background-color: $background;
 
-    .content-width {
+    @include mobile {
+      position: fixed;
       width: 100%;
-      height: 100%;
-      max-width: $sitewidth;
     }
-
-    @include box-shadow;
   }
 
   main {
+    @include mobile {
+      margin-top: $mobile-header-height;
+    }
+
     z-index: 0;
 
     .header-slider {
