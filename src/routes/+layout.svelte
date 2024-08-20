@@ -31,17 +31,10 @@
 </footer>
 
 <style lang="scss">
+
   header {
-    background-color: $background;
     z-index: 1;
-
-    .content-width {
-      width: 100%;
-      height: 100%;
-      max-width: $sitewidth;
-    }
-
-    @include box-shadow;
+    background-color: $background;
   }
 
   main {
