@@ -15,14 +15,23 @@ const dynamicDarkBackground = () => {
         let t: number = 0;
         // 60hz update
         const colorInterval = setInterval(() => {
-            const midcolor:string = `rgba(${r + f_sq(t, Math.PI / 60, 43, 14)},
-                ${g + f(t,0.0174532925200,20)},
-                ${b + f(t, -0.0401196102078,30)}, 1)`;
+            const midcolor:string = `rgba(${r + f_sq(t, Math.PI / 60 / 15, 43, 14)},
+                ${g + f(t,0.0174532925200 / 15,20)},
+                ${b + f(t, -0.0401196102078 / 15,25)}, 1)`;
+
+            // svelteBody.style.backgroundImage = `
+            // linear-gradient(60deg, rgba(255,215,0,0.7)  0%, ${midcolor} ${130 + f(t, Math.PI/60, 30)}%),
+            // linear-gradient(120deg, ${midcolor} ${ 20 -f(t, Math.PI/30, 20)}%, rgba(255,255,0,0.7) 100%),
+            // linear-gradient(180deg, rgba(14,47,85,0.7) 0%, ${midcolor} ${120 + f(t, Math.PI/20, 20)}%)`;
 
             svelteBody.style.backgroundImage = `
-            linear-gradient(60deg, rgba(14,47,85,0.7)  0%, ${midcolor} ${100 + f(t, Math.PI/60, 30)}%),
-            linear-gradient(120deg, ${midcolor} ${ 20 -f(t, Math.PI/30, 20)}%, rgba(14,47,85,0.7) 100%),
-            linear-gradient(180deg, rgba(14,47,85,0.7) 0%, ${midcolor} ${100 + f(t, Math.PI/20, 20)}%)`;
+            linear-gradient(60deg, rgba(255,215,0,0.7)  0%, ${midcolor} 0%),
+            linear-gradient(120deg, ${midcolor} 0%, rgba(200,200,31,1) 100%),
+            linear-gradient(180deg, rgba(14,47,85,0.7) 0%, ${midcolor} 0%)`;
+
+
+
+
 
             t++;
 

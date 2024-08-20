@@ -30,7 +30,7 @@ header
   height: $mobile-header-height;
 
   @include tablet {
-    padding: 0 $desktop-padding;
+    padding: $desktop-padding;
     height: auto;
   }
 
