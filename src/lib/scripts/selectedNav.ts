@@ -1,23 +1,12 @@
 /*
 The sole purpose of this script is to have graphics gold effect be consistent
 */
-import { onMount } from "svelte";
+import {writable} from "svelte/store";
+
+export let shineNav = writable<Number>(0);
 
 const selectedNav = (n: number): void => {
-  onMount(() => {
-    const link = document.querySelectorAll(`.nav-link--${n}`);
-
-    for(let i = 0; i < link.length; i++) {
-      link[i].classList.add("shine");
-    }
-
-
-    return (() => {
-      for(let i = 0; i < link.length; i++) {
-        link[i].classList.remove("shine");
-      }
-    })
-  });
+  shineNav.set(n);
 }
 
 export default selectedNav;

@@ -1,21 +1,36 @@
 <script lang="ts">
-    import { page } from '$app/stores';
+    import { page } from "$app/stores";
+    import {shineNav} from "$lib/scripts/selectedNav";
+    const root_paths: String[] = ['/', '/graphics', '/fullstack'];
 
-    function handleLinkClick(event) {
-        const targetUrl = event.currentTarget.getAttribute('href');
-        const currentPath = $page.url.pathname;
+  const firstpath = $page.url.pathname.match(/\/[^\/]*/gm)[0];
 
-        //if target same as current, reload page
-        if (targetUrl === currentPath) {
-            event.preventDefault(); // Prevent default link behavior
-            window.location.href = targetUrl; // Force full page reload
-        }
-    }
+  let localShine:Number = root_paths.indexOf(firstpath);
+
+  $: {
+      localShine = $shineNav;
+  }
+
 </script>
 
-<a class="nav-link nav-link--1" href="/" on:click={handleLinkClick}>Home</a>
-<a class="nav-link nav-link--2" href="/graphics" on:click={handleLinkClick}>Graphics</a>
-<a class="nav-link nav-link--3" href="/fullstack" on:click={handleLinkClick}>Boolean Calculator</a>
+<!--Needs fixing-->
+{#if localShine == 1}
+    <a class="nav-link nav-link--1 shine" href="/">Home</a>
+{:else}
+    <a class="nav-link nav-link--1" href="/">Home</a>
+{/if}
+
+{#if localShine == 2}
+    <a class="nav-link nav-link--2 shine" href="/graphics">Graphics</a>
+{:else}
+    <a class="nav-link nav-link--2" href="/graphics">Graphics</a>
+{/if}
+
+{#if localShine == 3}
+    <a class="nav-link nav-link--3 shine" href="/fullstack">Boolean Calculator</a>
+{:else}
+    <a class="nav-link nav-link--3" href="/fullstack">Boolean Calculator</a>
+{/if}
 
 <style lang="scss">
   a {
@@ -27,9 +42,13 @@
 
     @include tablet {
       @include scale-fonts-header;
-      padding: 0 1rem;
+      padding: 0 1.5rem;
       display: inline-block;
       margin: 0;
+    }
+
+    @include desktop {
+      padding: 0 2rem;
     }
   }
 </style>

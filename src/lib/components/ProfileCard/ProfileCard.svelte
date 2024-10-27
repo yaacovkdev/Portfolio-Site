@@ -136,8 +136,8 @@
         BSc. in Computing Science from <BlueLink href="https://twu.ca/" end={true}>Trinity Western University</BlueLink>
       </ProfileInfoCard>
 
-      <ProfileInfoCard title="Junior Software Developer" icon="work">
-        1 year as a Junior Software Engineer for <BlueLink href="https://www.happinessmountain.com/" end={true}>Happiness Mountain</BlueLink>
+      <ProfileInfoCard title="Intern Software Engineer" icon="work">
+        1 year as a Software Engineer for <BlueLink href="https://www.happinessmountain.com/" end={true}>Happiness Mountain</BlueLink>
       </ProfileInfoCard>
 
       <ProfileInfoCard
