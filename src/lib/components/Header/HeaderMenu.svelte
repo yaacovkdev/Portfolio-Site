@@ -58,7 +58,7 @@
         </div>
     </button>
 
-    <h1 class="text-3xl nav-link ml-5 md:hidden">YAACOV.SITE</h1>
+    <a href="/" class="header-title text-3xl nav-link ml-5 md:hidden">YAACOV.SITE</a>
 
     <nav class="flex-wrap w-auto hidden md:flex">
         <HeaderNavLinks />
@@ -127,4 +127,7 @@
     //padding: 0 2px;
   }
 
+  .header-title {
+    @include shine-effect;
+  }
 </style>
