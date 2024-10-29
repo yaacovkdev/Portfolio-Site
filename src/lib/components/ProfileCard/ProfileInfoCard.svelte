@@ -1,12 +1,12 @@
 <script lang="ts">
-  export let title: string;
-  export let icon: string;
-
   import bachelors_icon from "$lib/images/icons/bachelors.svg";
   import work_icon from "$lib/images/icons/work.svg";
   import skills_icon from "$lib/images/icons/skills.svg";
   import language_icon from "$lib/images/icons/language.svg";
   import project_icon from "$lib/images/icons/project.svg";
+
+  export let title: string;
+  export let icon: string;
 
   const icons = {
     bachelors: bachelors_icon,

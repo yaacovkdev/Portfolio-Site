@@ -5,6 +5,7 @@
   const text1: string = "Let's Stay in Touch!";
   const text2: string = "Return Card";
   let clicked: boolean = false;
+  let timeoutStarted: boolean = false;
 </script>
 
 <div class="connect-button">
@@ -12,10 +13,14 @@
     class="button"
     on:click={() => {
       if (!clicked) {
-        action();
-        setTimeout(() => {
-          clicked = !clicked;
-        }, 600);
+        if(!timeoutStarted) {
+           timeoutStarted = true;
+           action();
+           setTimeout(() => {
+             clicked = !clicked;
+             timeoutStarted = false;
+           }, 600);
+        }
       } else {
         revAction();
         clicked = !clicked;
