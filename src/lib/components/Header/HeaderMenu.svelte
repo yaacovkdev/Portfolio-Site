@@ -58,6 +58,8 @@
         </div>
     </button>
 
+    <h1 class="text-3xl nav-link ml-5 md:hidden">YAACOV.SITE</h1>
+
     <nav class="flex-wrap w-auto hidden md:flex">
         <HeaderNavLinks />
     </nav>
