@@ -43,6 +43,10 @@
     }
   }
 
+  .dark-header {
+    background-color: #780091;
+  }
+
   main {
     @include mobile {
       margin-top: $mobile-header-height;
