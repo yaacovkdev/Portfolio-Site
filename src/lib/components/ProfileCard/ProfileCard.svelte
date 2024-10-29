@@ -27,6 +27,13 @@
     card.classList.remove("rotate-anim");
     profileCard.style.visibility = "visible"; //prevents seeing rotation animation from playing on launch
 
+    //function to resize
+    const handleResize = () => {
+      if (card.style.display !== "none")
+        cardBack.style.height = `${card.getBoundingClientRect().height}px`;
+      else cardBack.style.height = "";
+    };
+
     dropCard = () => {
       let time = 0;
       card.classList.add("rotate-anim");
@@ -51,13 +58,6 @@
       card.style.display = "block";
       card.style.top = "0";
       handleResize();
-    };
-
-    //function to resize 
-    const handleResize = () => {
-      if (card.style.display !== "none")
-        cardBack.style.height = `${card.getBoundingClientRect().height}px`;
-      else cardBack.style.height = "";
     };
 
     handleResize();

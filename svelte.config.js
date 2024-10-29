@@ -5,9 +5,10 @@ import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 
 const filePath = dirname(fileURLToPath(import.meta.url));
+console.log("fi", filePath);
 
 //make the path unix like as it crashes on DOS backslash path
-const sassPath = path.join(filePath, "/src/lib/style/").replace(/\\/g, "/");
+const sassPath = '/' + path.relative('/', path.join(filePath, '/src/lib/style')).replace(/\\/g, '/');
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -16,9 +17,9 @@ const config = {
   preprocess: sveltePreprocess({
     postcss: true,
     scss: {
-      prependData: `@import '${sassPath}_variables.scss';
-        @import '${sassPath}_mixins.scss';
-        @import '${sassPath}_breakpoints.scss';`,
+      prependData: `@use '${sassPath}/_variables.scss' as *;
+      @use '${sassPath}/_breakpoints.scss' as *;
+      @use '${sassPath}/_mixins.scss' as *;`,
     },
   }),
 
