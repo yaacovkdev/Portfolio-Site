@@ -1,4 +1,5 @@
 @use "./breakpoints" as *;
+@use "./variables" as *;
 
 @mixin title-padding {
   padding-top: 4rem;
