@@ -55,6 +55,7 @@ main {
 
   @include tablet {
     padding: 0 $desktop-padding;
+
   }
 
   .content-width > * {
@@ -99,6 +100,10 @@ main {
 
   @include tablet {
     text-decoration: none;
+
+    &:after {
+      display: none;
+    }
   }
 }
 

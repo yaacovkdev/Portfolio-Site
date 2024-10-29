@@ -2,7 +2,7 @@
     import HeaderNavLinks from "$lib/components/Header/HeaderNavLinks.svelte";
     import {onMount} from "svelte";
 
-    export let mobileNavClicked: boolean = false;
+    let {mobileNavClicked = $bindable()} = $props();
     let bodyElement: HTMLElement;
     let dashes: NodeListOf<HTMLElement>;
 
@@ -38,6 +38,11 @@
     onMount(() => {
         bodyElement = document.querySelector("body");
         dashes = document.querySelectorAll(".hamburger-dash");
+
+        return(() => {
+            bodyElement = null;
+            dashes = null;
+        })
     });
 </script>
 
@@ -52,6 +57,8 @@
             </div>
         </div>
     </button>
+
+    <h1 class="text-3xl nav-link ml-5 md:hidden">YAACOV.SITE</h1>
 
     <nav class="flex-wrap w-auto hidden md:flex">
         <HeaderNavLinks />

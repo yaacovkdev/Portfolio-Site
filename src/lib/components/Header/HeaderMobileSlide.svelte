@@ -2,29 +2,39 @@
     import HeaderNavLinks from "$lib/components/Header/HeaderNavLinks.svelte";
     import {onMount} from "svelte";
 
-    export let clickedButton: boolean;
+    let props = $props();
+    let clickedButton = $derived(props.clickedButton);
     let headerMobileSlider: Element;
     let animationTimeout: number;
 
-    $: if(headerMobileSlider) {
-        if(clickedButton) {
+    $effect(() => {
+        let clicked = clickedButton;
+
+        if(!headerMobileSlider) {
+            return;
+        }
+
+        if (clicked) {
             headerMobileSlider.classList.remove("hidden");
             headerMobileSlider.classList.add("slide-down");
             clearTimeout(animationTimeout);
-            animationTimeout = setTimeout(()=>{
+            animationTimeout = setTimeout(() => {
                 headerMobileSlider.classList.remove("slide-down");
             }, 400);
-        }
-        else {
+        } else {
             headerMobileSlider.classList.add("hidden");
             headerMobileSlider.classList.remove("slide-down");
             clearTimeout(animationTimeout);
         }
-    }
+    });
 
     onMount(() => {
         headerMobileSlider = document.querySelector(".header-mobile-slider");
         headerMobileSlider.classList.remove("slide-down");
+
+        return(() => {
+            headerMobileSlider = null;
+        });
     })
 
 </script>
