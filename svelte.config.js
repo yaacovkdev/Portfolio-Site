@@ -5,7 +5,6 @@ import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 
 const filePath = dirname(fileURLToPath(import.meta.url));
-console.log("fi", filePath);
 
 //make the path unix like as it crashes on DOS backslash path
 const sassPath = '/' + path.relative('/', path.join(filePath, '/src/lib/style')).replace(/\\/g, '/');
