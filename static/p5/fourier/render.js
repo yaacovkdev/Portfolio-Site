@@ -72,7 +72,8 @@ function resetValues() {
   linegraphics.clear();
 
   try {
-    eval(code_field);
+    //change for now. Uncertain if it protects too much better.
+    Function(`"use strict"; ${code_field}`)();
     loop();
     return false;
   } catch (err) {

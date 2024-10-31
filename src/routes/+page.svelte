@@ -26,7 +26,7 @@
 
 <style lang="scss">
   .content-width {
-    z-index: 1;
+    z-index: -1;
     @include main-outer-div;
   }
 

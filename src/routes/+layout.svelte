@@ -34,7 +34,7 @@
 <style lang="scss">
 
   header {
-    z-index: 1;
+    z-index: 3;
     background-color: $background;
 
     @include mobile {
@@ -52,7 +52,7 @@
       margin-top: $mobile-header-height;
     }
 
-    z-index: 0;
+    z-index: 2;
 
     .header-slider {
       z-index: 10;
@@ -63,7 +63,7 @@
     background-color: $white;
     font-size: 1rem;
 
-    z-index: -1;
+    z-index: 1;
 
     .content-width {
       display: flex;
