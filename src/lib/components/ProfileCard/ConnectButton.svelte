@@ -2,7 +2,7 @@
   export let action;
   export let revAction;
 
-  const text1: string = "Let's Stay in Touch!";
+  const text1: string = "Let's Get in Touch!";
   const text2: string = "Return Card";
   let clicked: boolean = false;
   let timeoutStarted: boolean = false;

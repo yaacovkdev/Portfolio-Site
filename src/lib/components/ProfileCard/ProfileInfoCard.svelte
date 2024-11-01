@@ -4,6 +4,7 @@
   import skills_icon from "$lib/images/icons/skills.svg";
   import language_icon from "$lib/images/icons/language.svg";
   import project_icon from "$lib/images/icons/project.svg";
+  import volunteering_icon from "$lib/images/icons/volunteer.png";
 
   export let title: string;
   export let icon: string;
@@ -14,6 +15,7 @@
     skills: skills_icon,
     language: language_icon,
     project: project_icon,
+    volunteering: volunteering_icon
   };
 </script>
 

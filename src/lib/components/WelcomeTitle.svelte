@@ -2,6 +2,8 @@
   import { onMount } from "svelte";
   import { messages } from "./messages.json";
   let homeTitle: HTMLElement;
+  let messageKeys = ["English", "French", "Spanish", "Mandarin", "Hindi"];
+  let key_i = 1;
 
   const setRandomMessage = (messages: Object): string => {
     const language =
@@ -12,14 +14,24 @@
     return messages[language];
   };
 
-  let message = setRandomMessage(messages);
+  const setRandomMessageSmall = (messages: Object, keys: String[]): string => {
+    if(key_i >= messageKeys.length) key_i = 0;
+    const language =
+      keys[key_i++];
+
+      console.log(language);
+
+    return messages[language];
+  };
+
+  let message = messages["English"];
 
   const updateMessage = () => {
     homeTitle.classList.remove("fade-in");
     homeTitle.classList.add("fade-out");
 
     setTimeout(() => {
-      message = setRandomMessage(messages);
+      message = setRandomMessageSmall(messages, messageKeys);
 
       homeTitle.classList.remove("fade-out");
       homeTitle.classList.add("fade-in");
@@ -34,12 +46,17 @@
 </script>
 
 <div class="welcome-title">
-  <h1 id="homeTitle" class="h-44 text-4xl md:text-5xl xl:text-6xl text-amber-500 fade-in fade-out">
+  <h1 id="homeTitle" class="h-44 text-4xl md:text-5xl xl:text-6xl fade-in fade-out">
     {message}
   </h1>
 </div>
 
 <style lang="scss">
+  #homeTitle {
+    color: $gold;
+    text-shadow: $purpleheart 2px 2px 2px;
+  }
+
   .fade-out {
     animation: fadeOut 0.75s forwards ease-out;
   }
