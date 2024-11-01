@@ -32,17 +32,6 @@
   }
 }
 
-@mixin scale-fonts-header {
-
-  @include tablet {
-    @apply text-3xl;
-  }
-
-  @include desktop {
-    @apply text-4xl;
-  }
-}
-
 @mixin scale-fonts-title {
   @apply text-3xl;
 

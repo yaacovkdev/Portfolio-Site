@@ -58,11 +58,14 @@
         </div>
     </button>
 
-    <a href="/" class="header-title text-3xl nav-link ml-5 md:hidden">YAACOV.SITE</a>
+    <section class="flex justify-between w-full">
+        <a href="/" class="header-title text-3xl nav-link max-[767px]:ml-5">YAACOV.SITE</a>
 
-    <nav class="flex-wrap w-auto hidden md:flex">
-        <HeaderNavLinks />
-    </nav>
+        <nav class="flex-wrap hidden md:flex">
+            <HeaderNavLinks />
+        </nav>
+    </section>
+
 </div>
 
 <style lang="scss">
