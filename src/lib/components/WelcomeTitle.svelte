@@ -54,7 +54,7 @@
 <style lang="scss">
   #homeTitle {
     color: $gold;
-    text-shadow: $purpleheart 2px 2px 2px;
+    text-shadow: rgba($purpleheart, 0.4) 2px 2px 2px;
   }
 
   .fade-out {
