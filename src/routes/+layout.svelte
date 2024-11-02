@@ -43,11 +43,9 @@
     }
   }
 
-  .dark-header {
-    background-color: #780091;
-  }
-
   main {
+    background-color: $background;
+
     @include mobile {
       margin-top: $mobile-header-height;
     }
