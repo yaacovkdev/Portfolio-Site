@@ -9,6 +9,7 @@ due to making iframe a javascript object for extra security measures.
 
 #graphicsProjectSection.project {
   min-height: 100vh;
+  padding: $mobile-padding;
 
   @include tablet {
     padding: $desktop-padding;
@@ -43,24 +44,43 @@ due to making iframe a javascript object for extra security measures.
   }
 
   &--fourier {
+    padding: $mobile-padding 0;
+
     .project-iframe {
       --scale: 0.312;
+
+      height: 640px;
+
       iframe {
         width: 320%;
-        height: 2050px;
         transform-origin: 0 0;
         transform: scale(var(--scale));
+        height: 2050px;
         margin-bottom: calc((var(--scale) - 1) * 2050px);
+      }
+    }
+
+    @media (min-width: 526px) {
+      .project-iframe {
+
+        height: 327px;
+
+        iframe {
+          height: 1050px;
+        }
       }
     }
 
     @include tablet {
       .project-iframe {
         --scale: 0.7;
+
+        height: 1435px;
+
         iframe {
           width: 140%;
           transform: scale(var(--scale));
-          margin-bottom: 0;
+          margin-bottom: calc((var(--scale) - 1) * 2050px);
           height: 2050px;
         }
       }
@@ -69,25 +89,32 @@ due to making iframe a javascript object for extra security measures.
     @media (min-width: 1060px) {
       .project-iframe {
         --scale: 1;
+
+        &, iframe {
+          height: 2050px;
+        }
+
         iframe {
           width: 100%;
           transform: scale(var(--scale));
           margin-bottom: 0;
-          height: 2050px;
         }
       }
     }
 
     @media (min-width: 1750px) {
-      .project-iframe iframe {
+      .project-iframe, .project-iframe iframe {
         height: 1050px;
       }
     }
   }
 
   &--pool {
+    padding: $mobile-padding 0;
     .project-iframe {
       --scale: 0.26;
+
+      height: 234px;
 
       iframe {
         width: 1210px;
@@ -99,10 +126,16 @@ due to making iframe a javascript object for extra security measures.
 
       @include tablet {
         --scale: 0.60;
+
+        padding: $desktop-padding;
+
+        height: 540px;
       }
 
       @include desktop {
         --scale: 1;
+
+        height: 900px;
       }
     }
   }

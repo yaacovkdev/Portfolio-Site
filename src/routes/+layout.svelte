@@ -9,7 +9,7 @@
 
 <header>
   <div class="header-hidden-block"></div>
-  <div class="header-menu content-width">
+  <div class="header-menu limit-width">
     <HeaderMenu bind:mobileNavClicked={$clickedMobileNav} />
   </div>
 </header>
@@ -18,13 +18,13 @@
   <div class="header-slider">
     <HeaderMobileSlide clickedButton={$clickedMobileNav} />
   </div>
-  <div id="contentWidthMain" class="content-width">
+  <div id="contentWidthMain">
     <slot />
   </div>
 </main>
 
 <footer>
-  <div class="content-width">
+  <div class="limit-width">
     <p class="text-sm">Built by Jacob Kochatkov</p>
     <span class="footer-dot">·</span>
     <img src={sveltekit_icon} alt="svelte_icon" />
@@ -62,7 +62,7 @@
 
     z-index: 1;
 
-    .content-width {
+    .limit-width {
       display: flex;
       flex-direction: row;
       justify-content: center;

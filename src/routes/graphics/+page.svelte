@@ -10,7 +10,7 @@
   dynamicDarkBackground();
 </script>
 
-<section id="graphicsPageSection" class="background-purple">
+<section id="graphicsPageSection" class="background-purple padding-default">
   <MainTitle>WebGL Projects</MainTitle>
   <div class="project-cards">
     <a href="/graphics/rocket"><ProjectCard name="rocket" /></a>

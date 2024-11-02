@@ -26,7 +26,7 @@
   id="graphicsProjectSection"
   class={`project project--${data["url_name"]} background-purple flex-col justify-start items-center`}
 >
-  <h1 class="my-4 text-2xl">{data["name"]}</h1>
+  <h1 class="my-4 text-2xl padding-default">{data["name"]}</h1>
   <div class="project-iframe"></div>
 
   <!--  Description goes here-->

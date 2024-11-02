@@ -10,11 +10,11 @@
 
 </script>
 
-<div class="content-width">
+<div class="limit-width padding-default">
     <WelcomeTitle />
 </div>
 
-<div class="content-width">
+<div class="limit-width padding-default">
     <ProfileCard />
 </div>
 
@@ -24,9 +24,8 @@
 <!--    </MainTitle>-->
 <!--</div>-->
 
-
 <style lang="scss">
-  .content-width {
+  .limit-width {
     z-index: -1;
     @include main-outer-div;
   }
