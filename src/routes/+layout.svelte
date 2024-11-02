@@ -41,11 +41,12 @@
       position: fixed;
       width: 100%;
     }
+
+    @include box-shadow;
   }
 
-  .dark-header {
-    background-color: #780091;
-  }
+
+
 
   main {
     @include mobile {

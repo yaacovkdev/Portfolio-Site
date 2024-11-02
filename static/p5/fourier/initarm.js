@@ -1,5 +1,5 @@
 let code_field = "";
-let mainArm;
+let mainArm;+
 
 let initial_code = `/*In this field you can program in javascript anything you like and set mainArm\n vectors with any type of algorithms*/\n
 //vector arm\nmainArm = new VectorArm();\n
