@@ -77,16 +77,25 @@ main {
 }
 
 .shine {
-  background: linear-gradient(45deg, rgba($darkgold,0.75), rgba($gold,0.8), rgba($amber, 0.75)),
-              linear-gradient(100deg, rgba($amber,0.75), rgba($gold,0.8), rgba($darkgold,0.75));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: $gold 1px;
+    $textshine-amber: linear-gradient(45deg, rgba($darkgold,0.75), rgba($amber,0.5), rgba($pirategold, 0.75)), linear-gradient(100deg, rgba($pirategold,0.75), rgba($amber,0.5), rgba($darkgold,0.75));
+    $textshine-purple: linear-gradient(45deg, rgba($darkgold,0.75), rgba($purple,0.2), rgba($pirategold, 0.75)), linear-gradient(100deg, rgba($pirategold,0.75), rgba($purple,0.2), rgba($darkgold,0.75));
+
+    background: $textshine-amber;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: $gold 1px;
+
+  @include tablet {
+    background: $textshine-purple;
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: $gold 1px;
+  }
 
   text-decoration: underline;
   text-underline-offset: 0.3rem;
 
-  @include mobile {
     &:after {
       content: '';
       position: absolute;
@@ -94,17 +103,14 @@ main {
       bottom: -5px; /* Adjust based on your text size */
       width: 100%;
       height: 3px; /* Adjust thickness of the underline */
-      background: $amber;
-    }
-  }
+      background: $textshine-amber;
 
-  @include tablet {
-    text-decoration: none;
-
-    &:after {
-      display: none;
+      @include tablet {
+        height: 2px;
+        bottom: 0px;
+        background: $textshine-purple;
+      }
     }
-  }
 }
 
 .iframe-default {
