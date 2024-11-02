@@ -5,15 +5,14 @@
 
   const firstpath = $page.url.pathname.match(/\/[^\/]*/gm)[0];
 
-  let localShine:Number = root_paths.indexOf(firstpath);
+  let localShine:Number = $state(root_paths.indexOf(firstpath)+1);
 
-  $: {
+  $effect(() => {
       localShine = $shineNav;
-  }
+  });
 
 </script>
 
-<!--Needs fixing-->
 {#if localShine == 1}
     <a class="nav-link nav-link--1 shine" href="/">Home</a>
 {:else}

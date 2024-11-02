@@ -4,7 +4,7 @@ const dynamicDarkBackground = () => {
     onMount(() => {
         // Select the element with id 'my-element' and add a class 'new-class' to it
 
-        const mainHTML: HTMLElement = document.querySelector("main");
+        const mainHTML: HTMLElement = document.querySelector("#graphicsPageSection");
         const background: number[] = [14,47,85];
 
         let r: number = background[0];

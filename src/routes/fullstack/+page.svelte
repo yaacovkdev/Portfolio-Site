@@ -1,14 +1,12 @@
 <script lang="ts">
   import MainTitle from "$lib/components/MainTitle.svelte";
   import selectedNav from "$lib/scripts/selectedNav";
-  import { disableContentWidthMain } from "$lib/scripts/tweaks";
+
   import {resetNavButton} from "$lib/scripts/resetNavButton";
   import BlueLink from "$lib/components/BlueLink.svelte";
-  import {iframeDefault} from "$lib/scripts/tweaks.js";
 
   selectedNav(3);
   resetNavButton();
-  disableContentWidthMain();
 </script>
 
 <div class="project">

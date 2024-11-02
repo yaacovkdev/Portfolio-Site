@@ -41,8 +41,6 @@ header
   }
 
   @include box-shadow;
-
-
 }
 
 main {
@@ -51,17 +49,21 @@ main {
     width: 100%;
   }
 
-  padding: 0 $mobile-padding;
-
-  @include tablet {
-    padding: 0 $desktop-padding;
-
-  }
-
-  .content-width > * {
+  .content-width > *:not(#graphicsPageSection):not(#graphicsProjectSection) {
     max-width: $sitewidth;
     margin-right: auto;
     margin-left:auto;
+  }
+}
+
+.main-iframe {
+  padding: 0;
+}
+
+.background-default {
+  background-color: $background;
+  * {
+    color: $black;
   }
 }
 
@@ -111,10 +113,6 @@ main {
         background: $textshine-purple;
       }
     }
-}
-
-.iframe-default {
-  padding:0;
 }
 
 .gradient-gold-background {

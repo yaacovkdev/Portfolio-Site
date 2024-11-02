@@ -7,7 +7,7 @@ due to making iframe a javascript object for extra security measures.
 @use "./breakpoints" as *;
 @use "./mixins" as *;
 
-#graphicsProjectRoot.project {
+#graphicsProjectSection.project {
   min-height: 100vh;
 
   @include tablet {
