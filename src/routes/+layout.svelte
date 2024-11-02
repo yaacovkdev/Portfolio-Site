@@ -18,7 +18,7 @@
   <div class="header-slider">
     <HeaderMobileSlide clickedButton={$clickedMobileNav} />
   </div>
-  <div id="contentWidthMain">
+  <div id="contentWidthMain" class="content-width">
     <slot />
   </div>
 </main>
@@ -44,12 +44,11 @@
   }
 
   main {
-    background-color: $background;
-
     @include mobile {
       margin-top: $mobile-header-height;
     }
 
+    background: $background;
     z-index: 2;
 
     .header-slider {
@@ -72,7 +71,7 @@
 
     p,
     .footer-dot {
-      color: gray;
+      color: $black;
     }
 
     img {
