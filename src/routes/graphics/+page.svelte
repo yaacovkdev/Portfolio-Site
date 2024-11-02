@@ -2,33 +2,33 @@
   import ProjectCard from "$lib/components/ProjectCard.svelte";
   import MainTitle from "$lib/components/MainTitle.svelte";
   import selectedNav from "$lib/scripts/selectedNav";
-  import { backgroundPurple} from "$lib/scripts/tweaks";
   import {resetNavButton} from "$lib/scripts/resetNavButton";
   import dynamicDarkBackground from "$lib/scripts/dynamicDarkBackground";
 
   selectedNav(2);
   resetNavButton();
-  backgroundPurple(); //needed for light text color
   dynamicDarkBackground();
 </script>
 
-<MainTitle>WebGL Projects</MainTitle>
-<div class="project-cards">
-  <a href="/graphics/rocket"><ProjectCard name="rocket" /></a>
-  <a href="/graphics/cube"><ProjectCard name="cube" /></a>
+<section id="graphicsPageSection" class="background-purple padding-default">
+  <MainTitle>WebGL Projects</MainTitle>
+  <div class="project-cards">
+    <a href="/graphics/rocket"><ProjectCard name="rocket" /></a>
+    <a href="/graphics/cube"><ProjectCard name="cube" /></a>
+  </div>
 
-</div>
+  <MainTitle>p5.js Projects</MainTitle>
 
-<MainTitle>p5.js Projects</MainTitle>
+  <div class="project-cards">
+    <a href="/graphics/bouncy"><ProjectCard name="bouncy" /></a>
+    <a href="/graphics/spinning"><ProjectCard name="spinning" /></a>
+    <a href="/graphics/angel"><ProjectCard name="angel" /></a>
+    <a href="/graphics/fourier"><ProjectCard name="fourier" /></a>
+    <a href="/graphics/pool"><ProjectCard name="pool" /></a>
 
-<div class="project-cards">
-  <a href="/graphics/bouncy"><ProjectCard name="bouncy" /></a>
-  <a href="/graphics/spinning"><ProjectCard name="spinning" /></a>
-  <a href="/graphics/angel"><ProjectCard name="angel" /></a>
-  <a href="/graphics/fourier"><ProjectCard name="fourier" /></a>
-  <a href="/graphics/pool"><ProjectCard name="pool" /></a>
+  </div>
 
-</div>
+</section>
 
 <style lang="scss">
   .project-cards {

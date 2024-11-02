@@ -1,0 +1,191 @@
+/*
+The entire purpose of this file is to apply styles to +page.svelte in [project] folder,
+due to making iframe a javascript object for extra security measures.
+ */
+
+@use "./variables" as *;
+@use "./breakpoints" as *;
+@use "./mixins" as *;
+
+#graphicsProjectSection.project {
+  min-height: 100vh;
+  padding: $mobile-padding;
+
+  @include tablet {
+    padding: $desktop-padding;
+  }
+
+  .project-iframe {
+    width: 100%;
+
+    margin: 0 auto;
+
+    iframe {
+      margin: 0 auto;
+    }
+  }
+
+  &--bouncy {
+    background-color: pink;
+
+    iframe {
+      width: 650px;
+      height: 650px;
+    }
+  }
+
+  &--spinning {
+    background-color: black;
+    iframe {
+      min-width: 700px;
+      width: 1300px;
+      height: 750px;
+    }
+  }
+
+  &--fourier {
+    padding: $mobile-padding 0;
+
+    .project-iframe {
+      --scale: 0.312;
+
+      height: 640px;
+
+      iframe {
+        width: 320%;
+        transform-origin: 0 0;
+        transform: scale(var(--scale));
+        height: 2050px;
+        margin-bottom: calc((var(--scale) - 1) * 2050px);
+      }
+    }
+
+    @media (min-width: 526px) {
+      .project-iframe {
+
+        height: 327px;
+
+        iframe {
+          height: 1050px;
+        }
+      }
+    }
+
+    @include tablet {
+      .project-iframe {
+        --scale: 0.7;
+
+        height: 1435px;
+
+        iframe {
+          width: 140%;
+          transform: scale(var(--scale));
+          margin-bottom: calc((var(--scale) - 1) * 2050px);
+          height: 2050px;
+        }
+      }
+    }
+
+    @media (min-width: 1060px) {
+      .project-iframe {
+        --scale: 1;
+
+        &, iframe {
+          height: 2050px;
+        }
+
+        iframe {
+          width: 100%;
+          transform: scale(var(--scale));
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    @media (min-width: 1750px) {
+      .project-iframe, .project-iframe iframe {
+        height: 1050px;
+      }
+    }
+  }
+
+  &--pool {
+    padding: $mobile-padding 0;
+    .project-iframe {
+      --scale: 0.26;
+
+      height: 234px;
+
+      iframe {
+        width: 1210px;
+        height: 900px;
+        transform-origin: 0 0;
+        transform: scale(var(--scale));
+        margin-bottom: calc((var(--scale) - 1) * 2050px);
+      }
+
+      @include tablet {
+        --scale: 0.60;
+
+        padding: $desktop-padding;
+
+        height: 540px;
+      }
+
+      @include desktop {
+        --scale: 1;
+
+        height: 900px;
+      }
+    }
+  }
+
+  &--angel {
+    background-color: $background;
+    h1{
+      color: $black;
+    }
+    .project-iframe {
+      iframe {
+        width: 850px;
+        height: 850px;
+
+      }
+    }
+  }
+
+  &--cube {
+    background-color: $background;
+    h1{
+      color: $black;
+    }
+    .project-iframe {
+
+
+      iframe {
+        width: 900px;
+        height: 1200px;
+
+      }
+    }
+  }
+
+  &--rocket {
+    background-color: $background;
+    h1{
+      color: $black;
+    }
+    .project-iframe {
+      --scale: 0.36;
+
+      iframe {
+        width: 1050px;
+        height: 1200px;
+      }
+    }
+  }
+
+  iframe {
+    border: none;
+  }
+}

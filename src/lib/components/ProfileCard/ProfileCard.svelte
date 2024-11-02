@@ -114,7 +114,7 @@
       <div class="card__title">
         <h2 class="card__name mt-8">Jacob Kochatkov</h2>
         <h4 class="card__description">
-          BSc. of Computer Science upskilling in Web Development
+          BSc. of Computer Science upskilling in Full Stack Development
         </h4>
 
         <div class="location my-2">
@@ -137,7 +137,7 @@
       </ProfileInfoCard>
 
       <ProfileInfoCard title="Intern Software Engineer" icon="work">
-        1 year as a Software Engineer for <BlueLink href="https://www.happinessmountain.com/" end={true}>Happiness Mountain</BlueLink>
+        1 year as a Software Engineer for <BlueLink href="https://www.happinessmountain.com/" end={true}>Happiness Mountain Inc.</BlueLink>
       </ProfileInfoCard>
 
       <ProfileInfoCard
@@ -155,17 +155,19 @@
       </ProfileInfoCard>
 
       <ProfileInfoCard
-        title="Bilingual"
-        icon="language"
+        title="Volunteering"
+        icon="volunteering"
       >
-        Fluent in English and Russian
+        Youth Group<br>
+        Worship Team
       </ProfileInfoCard>
 
       <ProfileInfoCard
-        title="BrainStation Capstone Project"
+        title="Projects "
         icon="project"
       >
-        <BlueLink href="https://github.com/yaacovkdev/Quality-Flooring">Quality Flooring</BlueLink> - Web app with <BlueLink href="https://github.com/yaacovkdev/Flooring-API">API</BlueLink> to advertise flooring installation services and to contractors
+        <BlueLink href="https://github.com/yaacovkdev/Quality-Flooring">Quality Flooring</BlueLink> - Web app with <BlueLink href="https://github.com/yaacovkdev/Flooring-API">API</BlueLink><br>
+        <BlueLink href="https://github.com/nicmart-dev/feedmenow">FeedMeNow</BlueLink> - AI Recipe Generator
       </ProfileInfoCard>
     </div>
   </div>

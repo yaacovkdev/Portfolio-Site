@@ -36,7 +36,7 @@ export const ProjectsInfo: { [key: string]: { name: string; desc: string, mobile
   },
 
   fourier: {
-    name: "Fourier Series Transformation API",
+    name: "Fourier Series Transformation",
     desc: "",
     mobileIcon: true,
     image: preview_fourier

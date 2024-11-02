@@ -1,7 +1,7 @@
 <script lang="ts">
   import "../app.css";
   import "$lib/style/global.scss";
-  import sveltekit_icon from "$lib/images/icons/sveltelogo.png";
+  import sveltekit_icon from "$lib/images/icons/sveltelogored.png";
   import HeaderMenu from "$lib/components/Header/HeaderMenu.svelte";
   import HeaderMobileSlide from "$lib/components/Header/HeaderMobileSlide.svelte";
   import {clickedMobileNav} from "$lib/scripts/resetNavButton";
@@ -9,7 +9,7 @@
 
 <header>
   <div class="header-hidden-block"></div>
-  <div class="header-menu content-width">
+  <div class="header-menu limit-width">
     <HeaderMenu bind:mobileNavClicked={$clickedMobileNav} />
   </div>
 </header>
@@ -24,8 +24,8 @@
 </main>
 
 <footer>
-  <div class="content-width">
-    <p class="text-sm">By Jacob Kochatkov with power of SvelteKit</p>
+  <div class="limit-width">
+    <p class="text-sm">Built by Jacob Kochatkov</p>
     <span class="footer-dot">·</span>
     <img src={sveltekit_icon} alt="svelte_icon" />
   </div>
@@ -34,7 +34,7 @@
 <style lang="scss">
 
   header {
-    z-index: 1;
+    z-index: 3;
     background-color: $background;
 
     @include mobile {
@@ -43,16 +43,13 @@
     }
   }
 
-  .dark-header {
-    background-color: #780091;
-  }
-
   main {
     @include mobile {
       margin-top: $mobile-header-height;
     }
 
-    z-index: 0;
+    background: $background;
+    z-index: 2;
 
     .header-slider {
       z-index: 10;
@@ -63,9 +60,9 @@
     background-color: $white;
     font-size: 1rem;
 
-    z-index: -1;
+    z-index: 1;
 
-    .content-width {
+    .limit-width {
       display: flex;
       flex-direction: row;
       justify-content: center;
@@ -74,7 +71,7 @@
 
     p,
     .footer-dot {
-      color: gray;
+      color: $black;
     }
 
     img {

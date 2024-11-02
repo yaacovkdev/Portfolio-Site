@@ -9,7 +9,9 @@ let initial_code = `/*In this field you can program in javascript anything you l
 mainArm.push(10,30);`;
 document.getElementById("codefield").value = initial_code;
 code_field = document.getElementById("codefield").value;
-eval(code_field);
+
+//change for now. Uncertain if it protects too much better.
+Function(`"use strict"; ${code_field}`)();
 
 document.getElementById("buttonfield").onclick = function () {
   code_field = document.getElementById("codefield").value;
