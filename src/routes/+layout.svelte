@@ -1,7 +1,7 @@
 <script lang="ts">
   import "../app.css";
   import "$lib/style/global.scss";
-  import sveltekit_icon from "$lib/images/icons/sveltelogo.png";
+  import sveltekit_icon from "$lib/images/icons/sveltelogored.png";
   import HeaderMenu from "$lib/components/Header/HeaderMenu.svelte";
   import HeaderMobileSlide from "$lib/components/Header/HeaderMobileSlide.svelte";
   import {clickedMobileNav} from "$lib/scripts/resetNavButton";
@@ -25,7 +25,7 @@
 
 <footer>
   <div class="content-width">
-    <p class="text-sm">By Jacob Kochatkov with power of SvelteKit</p>
+    <p class="text-sm">Built by Jacob Kochatkov</p>
     <span class="footer-dot">·</span>
     <img src={sveltekit_icon} alt="svelte_icon" />
   </div>
@@ -41,14 +41,11 @@
       position: fixed;
       width: 100%;
     }
-
-    @include box-shadow;
   }
 
-
-
-
   main {
+    background-color: $background;
+
     @include mobile {
       margin-top: $mobile-header-height;
     }

@@ -41,14 +41,9 @@
     margin: 1rem 0;
 
     @include tablet {
-      @include scale-fonts-header;
-      padding: 0 1.5rem;
+      @apply text-xl;
+      margin: 0 1.5rem;
       display: inline-block;
-      margin: 0;
-    }
-
-    @include desktop {
-      padding: 0 2rem;
     }
   }
 </style>
