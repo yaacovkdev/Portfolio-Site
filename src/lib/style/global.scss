@@ -34,7 +34,7 @@ header
     height: auto;
   }
 
-  .content-width {
+  .limit-width {
     width: 100%;
     height: 100%;
     max-width: $sitewidth;
@@ -49,15 +49,19 @@ main {
     width: 100%;
   }
 
-  .content-width > *:not(#graphicsPageSection):not(#graphicsProjectSection) {
+  .limit-width > *:not(#graphicsPageSection):not(#graphicsProjectSection) {
     max-width: $sitewidth;
     margin-right: auto;
     margin-left:auto;
   }
 }
 
-.main-iframe {
-  padding: 0;
+.padding-default {
+  padding: $mobile-padding;
+
+  @include tablet {
+    padding: $desktop-padding;
+  }
 }
 
 .background-default {

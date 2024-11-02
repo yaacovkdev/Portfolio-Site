@@ -9,11 +9,11 @@
   resetNavButton();
 </script>
 
-<div class="project">
+<div class="boolean-project">
   <MainTitle>
     Symbolic Boolean Calculator
   </MainTitle>
-  <h3 class="text-lg">
+  <h3 class="padding-default text-lg">
     Also Available on <BlueLink href="https://boolean.yaacov.site" end={true}>boolean.yaacov.site</BlueLink>
   </h3>
   <iframe src="https://boolean.yaacov.site" title="Boolean Calculator"></iframe>
@@ -24,7 +24,7 @@
     color: black;
   }
 
-  .project {
+  .boolean-project {
     background-color: $background;
   }
 
