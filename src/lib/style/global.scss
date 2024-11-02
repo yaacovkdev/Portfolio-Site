@@ -77,16 +77,17 @@ main {
 }
 
 .shine {
-  background: linear-gradient(45deg, rgba($darkgold,0.75), rgba($purple,0.25), rgba($pirategold, 0.75)),
-              linear-gradient(100deg, rgba($pirategold,0.75), rgba($purple,0.25), rgba($darkgold,0.75));
+    $textshine-amber: linear-gradient(45deg, rgba($darkgold,0.75), rgba($amber,0.5), rgba($pirategold, 0.75)), linear-gradient(100deg, rgba($pirategold,0.75), rgba($amber,0.5), rgba($darkgold,0.75));
+    $textshine-purple: linear-gradient(45deg, rgba($darkgold,0.75), rgba($purple,0.2), rgba($pirategold, 0.75)), linear-gradient(100deg, rgba($pirategold,0.75), rgba($purple,0.2), rgba($darkgold,0.75));
 
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: $gold 1px;
+    background: $textshine-amber;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: $gold 1px;
 
-  @include mobile {
-    background: linear-gradient(45deg, rgba($darkgold,0.75), rgba($amber,0.5), rgba($pirategold, 0.75)),
-                linear-gradient(100deg, rgba($pirategold,0.75), rgba($amber,0.5), rgba($darkgold,0.75));
+  @include tablet {
+    background: $textshine-purple;
+
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: $gold 1px;
@@ -102,11 +103,12 @@ main {
       bottom: -5px; /* Adjust based on your text size */
       width: 100%;
       height: 3px; /* Adjust thickness of the underline */
-      background: $amber;
+      background: $textshine-amber;
 
       @include tablet {
         height: 2px;
-        bottom: 5px;
+        bottom: 0px;
+        background: $textshine-purple;
       }
     }
 }
