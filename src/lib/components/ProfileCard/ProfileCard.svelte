@@ -181,6 +181,8 @@
 <style lang="scss">
   .profile-card {
     position: relative;
+
+    margin: auto;
     max-width: 64rem;
     min-height: 42rem;
     visibility: hidden;

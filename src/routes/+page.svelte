@@ -10,19 +10,21 @@
 
 </script>
 
-<div class="limit-width padding-default">
-    <WelcomeTitle />
-</div>
+<section class="limit-width">
+    <div class="padding-default">
+        <WelcomeTitle />
+    </div>
 
-<div class="limit-width padding-default">
-    <ProfileCard />
-</div>
+    <div class="padding-default">
+        <ProfileCard />
+    </div>
 
-<!--<div class="content-width background-news">-->
-<!--    <MainTitle>-->
-<!--        News-->
-<!--    </MainTitle>-->
-<!--</div>-->
+    <!--<div class="content-width background-news">-->
+    <!--    <MainTitle>-->
+    <!--        News-->
+    <!--    </MainTitle>-->
+    <!--</div>-->
+</section>
 
 <style lang="scss">
   .limit-width {

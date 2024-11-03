@@ -73,7 +73,7 @@ function resetValues() {
 
   try {
     //change for now. Uncertain if it protects too much better.
-    Function(`"use strict"; ${code_field}`)();
+    sandboxFunction(code_field)();
     loop();
     return false;
   } catch (err) {
