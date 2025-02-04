@@ -38,6 +38,18 @@
   }
 }
 
+@mixin scale-fonts-subtitle {
+  @apply text-2xl;
+
+  @include tablet {
+    @apply text-3xl;
+  }
+
+  @include desktop {
+    @apply text-4xl;
+  }
+}
+
 @mixin scale-fonts-regular {
   @apply text-base;
   @include tablet {

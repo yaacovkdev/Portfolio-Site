@@ -4,6 +4,7 @@
   import selectedNav from "$lib/scripts/selectedNav";
   import {resetNavButton} from "$lib/scripts/resetNavButton";
   import dynamicDarkBackground from "$lib/scripts/dynamicDarkBackground";
+  import Subtitle from "$lib/components/Titles/Subtitle.svelte";
 
   selectedNav(2);
   resetNavButton();
@@ -11,8 +12,10 @@
 </script>
 
 <div id="graphicsPageSection" class="background-purple padding-default">
+  <MainTitle>Web Graphics <span class="project-descriptions underline">(Project Descriptions Coming Soon!!)</span> </MainTitle>
+
   <section>
-    <MainTitle>WebGL Projects</MainTitle>
+    <Subtitle>WebGL Projects</Subtitle>
     <div class="project-cards">
       <a href="/graphics/rocket"><ProjectCard name="rocket" /></a>
       <a href="/graphics/cube"><ProjectCard name="cube" /></a>
@@ -20,7 +23,7 @@
   </section>
 
   <section>
-    <MainTitle>p5.js Projects</MainTitle>
+    <Subtitle>p5.js Projects</Subtitle>
 
     <div class="project-cards">
       <a href="/graphics/bouncy"><ProjectCard name="bouncy" /></a>
@@ -33,7 +36,7 @@
   </section>
 
   <section>
-    <MainTitle>PIXI.js Projects</MainTitle>
+    <Subtitle>PIXI.js Projects</Subtitle>
 
     <div class="project-cards">
       <a href="/graphics/quadrature"><ProjectCard name="quadrature" /></a>
@@ -57,6 +60,27 @@
       &:first-child {
         margin-top: 0;
       }
+    }
+  }
+
+  .project-descriptions {
+    animation-name: changetextcolor;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+  }
+
+  @keyframes changetextcolor {
+    0% {
+      color: $pirategold;
+    }
+
+    50% {
+      color: $gold;
+    }
+
+    100% {
+      color: $pirategold;
     }
   }
 </style>

@@ -71,7 +71,7 @@
 </script>
 
 <div class="profile-card">
-  <!-- Links in the back of the Profile Card -->
+  <!-- Links behind the Profile Card -->
   <div class="card-back">
     <div class="card-back__panel">
       <a
@@ -242,6 +242,11 @@
     padding: $mobile-padding;
     background-color: $background;
     z-index: 1;
+
+    background-image: url('/src/lib/images/misc/card_background.svg');
+    background-repeat: no-repeat;
+    background-size: 150%;
+    background-position: center 50px;
 
     &__header {
       display: flex;
