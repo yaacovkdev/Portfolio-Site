@@ -1,16 +1,16 @@
 <script lang="ts">
   import ProfileCard from "$lib/components/ProfileCard/ProfileCard.svelte";
-  import WelcomeTitle from "$lib/components/WelcomeTitle.svelte";
+  import WelcomeTitle from "$lib/components/Titles/WelcomeTitle.svelte";
   import {resetNavButton} from "$lib/scripts/resetNavButton";
-  import MainTitle from "$lib/components/MainTitle.svelte";
   import selectedNav from "$lib/scripts/selectedNav";
+  import NewsBlock from "$lib/components/News/NewsBlock.svelte";
+  import HeadingColorTitle from "$lib/components/Titles/HeadingColorTitle.svelte";
 
   selectedNav(1);
   resetNavButton();
-
 </script>
 
-<section class="limit-width">
+<section class="main-limit-width">
     <div class="padding-default">
         <WelcomeTitle />
     </div>
@@ -18,21 +18,24 @@
     <div class="padding-default">
         <ProfileCard />
     </div>
-
-    <!--<div class="content-width background-news">-->
-    <!--    <MainTitle>-->
-    <!--        News-->
-    <!--    </MainTitle>-->
-    <!--</div>-->
 </section>
 
-<style lang="scss">
-  .limit-width {
-    z-index: -1;
-    @include main-outer-div;
-  }
+<!--<section class="section-news main-limit-width">
+    <div class="section-news__content">
+        <HeadingColorTitle color="teal">News</HeadingColorTitle>
+    </div>
+    <div class="padding-default">
+        <NewsBlock title="Recent Contract" />
+    </div>
+</section>-->
 
-  .background-news {
-    background-color: $lightgreen;
+<style lang="scss">
+  .section-news {
+    z-index: -1;
+    &__content {
+      @include tablet {
+        padding: $desktop-padding;
+      }
+    }
   }
 </style>

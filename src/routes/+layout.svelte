@@ -32,34 +32,60 @@
 </footer>
 
 <style lang="scss">
+  main, header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
   header {
     z-index: 3;
     background-color: $background;
+    border-bottom: 2px $gold solid;
+    padding: 0 $mobile-padding;
+    height: $mobile-header-height;
+
+    @include box-shadow;
+
+    .limit-width {
+      max-width: $site-width;
+      width: 100%;
+      height: 100%;
+    }
 
     @include mobile {
       position: fixed;
       width: 100%;
     }
+
+    @include tablet {
+      padding: $desktop-padding;
+      height: auto;
+    }
   }
 
   main {
-    @include mobile {
-      margin-top: $mobile-header-height;
-    }
-
     background: $background;
     z-index: 2;
 
+    //make all outer children centered in main
+    #contentWidthMain {
+      width: 100%;
+    }
+
     .header-slider {
       z-index: 10;
+    }
+
+    @include mobile {
+      margin-top: $mobile-header-height;
     }
   }
 
   footer {
     background-color: $white;
     font-size: 1rem;
-
+    margin-top: auto;
     z-index: 1;
 
     .limit-width {

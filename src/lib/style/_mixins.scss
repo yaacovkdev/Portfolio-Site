@@ -1,12 +1,20 @@
 @use "./breakpoints" as *;
 @use "./variables" as *;
 
-@mixin title-padding {
-  padding-top: 4rem;
-  padding-bottom: 1em;
+@mixin box-shadow {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+@mixin interactive-radius {
+  border-radius: 0.25rem;
+}
+
+@mixin title-margins {
+  margin-top: 4rem;
+  margin-bottom: 1em;
 
   @include tablet {
-    padding-bottom: 1.5em;
+    margin-bottom: 1.5em;
   }
 }
 
@@ -15,20 +23,6 @@
 
   @include tablet {
     margin-top: 2rem;
-  }
-}
-
-@mixin main-outer-div {
-  width: 100%;
-
-  padding-bottom: 2rem;
-
-  @include tablet {
-    padding-bottom: 3rem;
-  }
-
-  @include desktop {
-    padding-bottom: 4rem;
   }
 }
 
@@ -66,18 +60,7 @@
   }
 }
 
-@mixin box-shadow {
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-}
-
-@mixin interactive-radius {
-  border-radius: 0.25rem;
-}
-
 @mixin shine-effect {
-  &:active {
-    animation: shine 0.25s forwards;
-  }
   @keyframes shine {
     from {
       color: $purple;
@@ -86,6 +69,10 @@
     to {
       color: $amber;
     }
+  }
+
+  &:active {
+    animation: shine 0.25s forwards;
   }
 
   &:active {

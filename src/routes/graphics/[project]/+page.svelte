@@ -15,7 +15,7 @@
 
   onMount(() => {
     let iframe = document.createElement("iframe");
-    iframe.src = `/p5/${data["url_name"]}/index.html`;
+    iframe.src = `/sites/${data["url_name"]}/index.html`;
     iframe.title = data["name"];
     iframe.sandbox = "allow-scripts allow-downloads";
     document.querySelector("#graphicsProjectSection .project-iframe").appendChild(iframe);
@@ -23,7 +23,7 @@
 
 </script>
 
-<section
+<div
   id="graphicsProjectSection"
   class={`project project--${data["url_name"]} background-purple flex-col justify-start items-center`}
 >
@@ -32,4 +32,4 @@
 
   <!--  Description goes here-->
   <div class="project-description"></div>
-</section>
+</div>

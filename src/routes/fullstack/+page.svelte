@@ -1,5 +1,5 @@
 <script lang="ts">
-  import MainTitle from "$lib/components/MainTitle.svelte";
+  import MainTitle from "$lib/components/Titles/MainTitle.svelte";
   import selectedNav from "$lib/scripts/selectedNav";
 
   import {resetNavButton} from "$lib/scripts/resetNavButton";
@@ -9,7 +9,7 @@
   resetNavButton();
 </script>
 
-<div class="boolean-project limit-width">
+<div class="boolean-project large-limit-width">
   <MainTitle>
     Symbolic Boolean Calculator
   </MainTitle>

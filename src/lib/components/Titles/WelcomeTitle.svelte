@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { messages } from "./messages.json";
+  import { messages } from "../messages.json";
   let homeTitle: HTMLElement;
   let messageKeys = ["English", "French", "Spanish", "Mandarin", "Hindi"];
   let key_i = 1;
@@ -42,7 +42,7 @@
 </script>
 
 <div class="welcome-title">
-  <h1 id="homeTitle" class="h-44 text-4xl md:text-5xl xl:text-6xl fade-in fade-out">
+  <h1 id="homeTitle" class="h-20 text-4xl md:text-5xl xl:text-6xl fade-in fade-out">
     {message}
   </h1>
 </div>
@@ -80,6 +80,6 @@
   }
 
   #homeTitle {
-    @include title-padding;
+    @include title-margins;
   }
 </style>

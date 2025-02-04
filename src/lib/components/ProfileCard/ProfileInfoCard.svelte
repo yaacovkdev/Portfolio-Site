@@ -31,14 +31,17 @@
 
 <style lang="scss">
   .subcard {
-    position: relative;
-    width: 18rem;
-    padding: 1rem;
-    padding-top: 1.25rem;
-    border: 2px solid $gray;
-    border-radius: 1rem;
-    text-align: start;
-    background-color: $background;
+
+    & {
+      position: relative;
+      width: 18rem;
+      padding: 1rem;
+      padding-top: 1.25rem;
+      border: 2px solid $gray;
+      border-radius: 1rem;
+      text-align: start;
+      background-color: $background;
+    }
 
     .icon {
       position: absolute;
@@ -47,7 +50,6 @@
       
       height: 3rem;
       object-fit: fill;
-      
     }
   }
 </style>

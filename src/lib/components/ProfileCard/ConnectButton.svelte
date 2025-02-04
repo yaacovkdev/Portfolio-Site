@@ -35,8 +35,6 @@
   }
 
   .button {
-    @include interactive-radius;
-    @include shine-effect;
     background-color: $purple;
     color: $white;
     min-width: 15rem;
@@ -47,6 +45,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    @include interactive-radius;
+    @include shine-effect;
 
     &:hover {
       background: linear-gradient(

@@ -2,8 +2,8 @@
 
 <style lang="scss">
   .main-title {
-    @include title-padding;
     @include scale-fonts-title;
+    @include title-margins;
   }
 </style>
 

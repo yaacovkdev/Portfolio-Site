@@ -1,6 +1,6 @@
 <script lang="ts">
   import ProjectCard from "$lib/components/ProjectCard.svelte";
-  import MainTitle from "$lib/components/MainTitle.svelte";
+  import MainTitle from "$lib/components/Titles/MainTitle.svelte";
   import selectedNav from "$lib/scripts/selectedNav";
   import {resetNavButton} from "$lib/scripts/resetNavButton";
   import dynamicDarkBackground from "$lib/scripts/dynamicDarkBackground";
@@ -10,25 +10,38 @@
   dynamicDarkBackground();
 </script>
 
-<section id="graphicsPageSection" class="background-purple padding-default">
-  <MainTitle>WebGL Projects</MainTitle>
-  <div class="project-cards">
-    <a href="/graphics/rocket"><ProjectCard name="rocket" /></a>
-    <a href="/graphics/cube"><ProjectCard name="cube" /></a>
-  </div>
+<div id="graphicsPageSection" class="background-purple padding-default">
+  <section>
+    <MainTitle>WebGL Projects</MainTitle>
+    <div class="project-cards">
+      <a href="/graphics/rocket"><ProjectCard name="rocket" /></a>
+      <a href="/graphics/cube"><ProjectCard name="cube" /></a>
+    </div>
+  </section>
 
-  <MainTitle>p5.js Projects</MainTitle>
+  <section>
+    <MainTitle>p5.js Projects</MainTitle>
 
-  <div class="project-cards">
-    <a href="/graphics/bouncy"><ProjectCard name="bouncy" /></a>
-    <a href="/graphics/spinning"><ProjectCard name="spinning" /></a>
-    <a href="/graphics/angel"><ProjectCard name="angel" /></a>
-    <a href="/graphics/fourier"><ProjectCard name="fourier" /></a>
-    <a href="/graphics/pool"><ProjectCard name="pool" /></a>
+    <div class="project-cards">
+      <a href="/graphics/bouncy"><ProjectCard name="bouncy" /></a>
+      <a href="/graphics/spinning"><ProjectCard name="spinning" /></a>
+      <a href="/graphics/angel"><ProjectCard name="angel" /></a>
+      <a href="/graphics/fourier"><ProjectCard name="fourier" /></a>
+      <a href="/graphics/pool"><ProjectCard name="pool" /></a>
 
-  </div>
+    </div>
+  </section>
 
-</section>
+  <section>
+    <MainTitle>PIXI.js Projects</MainTitle>
+
+    <div class="project-cards">
+      <a href="/graphics/quadrature"><ProjectCard name="quadrature" /></a>
+      <a href="/graphics/polygon"><ProjectCard name="polygon" /></a>
+
+    </div>
+  </section>
+</div>
 
 <style lang="scss">
   .project-cards {

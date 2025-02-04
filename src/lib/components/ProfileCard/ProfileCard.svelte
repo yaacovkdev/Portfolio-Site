@@ -12,8 +12,8 @@
   import ConnectButton from "$lib/components/ProfileCard/ConnectButton.svelte";
   import BlueLink from "$lib/components/BlueLink.svelte";
 
-  let dropCard;
-  let returnCard;
+  let dropCard: Function;
+  let returnCard: Function;
 
   const msInterval = 16; //to run animation at 60FPS.
   const timeInterval = 400 / 1000;
@@ -114,7 +114,7 @@
       <div class="card__title">
         <h2 class="card__name mt-8">Jacob Kochatkov</h2>
         <h4 class="card__description">
-          BSc. of Computer Science upskilling in Full Stack Development
+          Software Engineer | BSc. in Computing Science
         </h4>
 
         <div class="location my-2">
@@ -132,26 +132,33 @@
     </div>
 
     <div class="card__content">
-      <ProfileInfoCard title="Bachelor's Degree" icon="bachelors">
-        BSc. in Computing Science from <BlueLink href="https://twu.ca/" end={true}>Trinity Western University</BlueLink>
+      <ProfileInfoCard
+              title="Full Stack Developer"
+              icon="work"
+      >
+        Currently employed at <BlueLink href="https://albernichamber.ca/directory/alberni-design" end={true}>Alberni Online</BlueLink>
       </ProfileInfoCard>
 
       <ProfileInfoCard title="Intern Software Engineer" icon="work">
         1 year as a Software Engineer for <BlueLink href="https://www.happinessmountain.com/" end={true}>Happiness Mountain Inc.</BlueLink>
       </ProfileInfoCard>
 
-      <ProfileInfoCard
-        title="Teaching Assistant"
-        icon="work"
-      >
-        1+ years as a Teaching Assistant for Department of Computing Science and Mathematics at Trinity Western University
+      <ProfileInfoCard title="Bachelor's Degree" icon="bachelors">
+        BSc. in Computing Science from <BlueLink href="https://twu.ca/" end={true}>Trinity Western University</BlueLink>
       </ProfileInfoCard>
+
+<!--      <ProfileInfoCard-->
+<!--        title="Teaching Assistant"-->
+<!--        icon="work"-->
+<!--      >-->
+<!--        1+ years as a Teaching Assistant for Department of Computing Science and Mathematics at Trinity Western University-->
+<!--      </ProfileInfoCard>-->
 
       <ProfileInfoCard
         title="Skills"
         icon="skills"
       >
-        Amazon Web Services, TypeScript, NodeJS, Flutter, Python, Restful API, Pendo SDK, MySQL, Airtable
+        Amazon Web Services, TypeScript, Linux, Flutter, Python, Docker, Pendo SDK, MySQL, Airtable
       </ProfileInfoCard>
 
       <ProfileInfoCard
@@ -183,17 +190,14 @@
     position: relative;
 
     margin: auto;
-    max-width: 64rem;
     min-height: 42rem;
     visibility: hidden;
   }
 
   .card-back {
-    @include scale-fonts-regular;
     position: relative;
     width: 100%;
     min-height: 42rem;
-    padding: $mobile-padding;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -201,6 +205,8 @@
     text-align: start;
     flex-wrap: wrap;
     gap: 4rem;
+
+    @include scale-fonts-regular;
 
     &__panel {
       width: 15rem;
@@ -227,10 +233,6 @@
 
     &__content {
       margin-top: 2rem;
-    }
-
-    @include tablet {
-      padding: $desktop-padding;
     }
   }
 
@@ -279,11 +281,12 @@
         }
 
         &__status {
-          @include scale-fonts-small;
           background-color: $lightgreen;
           line-height: 1rem;
           border-radius: 0.5rem;
           padding: 0 0.25rem;
+
+          @include scale-fonts-small;
         }
       }
     }

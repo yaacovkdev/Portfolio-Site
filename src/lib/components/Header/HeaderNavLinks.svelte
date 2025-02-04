@@ -33,16 +33,16 @@
 
 <style lang="scss">
   a {
-    @include shine-effect;
     position: relative;
-
-    @apply text-3xl;
     margin: 1rem 0;
 
+    @include shine-effect;
+    @apply text-3xl;
+
     @include tablet {
-      @apply text-xl;
       margin: 0 1.5rem;
       display: inline-block;
+      @apply text-xl;
     }
   }
 </style>
