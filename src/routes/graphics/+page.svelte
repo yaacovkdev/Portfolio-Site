@@ -65,7 +65,7 @@
 
   .project-descriptions {
     animation-name: changetextcolor;
-    animation-duration: 3s;
+    animation-duration: 7s;
     animation-iteration-count: infinite;
     animation-timing-function: ease-in-out;
   }
