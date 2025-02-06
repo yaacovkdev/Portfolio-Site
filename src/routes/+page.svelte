@@ -15,7 +15,7 @@
         <WelcomeTitle />
     </div>
 
-    <div class="padding-default">
+    <div class="padding-default no-padding-mobile">
         <ProfileCard />
     </div>
 </section>
@@ -30,6 +30,11 @@
 </section>-->
 
 <style lang="scss">
+  @include mobile {
+    .no-padding-mobile {
+      padding: 0;
+    }
+  }
   .section-news {
     z-index: -1;
     &__content {

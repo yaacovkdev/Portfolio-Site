@@ -149,6 +149,9 @@ var Mode;
 //Sounds
 const audio_place = new Audio('Place.wav');
 const audio_destroy = new Audio('Destroy.wav');
+const wood_texture = new Image();
+wood_texture.crossOrigin = "anonymous";
+wood_texture.src = 'woodtex.png';
 
 //Pushes the multicolour polygons as well as vectors to be used for shading
 function quad(a, b, c, d) {
@@ -267,8 +270,7 @@ window.onload = function init() {
     gl.vertexAttribPointer(texCoordLoc, 2, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(texCoordLoc);
 
-    var image = document.getElementById("texImage");
-    configureTexture(image);
+    configureTexture(wood_texture);
 
     isclicked = false;
 
@@ -385,7 +387,7 @@ function getface(colors){
     return adjpos;
 }
 
-//COnfigures the image to properly load on the fragment 
+//Configures the image to properly load on the fragment
 function configureTexture(image){
     texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);

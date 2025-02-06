@@ -245,8 +245,9 @@
 
     background-image: url('/src/lib/images/misc/card_background.svg');
     background-repeat: no-repeat;
-    background-size: 150%;
+    background-size: max(700px, 150%);
     background-position: center 50px;
+
 
     &__header {
       display: flex;

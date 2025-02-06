@@ -11,6 +11,21 @@ due to making iframe a javascript object for extra security measures.
   min-height: 100vh;
   padding: $mobile-padding;
 
+  .project-description {
+    text-align: left;
+
+    article {
+      font-size: 1.5rem;
+      line-height: 2.5rem;
+      p {
+        margin-bottom: 1rem;
+      }
+      a {
+        color: $diamondblue;
+      }
+    }
+  }
+
   @include tablet {
     padding: $desktop-padding;
   }
@@ -22,6 +37,28 @@ due to making iframe a javascript object for extra security measures.
 
     iframe {
       margin: 0 auto;
+    }
+  }
+
+  &--rocket {
+    background-color: $background;
+    h1{
+      color: $black;
+    }
+
+    .project-iframe {
+      --scale: 0.36;
+
+      iframe {
+        width: 1050px;
+        height: 1200px;
+      }
+    }
+
+    .project-description {
+      h2, article * {
+        color: $black;
+      }
     }
   }
 
@@ -168,19 +205,10 @@ due to making iframe a javascript object for extra security measures.
 
       }
     }
-  }
 
-  &--rocket {
-    background-color: $background;
-    h1{
-      color: $black;
-    }
-    .project-iframe {
-      --scale: 0.36;
-
-      iframe {
-        width: 1050px;
-        height: 1200px;
+    .project-description {
+      h2, article * {
+        color: $black;
       }
     }
   }

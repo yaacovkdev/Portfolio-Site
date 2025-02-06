@@ -12,18 +12,18 @@
   min-height: 100vh;
 }
 
-.main-limit-width {
+.main-limit-width, .large-limit-width {
   width: 100%;
-  max-width: $profile-card-width;
   margin-left: auto;
   margin-right: auto;
 }
 
+.main-limit-width {
+  max-width: $profile-card-width;
+}
+
 .large-limit-width {
-  width: 100%;
   max-width: $site-width;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .padding-default {

@@ -1,0 +1,19 @@
+<article>
+    <p>OK... I'm not even going to lie, this one is a nightmare to deal with, anytime I try show my failed Minecraft sandbox to people. Even when I deployed it on my portfolio website, I just recently discovered that not every browser can run this canvas, due to some security concerns. "If it looks good on Chrome you might only be half way there", I tend to tell myself when I find some visual bugs. Just recently Firefox browser told me that loading processed image data into the drawing buffer <i>(the way I did it)</i> is a security threat, for some reason. Yikes.</p>
+
+    <p>
+        I managed to fix this issue by simply allowing cross origin for the wood texture that is used on block faces, because isolating the projects in iframe objects that are created in the client on page load, provided me many more headaches. It is quite safe because if something funky happens it happens on your machine, and my server is safe and sound)
+    </p>
+
+    <p>As the Final Project for my Computer Graphics course I decided to recreate Minecraft on the Web. Unfortunately I haven't been able to figure out how to make the program "know" that my camera is pointing at the specific cube face. This particular project has been laying around collecting dust in my github repository, and on my laptop harddrive. I thought that since I am making a static site and it will be hosted on a server, the cube game will work in it's best state, because you aren't able to display 3D textures without hosting your webgl program on a live server. Interestingly, every other application among my graphics projects is actually fully funcional if you just display the root html file in your browser, without the need to host.</p>
+
+    <p>
+        Hopefully one day I sit down and figure out how to interact with a particular block face from my pointing camera, because the way I set up the building mechanics of my game is that for an invisible 1 frame after you click, the last placed cube turns distinct color and the application builds the next cube by the color of where you clicked.
+    </p>
+
+    <p>
+        For now you can admire the Phong Shading implementation for the block faces, and the POV camera which is just a special matrix stacked on top of other transformation matrices to display all the vector graphics.
+
+    </p>
+
+</article>

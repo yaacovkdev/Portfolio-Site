@@ -13,7 +13,7 @@
 
 <div id="graphicsPageSection" class="background-purple padding-default">
   <MainTitle>Web Graphics <span class="project-descriptions underline">(Project Descriptions Coming Soon!!)</span> </MainTitle>
-
+  <div class="sections main-limit-width">
   <section>
     <Subtitle>WebGL Projects</Subtitle>
     <div class="project-cards">
@@ -44,6 +44,7 @@
 
     </div>
   </section>
+  </div>
 </div>
 
 <style lang="scss">
