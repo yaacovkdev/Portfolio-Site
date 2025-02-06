@@ -64,6 +64,12 @@ main {
   }
 }
 
+.no-mobile-padding {
+  @include mobile {
+    padding: 0;
+  }
+}
+
 .background-default {
   background-color: $background;
   * {
