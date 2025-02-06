@@ -17,7 +17,7 @@
     let iframe = document.createElement("iframe");
     iframe.src = `/p5/${data["url_name"]}/index.html`;
     iframe.title = data["name"];
-    iframe.sandbox = "allow-scripts allow-downloads";
+    iframe.sandbox = "allow-scripts allow-same-origin allow-downloads ";
     document.querySelector("#graphicsProjectSection .project-iframe").appendChild(iframe);
   });
 

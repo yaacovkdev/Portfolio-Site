@@ -2,7 +2,7 @@
   import ProfileCard from "$lib/components/ProfileCard/ProfileCard.svelte";
   import WelcomeTitle from "$lib/components/WelcomeTitle.svelte";
   import {resetNavButton} from "$lib/scripts/resetNavButton";
-  import MainTitle from "$lib/components/MainTitle.svelte";
+
   import selectedNav from "$lib/scripts/selectedNav";
 
   selectedNav(1);
@@ -18,12 +18,6 @@
     <div class="padding-default no-mobile-padding">
         <ProfileCard />
     </div>
-
-    <!--<div class="content-width background-news">-->
-    <!--    <MainTitle>-->
-    <!--        News-->
-    <!--    </MainTitle>-->
-    <!--</div>-->
 </section>
 
 <style lang="scss">
