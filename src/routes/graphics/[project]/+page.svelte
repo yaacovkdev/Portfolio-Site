@@ -23,7 +23,7 @@
 
 </script>
 
-<section
+<div
   id="graphicsProjectSection"
   class={`project project--${data["url_name"]} background-purple flex-col justify-start items-center`}
 >
@@ -32,4 +32,4 @@
 
   <!--  Description goes here-->
   <div class="project-description"></div>
-</section>
+</div>
