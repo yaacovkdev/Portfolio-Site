@@ -241,6 +241,11 @@
     background-color: $background;
     z-index: 1;
 
+    background-image: url("/src/lib/images/misc/card_background.svg");
+    background-position: center 50px;
+    background-repeat: no-repeat;
+    background-size: max(700px, 150%);
+
     &__header {
       display: flex;
       flex-direction: column;
