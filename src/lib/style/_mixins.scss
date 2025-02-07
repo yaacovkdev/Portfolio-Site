@@ -10,6 +10,15 @@
   }
 }
 
+@mixin subtitle-padding {
+  padding-top: 2rem;
+  padding-bottom: 1em;
+
+  @include tablet {
+    padding-bottom: 1.5em;
+  }
+}
+
 @mixin margin-top {
   margin-top: 1.5rem;
 
@@ -41,6 +50,18 @@
 
   @include desktop {
     @apply text-5xl;
+  }
+}
+
+@mixin scale-fonts-subtitle {
+  @apply text-2xl;
+
+  @include tablet {
+    @apply text-3xl;
+  }
+
+  @include desktop {
+    @apply text-4xl;
   }
 }
 

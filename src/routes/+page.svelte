@@ -1,6 +1,6 @@
 <script lang="ts">
   import ProfileCard from "$lib/components/ProfileCard/ProfileCard.svelte";
-  import WelcomeTitle from "$lib/components/WelcomeTitle.svelte";
+  import WelcomeTitle from "$lib/components/Titles/WelcomeTitle.svelte";
   import {resetNavButton} from "$lib/scripts/resetNavButton";
 
   import selectedNav from "$lib/scripts/selectedNav";

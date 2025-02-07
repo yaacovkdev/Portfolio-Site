@@ -12,6 +12,8 @@
   min-height: 100vh;
 }
 
+section
+
 footer {
   margin-top: auto;
 }
@@ -53,6 +55,10 @@ main {
     max-width: $sitewidth;
     margin-right: auto;
     margin-left:auto;
+  }
+
+  section {
+    margin-bottom: 1.5rem;
   }
 }
 
