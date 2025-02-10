@@ -58,13 +58,13 @@
         </div>
     </button>
 
-    <section class="flex justify-between items-center w-full">
+    <div class="flex justify-between items-center w-full">
         <a href="/" class="header-title text-3xl nav-link max-[767px]:ml-5">YAACOV.SITE</a>
 
         <nav class="flex-wrap hidden md:flex">
             <HeaderNavLinks />
         </nav>
-    </section>
+    </div>
 
 </div>
 

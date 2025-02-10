@@ -12,25 +12,36 @@
 </script>
 
 <div id="graphicsPageSection" class="background-purple padding-default">
-  <MainTitle>Graphics Projects</MainTitle>
-
-  <Subtitle>WebGL Projects</Subtitle>
-    <section class="project-cards">
+  <section>
+    <Subtitle>WebGL Projects</Subtitle>
+    <div class="project-cards">
       <a href="/graphics/rocket"><ProjectCard name="rocket" /></a>
       <a href="/graphics/cube"><ProjectCard name="cube" /></a>
-    </section>
-
-  <Subtitle>p5.js Projects</Subtitle>
-
-  <section class="project-cards">
-    <a href="/graphics/bouncy"><ProjectCard name="bouncy" /></a>
-    <a href="/graphics/spinning"><ProjectCard name="spinning" /></a>
-    <a href="/graphics/angel"><ProjectCard name="angel" /></a>
-    <a href="/graphics/fourier"><ProjectCard name="fourier" /></a>
-    <a href="/graphics/pool"><ProjectCard name="pool" /></a>
-
+    </div>
   </section>
 
+  <section>
+    <Subtitle>p5.js Projects</Subtitle>
+
+    <div class="project-cards">
+      <a href="/graphics/bouncy"><ProjectCard name="bouncy" /></a>
+      <a href="/graphics/spinning"><ProjectCard name="spinning" /></a>
+      <a href="/graphics/angel"><ProjectCard name="angel" /></a>
+      <a href="/graphics/fourier"><ProjectCard name="fourier" /></a>
+      <a href="/graphics/pool"><ProjectCard name="pool" /></a>
+
+    </div>
+  </section>
+
+  <section>
+    <Subtitle>PIXI.js Projects</Subtitle>
+
+    <div class="project-cards">
+      <a href="/graphics/quadrature"><ProjectCard name="quadrature" /></a>
+      <a href="/graphics/polygon"><ProjectCard name="polygon" /></a>
+
+    </div>
+  </section>
 </div>
 
 <style lang="scss">

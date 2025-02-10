@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Area of Polygon</title>
+    </head>
+    <body id="b">
+        <h1>Area of Polygon (Experiment)</h1>
+        <div id="canvasdiv" style="float: left;" >
+            
+        </div>
+        <div id="ResultField" style="margin: 40px 0 40px 40px; float: left; width: fit-content;">
+            <h1>Results:</h1>
+            
+            <p id="exactarea" style="font-size: larger; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;"></p>
+            
+            <p id="approxarea" style="font-size: larger; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;"></p>
+            
+            <p id="approxmod" style="font-size: larger; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;"></p>
+
+            <p id="calculatedk" style="font-size: larger; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;"></p>
+
+            <p id="winner" style="font-size: x-large; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;"></p>
+
+            <form>
+                <label for="username">Change grid division (px):</label><br>
+                <input type="text" id="pxdivision"><br><br>
+            </form>
+            <button type="button" id="resetbutton">Reset</button>
+        </div>
+        <script src="../utils/bignumber.js"></script>
+        <script src="../utils/util.js"></script>
+        <script src="../pixi.min.js"></script>
+        <script src="../utils/colors.js"></script>
+        <script src="./initlines.js"></script>
+        <script src="./render.js"></script>
+        
+        
+    </body>
+</html>

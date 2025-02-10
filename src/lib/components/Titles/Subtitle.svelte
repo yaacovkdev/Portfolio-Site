@@ -2,7 +2,7 @@
 
 <style lang="scss">
   .subtitle {
-    @include subtitle-padding;
+    @include subtitle-margins;
     @include scale-fonts-subtitle;
   }
 </style>

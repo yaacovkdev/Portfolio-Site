@@ -2,7 +2,7 @@
 
 <style lang="scss">
   .main-title {
-    @include title-padding;
+    @include title-margins;
     @include scale-fonts-title;
   }
 </style>
