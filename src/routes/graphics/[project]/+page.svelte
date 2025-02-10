@@ -31,5 +31,10 @@
   <div class="project-iframe"></div>
 
   <!--  Description goes here-->
-  <div class="project-description"></div>
+  <div class="project-instructions">
+
+  </div>
+  <div class="project-description">
+
+  </div>
 </div>

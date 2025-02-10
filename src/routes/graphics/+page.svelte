@@ -3,15 +3,18 @@
   import MainTitle from "$lib/components/Titles/MainTitle.svelte";
   import selectedNav from "$lib/scripts/selectedNav";
   import {resetNavButton} from "$lib/scripts/resetNavButton";
-  import dynamicDarkBackground from "$lib/scripts/dynamicDarkBackground";
+  import {dynamicDarkBackground, genBackgroundImage, getTFromTime} from "$lib/scripts/dynamicDarkBackground";
   import Subtitle from "$lib/components/Titles/Subtitle.svelte";
+
+  let initStyleGraphics: string = genBackgroundImage(getTFromTime());
 
   selectedNav(2);
   resetNavButton();
   dynamicDarkBackground();
 </script>
 
-<div id="graphicsPageSection" class="background-purple padding-default">
+<div id="graphicsPageSection" class="background-purple padding-default" style={`background-image: ${initStyleGraphics}`}>
+  <MainTitle>Graphics Projects</MainTitle>
   <section>
     <Subtitle>WebGL Projects</Subtitle>
     <div class="project-cards">
