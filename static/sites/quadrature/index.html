@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Quadrature Rules</title>
+        <h1>Quadrature Rules Comparison</h1>
+    </head>
+    <body id="b">
+        <div id="canvasdiv" style="float: left;">
+            
+        </div>
+        <div style="float: left; margin-left: 20px;">
+            <h1 style="text-align: center;">Results:</h1>
+
+            <p id="Function">Function: 1/20 * (x^2) + sin(x)</p>
+            <p id="Integral">Indef. Integral = 1/60 * (x^3) - cos(x)</p>
+            <p id="calculatedinteg"></p>
+            <p id="approximatedmidpoint"></p>
+            <p id="approxtrapezoidrule"></p>
+            <p id="simpsonsrule"></p>
+        </div>
+
+        <script src="../utils/bignumber.js"></script>
+        <script src="../utils/util.js"></script>
+        <script src="../pixi.min.js"></script>
+        <script src="../utils/colors.js"></script>
+        <script src="./initlines.js"></script>
+        <script src="./render.js"></script>
+        
+    </body>
+</html>
