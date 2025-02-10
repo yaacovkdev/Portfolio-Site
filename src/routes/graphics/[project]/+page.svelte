@@ -15,21 +15,25 @@
 
   onMount(() => {
     let iframe = document.createElement("iframe");
-    iframe.src = `/p5/${data["url_name"]}/index.html`;
+    iframe.src = `/sites/${data["url_name"]}/index.html`;
     iframe.title = data["name"];
-    iframe.sandbox = "allow-scripts allow-same-origin allow-downloads ";
+    iframe.sandbox = "allow-scripts allow-downloads";
     document.querySelector("#graphicsProjectSection .project-iframe").appendChild(iframe);
   });
 
 </script>
 
 <div
-  id="graphicsProjectSection"
-  class={`project project--${data["url_name"]} background-purple flex-col justify-start items-center`}
+        id="graphicsProjectSection"
+        class={`project project--${data["url_name"]} background-purple flex-col justify-start items-center`}
 >
   <h1 class="my-4 text-2xl padding-default">{data["name"]}</h1>
   <div class="project-iframe"></div>
 
   <!--  Description goes here-->
-  <div class="project-description"></div>
+
+  <div class="project-instructions">
+  </div>
+  <div class="project-description">
+  </div>
 </div>

@@ -9,7 +9,7 @@
   resetNavButton();
 </script>
 
-<div class="boolean-project limit-width">
+<div class="boolean-project large-limit-width">
   <MainTitle>
     Symbolic Boolean Calculator
   </MainTitle>

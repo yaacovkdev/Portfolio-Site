@@ -5,6 +5,8 @@ import preview_pool from "$lib/images/preview/preview_pool.png";
 import preview_angel from "$lib/images/preview/preview_angel.png";
 import preview_cube from "$lib/images/preview/preview_cube.png";
 import preview_rocket from "$lib/images/preview/preview_rocket.png";
+import polygon_preview from "$lib/images/preview/polygon_preview.png";
+import quadrature_preview from "$lib/images/preview/quadrature_preview.png";
 
 export const ProjectsInfo: { [key: string]: { name: string; desc: string, mobileIcon: boolean, image: any } } = {
   rocket: {
@@ -54,5 +56,19 @@ export const ProjectsInfo: { [key: string]: { name: string; desc: string, mobile
     desc: "",
     mobileIcon: false,
     image: preview_angel
+  },
+
+  polygon: {
+    name: "Area of Polygon Fast Calculation",
+    desc: "",
+    mobileIcon: false,
+    image: polygon_preview
+  },
+
+  quadrature: {
+    name: "Quadrature Rules",
+    desc: "",
+    mobileIcon: false,
+    image: quadrature_preview
   }
 };

@@ -185,7 +185,41 @@ due to making iframe a javascript object for extra security measures.
     }
   }
 
+  &--polygon {
+    background-color: $background;
+    h1 {
+      color: $black;
+    }
+
+    .project-iframe {
+
+
+      iframe {
+        width: 1550px;
+        height: 1550px;
+      }
+    }
+  }
+
+  &--quadrature {
+    background-color: $background;
+    h1 {
+      color: $black;
+    }
+
+    .project-iframe {
+      iframe {
+        width: 1100px;
+        height: 1500px;
+      }
+    }
+  }
+
   iframe {
     border: none;
+  }
+
+  .project-instructions {
+
   }
 }
