@@ -14,8 +14,10 @@
 </script>
 
 <div id="graphicsPageSection" class="background-purple" style={`background-image: ${initStyleGraphics}`}>
-  <div class="padding-default">
+  <div class="main-limit-width">
   <MainTitle>Graphics Projects</MainTitle>
+    <Subtitle class="m-0"><span class="project-announce__text">Project Descriptions Coming Soon!!!</span></Subtitle>
+
   <section>
     <Subtitle>WebGL Projects</Subtitle>
     <div class="project-cards">
@@ -52,6 +54,25 @@
 <style lang="scss">
   #graphicsPageSection {
     padding: 1rem;
+  }
+
+  .project-announce__text {
+    text-decoration: underline;
+    animation: 7s goldToDark ease-in-out infinite;
+  }
+
+  @keyframes goldToDark {
+    0% {
+      color: $gold;
+    }
+
+    50% {
+      color: $pirategold;
+    }
+
+    100% {
+      color: $gold;
+    }
   }
 
   .project-cards {
