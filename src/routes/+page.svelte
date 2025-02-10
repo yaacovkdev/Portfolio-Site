@@ -13,7 +13,7 @@
         <WelcomeTitle />
     </div>
 
-    <div class="padding-default">
+    <div class="padding-default no-mobile-padding">
         <ProfileCard />
     </div>
 </section>

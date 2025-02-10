@@ -13,7 +13,8 @@
   dynamicDarkBackground();
 </script>
 
-<div id="graphicsPageSection" class="background-purple padding-default" style={`background-image: ${initStyleGraphics}`}>
+<div id="graphicsPageSection" class="background-purple" style={`background-image: ${initStyleGraphics}`}>
+  <div class="padding-default">
   <MainTitle>Graphics Projects</MainTitle>
   <section>
     <Subtitle>WebGL Projects</Subtitle>
@@ -45,9 +46,14 @@
 
     </div>
   </section>
+  </div>
 </div>
 
 <style lang="scss">
+  #graphicsPageSection {
+    padding: 1rem;
+  }
+
   .project-cards {
     display: flex;
     justify-content: start;

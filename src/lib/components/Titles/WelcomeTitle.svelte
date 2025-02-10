@@ -42,7 +42,7 @@
 </script>
 
 <div class="welcome-title">
-  <h1 id="homeTitle" class="h-28 text-4xl md:text-5xl xl:text-6xl fade-in fade-out">
+  <h1 id="homeTitle" class="h-[1.5em] text-4xl md:text-5xl xl:text-6xl fade-in fade-out">
     {message}
   </h1>
 </div>

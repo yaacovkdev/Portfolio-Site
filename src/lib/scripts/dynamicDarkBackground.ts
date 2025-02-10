@@ -24,13 +24,8 @@ const genBackgroundImage = (t: number): string => {
 const dynamicDarkBackground = () => {
     onMount(() => {
         // Select the element with id 'my-element' and add a class 'new-class' to it
-
         const mainHTML: HTMLElement = document.querySelector("#graphicsPageSection");
 
-        //mainHTML.style.backgroundImage = `linear-gradient(60deg, rgba(14,47,85,1) 0%, rgba(14,47,85,1) 50%, rgba(14,47,85,1) 100%)`;
-
-
-        // 60hz update
         const colorInterval = setInterval(() => {
             let t = getTFromTime();
             mainHTML.style.backgroundImage = genBackgroundImage(t);
