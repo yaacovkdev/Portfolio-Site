@@ -132,19 +132,16 @@
     </div>
 
     <div class="card__content">
-      <ProfileInfoCard title="Bachelor's Degree" icon="bachelors">
-        BSc. in Computing Science from <BlueLink href="https://twu.ca/" end={true}>Trinity Western University</BlueLink>
+      <ProfileInfoCard title="Fullstack Developer" icon="work">
+        Currently Employed at <BlueLink href="https://albernionline.ca/" end={true}>Alberni Online</BlueLink>
       </ProfileInfoCard>
 
       <ProfileInfoCard title="Intern Software Engineer" icon="work">
         1 year as a Software Engineer for <BlueLink href="https://www.happinessmountain.com/" end={true}>Happiness Mountain Inc.</BlueLink>
       </ProfileInfoCard>
 
-      <ProfileInfoCard
-        title="Teaching Assistant"
-        icon="work"
-      >
-        1+ years as a Teaching Assistant for Department of Computing Science and Mathematics at Trinity Western University
+      <ProfileInfoCard title="Bachelor's Degree" icon="bachelors">
+        BSc. in Computing Science from <BlueLink href="https://twu.ca/" end={true}>Trinity Western University</BlueLink>
       </ProfileInfoCard>
 
       <ProfileInfoCard
