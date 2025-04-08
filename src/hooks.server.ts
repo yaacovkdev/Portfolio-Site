@@ -6,7 +6,7 @@ export async function handle({ event, resolve }) {
   if(event.url.pathname.startsWith('/home')) {
     throw redirect(302, "/");
   }
-  
+
   const response = await resolve(event);
   return response;
 }

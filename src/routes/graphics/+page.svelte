@@ -16,13 +16,14 @@
 <div id="graphicsPageSection" class="background-purple" style={`background-image: ${initStyleGraphics}`}>
   <div class="main-limit-width">
   <MainTitle>Graphics Projects</MainTitle>
-    <Subtitle class="m-0"><span class="project-announce__text">Project Descriptions Coming Soon!!!</span></Subtitle>
+  <Subtitle class="m-0"><span class="project-announce__text">Project Descriptions Coming Soon!!!</span></Subtitle>
 
   <section>
-    <Subtitle>WebGL Projects</Subtitle>
+    <Subtitle>PIXI.js Projects</Subtitle>
+
     <div class="project-cards">
-      <a href="/graphics/rocket"><ProjectCard name="rocket" /></a>
-      <a href="/graphics/cube"><ProjectCard name="cube" /></a>
+      <a href="/graphics/polygon"><ProjectCard name="polygon" /></a>
+      <a href="/graphics/quadrature"><ProjectCard name="quadrature" /></a>
     </div>
   </section>
 
@@ -30,24 +31,21 @@
     <Subtitle>p5.js Projects</Subtitle>
 
     <div class="project-cards">
-      <a href="/graphics/bouncy"><ProjectCard name="bouncy" /></a>
-      <a href="/graphics/spinning"><ProjectCard name="spinning" /></a>
-      <a href="/graphics/angel"><ProjectCard name="angel" /></a>
-      <a href="/graphics/fourier"><ProjectCard name="fourier" /></a>
       <a href="/graphics/pool"><ProjectCard name="pool" /></a>
+      <a href="/graphics/fourier"><ProjectCard name="fourier" /></a>
+      <a href="/graphics/spinning"><ProjectCard name="spinning" /></a>
+      <a href="/graphics/bouncy"><ProjectCard name="bouncy" /></a>
 
     </div>
   </section>
 
-  <section>
-    <Subtitle>PIXI.js Projects</Subtitle>
-
-    <div class="project-cards">
-      <a href="/graphics/quadrature"><ProjectCard name="quadrature" /></a>
-      <a href="/graphics/polygon"><ProjectCard name="polygon" /></a>
-
-    </div>
-  </section>
+    <section>
+      <Subtitle>WebGL Projects</Subtitle>
+      <div class="project-cards">
+        <a href="/graphics/cube"><ProjectCard name="cube" /></a>
+        <a href="/graphics/rocket"><ProjectCard name="rocket" /></a>
+      </div>
+    </section>
   </div>
 </div>
 

@@ -1,4 +1,4 @@
-let basicEnemy = {
+const basicEnemy = {
   specs: {
     width: SIZEW,
     height: SIZEH,

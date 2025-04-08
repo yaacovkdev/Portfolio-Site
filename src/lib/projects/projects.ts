@@ -2,29 +2,47 @@ import preview_bouncy from "$lib/images/preview/preview_bouncy.jpg";
 import preview_spinning from "$lib/images/preview/preview_spinning.jpg";
 import preview_fourier from "$lib/images/preview/preview_fourier.jpg";
 import preview_pool from "$lib/images/preview/preview_pool.png";
-import preview_angel from "$lib/images/preview/preview_angel.png";
 import preview_cube from "$lib/images/preview/preview_cube.png";
 import preview_rocket from "$lib/images/preview/preview_rocket.png";
 import polygon_preview from "$lib/images/preview/polygon_preview.png";
 import quadrature_preview from "$lib/images/preview/quadrature_preview.png";
 
-export const ProjectsInfo: { [key: string]: { name: string; desc: string, mobileIcon: boolean, image: any } } = {
+import instruction_rocket from "$lib/projects/instructions/instruction_rocket.html?raw";
+import description_rocket from "$lib/projects/descriptions/description_rocket.html?raw";
+
+import instruction_cube from "$lib/projects/instructions/instruction_cube.html?raw";
+import description_cube from "$lib/projects/descriptions/description_cube.html?raw";
+
+import instruction_spinning from "$lib/projects/instructions/instruction_spinning.html?raw";
+
+import instruction_bouncy from "$lib/projects/instructions/instruction_bouncy.html?raw";
+
+import description_quadrature from "$lib/projects/descriptions/description_quadrature.html?raw";
+
+import description_polygon from "$lib/projects/descriptions/description_polygon.html?raw";
+
+import description_pool from "$lib/projects/descriptions/description_pool.html?raw";
+
+export const ProjectsInfo: { [key: string]: { name: string; inst: string, desc: string, mobileIcon: boolean, image: any } } = {
   rocket: {
     name: "Rocket",
-    desc: "",
+    inst: instruction_rocket,
+    desc: description_rocket,
     mobileIcon: false,
     image: preview_rocket,
   },
 
   cube: {
     name: "Cube Game",
-    desc: "",
+    inst: instruction_cube,
+    desc: description_cube,
     mobileIcon: false,
     image: preview_cube
   },
 
   bouncy: {
     name: "BouncyJS",
+    inst: instruction_bouncy,
     desc: "",
     mobileIcon: false,
     image: preview_bouncy
@@ -32,6 +50,7 @@ export const ProjectsInfo: { [key: string]: { name: string; desc: string, mobile
 
   spinning: {
     name: "SpinningJS",
+    inst: instruction_spinning,
     desc: "",
     mobileIcon: false,
     image: preview_spinning
@@ -39,6 +58,7 @@ export const ProjectsInfo: { [key: string]: { name: string; desc: string, mobile
 
   fourier: {
     name: "Fourier Series Transformation",
+    inst: "",
     desc: "",
     mobileIcon: true,
     image: preview_fourier
@@ -46,28 +66,24 @@ export const ProjectsInfo: { [key: string]: { name: string; desc: string, mobile
 
   pool: {
     name: "Playing Pool With PI",
-    desc: "",
+    inst: "",
+    desc: description_pool,
     mobileIcon: true,
     image: preview_pool
   },
 
-  angel: {
-    name: "Angel vs. Devil",
-    desc: "",
-    mobileIcon: false,
-    image: preview_angel
-  },
-
   polygon: {
     name: "Area of Polygon Fast Calculation",
-    desc: "",
+    inst: "",
+    desc: description_polygon,
     mobileIcon: false,
     image: polygon_preview
   },
 
   quadrature: {
-    name: "Quadrature Rules",
-    desc: "",
+    name: "Quadrature Rules Comparison",
+    inst: "",
+    desc: description_quadrature,
     mobileIcon: false,
     image: quadrature_preview
   }

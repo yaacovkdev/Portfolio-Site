@@ -177,13 +177,14 @@ app.stage.addEventListener('pointertap', (e) =>{
 
 
         
-        approximatingsquares.beginFill(colors['red'],0.5);
+        approximatingsquares.beginFill(colors['light green'],0.6);
         for (var i = 0; i < k1.length; i++){
             if(pxdiv< 1 && (k1[i][0] - parseInt(k1[i][0]) != 0 || k1[i][1] - parseInt(k1[i][1]) != 0)){
                 continue;
             }
             approximatingsquares.drawRect(k1[i][0], k1[i][1], pxdiv,pxdiv);
         }
+        approximatingsquares.beginFill(colors['firebrick'],0.6);
         for (var i = 0; i < k2.length; i++){
             if(pxdiv< 1 && (k2[i][0] - parseInt(k2[i][0]) != 0 || k2[i][1] - parseInt(k2[i][1]) != 0)){
                 continue;
@@ -203,7 +204,7 @@ app.stage.addEventListener('pointertap', (e) =>{
         document.getElementById('exactarea').innerText=`Exact Area: ${exact_area.toFixed(3)} squares`;
         document.getElementById('approxarea').innerText=`Approx Area is: ${approxarea} squares`;
         document.getElementById('approxmod').innerText=`Approx Modified Area is: ${approxmodarea} squares (k=0.5)`;
-        document.getElementById('calculatedk').innerText=`Ratio of k = ${ratiok}`;
+        document.getElementById('calculatedk').innerText=`Perfect k = ${ratiok}`;
         document.getElementById('winner').innerText=`Winner: ${winner}`;
     }
 });

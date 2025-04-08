@@ -1,10 +1,9 @@
 let rays = [];
 let enemies = [];
-let counter = 0;
 let score = 0;
 let gameOver = false;
 
-let createEnemy = function (speedMin, speedMax) {
+const createEnemy = function (speedMin, speedMax) {
   let px = CANVSIZEX + 2 * SIZEW;
   let py = CANVSIZEY + 2 * SIZEH;
   let pos = randomRectPerimiterPos(px, py);
@@ -29,8 +28,6 @@ let setGun = function () {
   if (Player.gun.reloadtime <= 1) Player.gun.reloadtime = 1;
 
   Player.ammo.rayspeed = 5 + int(score / 20);
-
-  console.log(Player.gun);
 };
 
 function checkCollisions() {

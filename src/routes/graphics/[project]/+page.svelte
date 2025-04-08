@@ -8,6 +8,7 @@
   export let data: {
     url_name: string;
     name: string;
+    inst: string;
   };
 
   selectedNav(2);
@@ -31,9 +32,19 @@
   <div class="project-iframe"></div>
 
   <!--  Description goes here-->
+  {#if data["instructions"].length !== 0 }
+    <div class="project-instructions padding-default md:mb-20 main-limit-width">
+      <h2>Instructions</h2>
 
-  <div class="project-instructions">
+      {@html data["instructions"]}
+    </div>
+  {/if}
+
+  {#if data["description"].length !== 0}
+  <div class="project-description padding-default main-limit-width">
+    <h2>Description</h2>
+
+    {@html data["description"]}
   </div>
-  <div class="project-description">
-  </div>
+    {/if}
 </div>

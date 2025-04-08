@@ -37,8 +37,8 @@ function resetDraw(){
 
   if(text_field.classList.contains("redplaceholder")) setValidPlace();
   
-  var textval = text_field.value;
-  var newsq2size = 0;
+  let textval = text_field.value;
+  let newsq2size = 0;
   if(textval == null || textval == '') return;
   if(textval.includes("^")){
     var [val, exp] = textval.split("^");
@@ -158,9 +158,7 @@ function updateSquares(){
     //Found formulas on here
     //https://www.khanacademy.org/science/physics/linear-momentum/elastic-and-inelastic-collisions/a/what-are-elastic-and-inelastic-collisions
 
-    var velocities = elasticV(square1.mass, square2.mass, square1.v, square2.v);
-    square1.v = velocities[0];
-    square2.v = velocities[1];
+    [square1.v, square2.v] = elasticV(square1.mass, square2.mass, square1.v, square2.v);
     collision++;
   }
 

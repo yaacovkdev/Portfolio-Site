@@ -1,11 +1,11 @@
-let bcolor = [0,0,0];
-let colors = ["white", "red", "blue", "green", "yellow", "orange", "purple", "pink", "brown", "light gray"];
+const bcolor = [0,0,0];
+const colors = ["white", "red", "blue", "green", "yellow", "orange", "purple", "pink", "brown", "light gray"];
 const CANVSIZEX = 1200, CANVSIZEY = 675;
 
 document.getElementById("b").style.background = "rgb(0,0,0)";
 
 function setup(){
-    var C = createCanvas(CANVSIZEX,CANVSIZEY);
+    const C = createCanvas(CANVSIZEX,CANVSIZEY);
     setPlayerSpeed(Player.move.speed);
     Player.move.x = CANVSIZEX/2;
     Player.move.y = CANVSIZEY/2;
