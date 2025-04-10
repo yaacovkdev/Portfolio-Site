@@ -1,11 +1,14 @@
 <p>
-    I am delighted to share an interesting experiment to closely approximate the area of simple polygons, the ones where the edges of the polygon never intercept with each other. The idea of using a particular formula to compute an area approximation of came from looking at Cleve Moler's "Numerical Computing with MATLAB" textbook, problem <a class="blue-link" href="https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/moler/quad.pdf#page=19">6.23 a)</a>.
+    I am delighted to share an interesting experiment to closely approximate the area of simple polygons, the ones where the edges of the polygon never intercept with each other. The idea of this formula to compute an area approximation came from looking at Cleve Moler's "Numerical Computing with MATLAB" textbook, problem <a class="blue-link" href="https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/moler/quad.pdf#page=19">6.23 a)</a>.
 </p>
-<p>The Exact Area calculation is the area of the polygon calculated using the Shoelace formula. Approx Area is just the number of red polygons, that approximate the area of the drawn polygon. Approximate modified area is the area calculated with the formula of Taking all the squares that are strictly on the inside of the polygon, where the edges do not intercept with the squares. The squares that are colored green represent the Inner Area of the Polygon, that is definitely less than the exact area of the polygon. The squares colored red represent the area of squares that intercept with the edges of the polygon.</p>
+<p>The Exact Area calculation is the area of the polygon calculated using the Shoelace formula. Approx Area is the total of colored squares, which is an approximate area of the drawn polygon. Approximate modified area is the area calculated with the formula of Taking all the squares that are strictly on the inside of the polygon, where the polygon edges do not intercept with the squares. The squares that are colored green represent the Inner Area of the Polygon, that is definitely less than the exact area of the polygon. The squares colored red represent the area of squares that intercept with the edges of the polygon.</p>
 <p>The Formula for Approximate Modified Area is:
     <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-        <mi>A</mi>
-        <mo>&#x2248;</mo>
+        <msub>
+            <mi>A</mi>
+            <mi>m</mi>
+        </msub>
+        <mo>=</mo>
         <msub>
             <mi>S</mi>
             <mi>i</mi>
@@ -21,5 +24,5 @@
     </math>
 
     <i>k</i> in the case of approximating the area of polygon is 0.5 and if you check out the areas of your drawn simple polygons, on the canvas, you will find that most of the exact areas are very close to the areas found through calculating approximate modified areas. </p>
-<p>Perfect k is calculated by making the Approximate Modified Are equal to Exact Area and working out the solution for k.</p>
-<p>Although inner squared, that are rendered green, are found by running the ray casting algorithm over the polygon and excluding the squares that intercept with the edges of the polygon, there may be an algorithm that can find certain mesh inside the simple polygon, much quicker, further increasing the efficiency of the modified Raycasting Algorithm. </p>
+<p>Perfect k is the value that would make Approximate Modified Area equal to Exact Area.</p>
+<p>Although the inner green squares are found by running the ray casting algorithm and subtracting the squares that intercept with the polygon edges, there may be an algorithm that can find certain mesh inside the simple polygon, much quicker, further increasing the efficiency of this Area Approximation Method.</p>

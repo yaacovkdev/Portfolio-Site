@@ -14,6 +14,7 @@ import instruction_cube from "$lib/projects/instructions/instructions_cube.html?
 import description_cube from "$lib/projects/descriptions/description_cube.html?raw";
 
 import instruction_spinning from "$lib/projects/instructions/instructions_spinning.html?raw";
+import description_spinning from "$lib/projects/descriptions/description_spinning.html?raw";
 
 import instruction_bouncy from "$lib/projects/instructions/instructions_bouncy.html?raw";
 import description_bouncy from "$lib/projects/descriptions/description_bouncy.html?raw";
@@ -57,7 +58,7 @@ export const ProjectsInfo: { [key: string]: { name: string; inst: string, desc: 
   spinning: {
     name: "SpinningJS",
     inst: instruction_spinning,
-    desc: "",
+    desc: description_spinning,
     mobileIcon: false,
     image: preview_spinning
   },
