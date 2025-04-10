@@ -1,5 +1,6 @@
 <script lang="ts">
     import HeaderNavLinks from "$lib/components/Header/HeaderNavLinks.svelte";
+    import sitelogo from "$lib/images/logo/sitelogo.png";
     import {onMount} from "svelte";
 
     let {mobileNavClicked = $bindable()} = $props();
@@ -30,7 +31,6 @@
                 dashes[0].classList.remove("rotate-down");
                 dashes[1].classList.remove("slide-left");
                 dashes[2].classList.remove("rotate-up");
-
             }
         }
     }
@@ -42,11 +42,10 @@
         return(() => {
             bodyElement = null;
             dashes = null;
-        })
+        });
     });
 </script>
 
-<!--Add Animation Later-->
 <div class="header-menu relative flex justify-start items-center w-full h-full md:justify-center">
     <button id="button" class="relative w-18 h-18 md:hidden" on:click={navButton}>
         <div class="relative flex overflow-hidden items-center justify-center w-[4rem] h-[4rem]">
@@ -58,10 +57,12 @@
         </div>
     </button>
 
-    <div class="flex justify-between items-center w-full">
-        <a href="/" class="header-title text-3xl nav-link max-[767px]:ml-5">YAACOV.SITE</a>
+    <div class="flex justify-between items-center md:w-full relative">
+        <a href="/" id="siteLogo" class="text-3xl ml-6 opacity-0">
+            <img src={sitelogo} alt="logo" class="w-[260px] object-contain"/>
+        </a>
 
-        <nav class="flex-wrap hidden md:flex">
+        <nav class="flex-nowrap hidden md:flex">
             <HeaderNavLinks />
         </nav>
     </div>
@@ -69,6 +70,15 @@
 </div>
 
 <style lang="scss">
+  #siteLogo {
+    transform: translateY($mobile-site-logo-animate-start);
+
+    @include tablet {
+      transform: translateX($desktop-site-logo-animate-start);
+    }
+
+  }
+
   @keyframes rotate-down {
     from {
         transform: rotate(0deg);
@@ -127,10 +137,5 @@
     height: 2px;
     border-radius: 4px;
     transform-origin: left;
-    //padding: 0 2px;
-  }
-
-  .header-title {
-    @include shine-effect;
   }
 </style>

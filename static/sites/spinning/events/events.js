@@ -4,7 +4,7 @@ let incrementEnemiesTime;
 let incrementReload;
 let incrementEnemiesSpeed;
 
-var Events = [];
+let Events = [];
 
 class TimeEvent {
   //interpreted in ticks
@@ -50,7 +50,7 @@ function initEvents() {
 }
 
 function progressEvents() {
-  for (var i in Events) {
+  for (let i in Events) {
     //delay
     if (Events[i].delay > 0) {
       Events[i].delay--;
@@ -66,12 +66,12 @@ function progressEvents() {
   }
 }
 
-let incrementEventTime = function (event, n) {
+const incrementEventTime = function (event, n) {
   if (event.interval <= 1) return;
   event.interval += n;
 };
 
-let setEventParameters = function (event, n) {
+const setEventParameters = function (event, n) {
   event.parameterarray[0] += n;
   event.parameterarray[1] += n;
 };

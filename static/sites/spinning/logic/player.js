@@ -1,6 +1,6 @@
 const SIZEW = 30, SIZEH = 30;
 
-let Player = {
+const Player = {
     specs: {
         width: SIZEW,
         height: SIZEH,

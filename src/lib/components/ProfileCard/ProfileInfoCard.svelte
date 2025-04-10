@@ -1,26 +1,10 @@
 <script lang="ts">
-  import bachelors_icon from "$lib/images/icons/bachelors.svg";
-  import work_icon from "$lib/images/icons/work.svg";
-  import skills_icon from "$lib/images/icons/skills.svg";
-  import language_icon from "$lib/images/icons/language.svg";
-  import project_icon from "$lib/images/icons/project.svg";
-  import volunteering_icon from "$lib/images/icons/volunteer.png";
-
   export let title: string;
   export let icon: string;
-
-  const icons = {
-    bachelors: bachelors_icon,
-    work: work_icon,
-    skills: skills_icon,
-    language: language_icon,
-    project: project_icon,
-    volunteering: volunteering_icon
-  };
 </script>
 
 <div class="subcard">
-  <img class="icon" src={icons[icon]} alt="icon" />
+  <img class="icon" src={icon} alt="icon" />
   <div class="subcard__content">
     <h3 class="text-lg font-semibold">{title}</h3>
     <p class="text-base">

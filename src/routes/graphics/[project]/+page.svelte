@@ -4,11 +4,9 @@
   import {resetNavButton} from "$lib/scripts/resetNavButton";
   import {onMount} from "svelte";
   import selectedNav from "$lib/scripts/selectedNav";
+  import type { LoadResult } from "./$types";
 
-  export let data: {
-    url_name: string;
-    name: string;
-  };
+  let { data }: LoadResult = $props();
 
   selectedNav(2);
   resetNavButton();
@@ -31,9 +29,19 @@
   <div class="project-iframe"></div>
 
   <!--  Description goes here-->
+  {#if data["instructions"].length !== 0 }
+    <div class="project-instructions padding-default md:mb-20 main-limit-width">
+      <h2>Instructions</h2>
 
-  <div class="project-instructions">
+      {@html data["instructions"]}
+    </div>
+  {/if}
+
+  {#if data["description"].length !== 0}
+  <div class="project-description padding-default main-limit-width">
+    <h2>Description</h2>
+
+    {@html data["description"]}
   </div>
-  <div class="project-description">
-  </div>
+    {/if}
 </div>

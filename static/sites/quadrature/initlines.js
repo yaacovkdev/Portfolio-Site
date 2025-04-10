@@ -3,7 +3,7 @@ mesh.lineStyle(1, colors['white'], 0.25 );
 
 function setLines(divs){
 
-    var nx = parseInt(HEIGHT / divs);
+    let nx = parseInt(HEIGHT / divs);
     for (var i = nx/2-1; i > 0; i--){
         mesh.moveTo(0,divs*i);
         mesh.lineTo(WIDTH,divs*i);
@@ -14,7 +14,7 @@ function setLines(divs){
     }
 
 
-    var ny = parseInt(WIDTH / divs);
+    let ny = parseInt(WIDTH / divs);
     for (var i = ny/2; i < ny; i++){
         mesh.moveTo(divs*i,0);
         mesh.lineTo(divs*i,HEIGHT);

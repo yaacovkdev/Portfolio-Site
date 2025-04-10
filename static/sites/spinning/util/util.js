@@ -3,8 +3,8 @@ function diagonalSpeed(s) {
 }
 
 function direction(x1, y1, x2, y2) {
-  var opp = y2 - y1;
-  var adj = x2 - x1;
+  const opp = y2 - y1;
+  const adj = x2 - x1;
 
   if (adj == 0 && opp >= 0) {
     return PI / 2;
@@ -12,7 +12,7 @@ function direction(x1, y1, x2, y2) {
     return (3 * PI) / 2;
   }
 
-  var angle = Math.atan(opp / adj);
+  let angle = Math.atan(opp / adj);
 
   if (adj < 0) {
     return angle + PI;
@@ -28,10 +28,10 @@ function inside(t, x1, x2) {
 }
 
 function quadraticSolv(a, b, c) {
-  var insq = Math.pow(b, 2) - 4 * a * c;
+  const insq = Math.pow(b, 2) - 4 * a * c;
 
-  var x1 = (-b + Math.sqrt(insq)) / (2 * a);
-  var x2;
+  const x1 = (-b + Math.sqrt(insq)) / (2 * a);
+  let x2;
   if (insq == 0) x2 = x1;
   else x2 = (-b - Math.sqrt(insq)) / (2 * a);
 
@@ -39,9 +39,7 @@ function quadraticSolv(a, b, c) {
 }
 
 function interceptCircs(circ1, circ1dia, circ2, circ2dia) {
-  var rad1 = circ1dia / 2;
-  var rad2 = circ2dia / 2;
-  if (dist(circ1.x, circ1.y, circ2.x, circ2.y) <= rad1 + rad2) return true;
+  if (dist(circ1.x, circ1.y, circ2.x, circ2.y) <= (circ1dia / 2 + circ2dia / 2)) return true;
   return false;
 }
 
@@ -89,9 +87,9 @@ function interceptLineRect(l1, l2, s1, s2) {
 
   //linear solution
   //y = mx + b
-  var m = (l2.y - l1.y) / (l2.x - l1.x);
-  var b = l1.y - l1.x * m;
-  var intercept;
+  const m = (l2.y - l1.y) / (l2.x - l1.x);
+  const b = l1.y - l1.x * m;
+  let intercept;
 
   if (m == 0) {
     if (b == s1.y || b == s2.y) return true;
@@ -125,7 +123,7 @@ function interceptLineCirc(l1, l2, cent, rad) {
     return true;
   if (l1.x == l2.x) {
     if (rad >= Math.pow(l1.x, 2)) {
-      var y = Math.sqrt(rad - Math.pow(l1.x, 2));
+      const y = Math.sqrt(rad - Math.pow(l1.x, 2));
       if (inside(y, l1.y, l2.y)) return true;
       if (inside(-y, l1.y, l2.y)) return true;
     } else {
@@ -136,21 +134,19 @@ function interceptLineCirc(l1, l2, cent, rad) {
   //prevents from doing unnecesary math
   if (dist(l1.x, l1.y, l2.x, l2.y) <= 2 * rad) return false;
 
-  var x1 = l1.x - cent.x;
-  var x2 = l2.x - cent.x;
-  var y1 = l1.y - cent.y;
-  var y2 = l2.y - cent.y;
+  const x1 = l1.x - cent.x;
+  const x2 = l2.x - cent.x;
+  const y1 = l1.y - cent.y;
+  const y2 = l2.y - cent.y;
 
-  var m = (y2 - y1) / (x2 - x1);
-  var bline = y1 - x1 * m;
-  var a = Math.pow(m, 2) + 1;
-  var b = 2 * bline * m;
-  var c = Math.pow(bline, 2) - Math.pow(rad, 2);
-  m = undefined;
-  bline = undefined;
+  const m = (y2 - y1) / (x2 - x1);
+  const bline = y1 - x1 * m;
+  const a = Math.pow(m, 2) + 1;
+  const b = 2 * bline * m;
+  const c = Math.pow(bline, 2) - Math.pow(rad, 2);
 
   if (Math.pow(b, 2) - 4 * a * c < 0) return false;
-  var x = quadraticSolv(a, b, c);
+  const x = quadraticSolv(a, b, c);
   if (inside(x[0], x1, x2)) return true;
 
   return false;
@@ -158,9 +154,9 @@ function interceptLineCirc(l1, l2, cent, rad) {
 
 //random x-y position on a perimeter
 function randomRectPerimiterPos(sizex, sizey) {
-  var randperim = random(2 * sizex + 2 * sizey);
-  var xpos = 0;
-  var ypos = 0;
+  let randperim = random(2 * sizex + 2 * sizey);
+  let xpos = 0;
+  let ypos = 0;
 
   if (randperim > sizex) {
     randperim -= sizex;
@@ -202,7 +198,7 @@ function interceptLines(l1, l2, l3, l4) {}
 function closestAngle(source, target, increment) {
   if (abs(source + 2 * Math.PI - (target + 2 * Math.PI)) <= increment)
     return target;
-  var sh = source + Math.PI;
+  let sh = source + Math.PI;
   if (sh > 2 * Math.PI) sh -= 2 * Math.PI;
   if (sh > target) source += increment;
   if (sh < target) source -= increment;

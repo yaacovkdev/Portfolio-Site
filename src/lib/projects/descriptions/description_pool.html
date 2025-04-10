@@ -1,0 +1,213 @@
+<p>After watching yet another very insightful video by <a class="blue-link" href="https://www.youtube.com/@3blue1brown">3Blue1Brown</a>: </p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/HEfHFsfGXjs?si=6FSBqwt7fDZAhPrH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<p>I decided to simulate the same mathematical phenomenon, that computes the digits of PI, by making an interractive application that counts the number of collisions made by the cubes and calculates the velocities of both cubes after their ellastic collisions. The browser computes velocities from these two formulas: </p>
+
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+    <msub>
+        <mi>v</mi>
+        <mrow data-mjx-texclass="ORD">
+            <mi>A</mi>
+            <mi>f</mi>
+        </mrow>
+    </msub>
+    <mo>=</mo>
+    <mrow data-mjx-texclass="INNER">
+        <mo data-mjx-texclass="OPEN">(</mo>
+        <mfrac>
+            <mrow>
+                <msub>
+                    <mi>m</mi>
+                    <mrow data-mjx-texclass="ORD">
+                        <mi>A</mi>
+                    </mrow>
+                </msub>
+                <mo>&#x2212;</mo>
+                <msub>
+                    <mi>m</mi>
+                    <mrow data-mjx-texclass="ORD">
+                        <mi>B</mi>
+                    </mrow>
+                </msub>
+            </mrow>
+            <mrow>
+                <msub>
+                    <mi>m</mi>
+                    <mrow data-mjx-texclass="ORD">
+                        <mi>A</mi>
+                    </mrow>
+                </msub>
+                <mo>+</mo>
+                <msub>
+                    <mi>m</mi>
+                    <mrow data-mjx-texclass="ORD">
+                        <mi>B</mi>
+                    </mrow>
+                </msub>
+            </mrow>
+        </mfrac>
+        <mo data-mjx-texclass="CLOSE">)</mo>
+    </mrow>
+    <msub>
+        <mi>v</mi>
+        <mrow data-mjx-texclass="ORD">
+            <mi>A</mi>
+            <mi>i</mi>
+        </mrow>
+    </msub>
+    <mo>+</mo>
+    <mrow data-mjx-texclass="INNER">
+        <mo data-mjx-texclass="OPEN">(</mo>
+        <mfrac>
+            <mrow>
+                <mn>2</mn>
+                <msub>
+                    <mi>m</mi>
+                    <mrow data-mjx-texclass="ORD">
+                        <mi>B</mi>
+                    </mrow>
+                </msub>
+            </mrow>
+            <mrow>
+                <msub>
+                    <mi>m</mi>
+                    <mrow data-mjx-texclass="ORD">
+                        <mi>A</mi>
+                    </mrow>
+                </msub>
+                <mo>+</mo>
+                <msub>
+                    <mi>m</mi>
+                    <mrow data-mjx-texclass="ORD">
+                        <mi>B</mi>
+                    </mrow>
+                </msub>
+            </mrow>
+        </mfrac>
+        <mo data-mjx-texclass="CLOSE">)</mo>
+    </mrow>
+    <msub>
+        <mi>v</mi>
+        <mrow data-mjx-texclass="ORD">
+            <mi>B</mi>
+            <mi>i</mi>
+        </mrow>
+    </msub>
+</math>
+
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+    <msub>
+        <mi>v</mi>
+        <mrow data-mjx-texclass="ORD">
+            <mi>B</mi>
+            <mi>f</mi>
+        </mrow>
+    </msub>
+    <mo>=</mo>
+    <mrow data-mjx-texclass="INNER">
+        <mo data-mjx-texclass="OPEN">(</mo>
+        <mfrac>
+            <mrow>
+                <mn>2</mn>
+                <msub>
+                    <mi>m</mi>
+                    <mrow data-mjx-texclass="ORD">
+                        <mi>A</mi>
+                    </mrow>
+                </msub>
+            </mrow>
+            <mrow>
+                <msub>
+                    <mi>m</mi>
+                    <mrow data-mjx-texclass="ORD">
+                        <mi>A</mi>
+                    </mrow>
+                </msub>
+                <mo>+</mo>
+                <msub>
+                    <mi>m</mi>
+                    <mrow data-mjx-texclass="ORD">
+                        <mi>B</mi>
+                    </mrow>
+                </msub>
+            </mrow>
+        </mfrac>
+        <mo data-mjx-texclass="CLOSE">)</mo>
+    </mrow>
+    <msub>
+        <mi>v</mi>
+        <mrow data-mjx-texclass="ORD">
+            <mi>A</mi>
+            <mi>i</mi>
+        </mrow>
+    </msub>
+    <mo>+</mo>
+    <mrow data-mjx-texclass="INNER">
+        <mo data-mjx-texclass="OPEN">(</mo>
+        <mfrac>
+            <mrow>
+                <msub>
+                    <mi>m</mi>
+                    <mrow data-mjx-texclass="ORD">
+                        <mi>B</mi>
+                    </mrow>
+                </msub>
+                <mo>&#x2212;</mo>
+                <msub>
+                    <mi>m</mi>
+                    <mrow data-mjx-texclass="ORD">
+                        <mi>A</mi>
+                    </mrow>
+                </msub>
+            </mrow>
+            <mrow>
+                <msub>
+                    <mi>m</mi>
+                    <mrow data-mjx-texclass="ORD">
+                        <mi>A</mi>
+                    </mrow>
+                </msub>
+                <mo>+</mo>
+                <msub>
+                    <mi>m</mi>
+                    <mrow data-mjx-texclass="ORD">
+                        <mi>B</mi>
+                    </mrow>
+                </msub>
+            </mrow>
+        </mfrac>
+        <mo data-mjx-texclass="CLOSE">)</mo>
+    </mrow>
+    <msub>
+        <mi>v</mi>
+        <mrow data-mjx-texclass="ORD">
+            <mi>B</mi>
+            <mi>i</mi>
+        </mrow>
+    </msub>
+</math>
+
+<p>After playing around with the mass of the moving object, we can find that if the Mass of the cube on the left is any one of:</p>
+
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+    <msup>
+        <mtext>100kg</mtext>
+        <mi>I</mi>
+    </msup>
+    <mstyle scriptlevel="0">
+        <mspace width="0.222em"></mspace>
+    </mstyle>
+    <mo fence="false" stretchy="false">{</mo>
+    <mi>I</mi>
+    <mo>&#x2208;</mo>
+    <msub>
+        <mrow data-mjx-texclass="ORD">
+            <mi mathvariant="double-struck">N</mi>
+        </mrow>
+        <mn>0</mn>
+    </msub>
+    <mo fence="false" stretchy="false">}</mo>
+</math>
+
+<p>With these conditions the amount of collisions happens to be the trailing digits of PI.</p>

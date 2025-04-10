@@ -114,19 +114,12 @@ Oops ... your browser doesn't support the HTML5 canvas element
         <option value="4">Presentation</option>
     </select>
 
-</div>
-<div>
-    <h3>How To Use:</h3>
-    <p>Press on the coloured cubes faces to build onto that cube.</p>
-    <p>Click Undo to detroy the last placed cube.</p>
-    <p>The Second button selects the Mode of the visualization of the cubes:</p>
-    <div class="indent">
-        <p>Fixed disables all interactions with the cube.</p>
-        <p>Move mode allows the user to move the camera away and towards the cubes (W -> Up, S -> Down)</p>
-        <p>Look mode allows the uer to look around their camera position (WASD keys)</p>
-        <p>Rotation mode allows the user to rotate the shape along the x and y axis (WASD)</p>
-        <p>Presentation mode colors the coloured block in the texture and disables the ability to build and disables the ability to accidentaly Undo build</p>
-    </div>
+    <label>Projection Type:</label>
+    <select id="ProjectionS">
+        <option value="0" selected="selected">Perspective</option>
+        <option value="1">Orthographic</option>
+    </select>
+
 </div>
 
 </body>

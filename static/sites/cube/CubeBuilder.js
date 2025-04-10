@@ -6,32 +6,34 @@ CMPT 370 A
 */
 "use strict";
 
-var canvas;
-var gl;
+let canvas;
+let gl;
 
-var program;
+let program;
 
-var numPositions  = 36;
+const NUM_POSITIONS  = 36;
+const WIDTH = 720;
+const HEIGHT = 720;
 
-var positionsArray = [];
-var normalsArray = [];
-var colorsArray = [];
+const positionsArray = [];
+const normalsArray = [];
+const colorsArray = [];
 
-var placementStack = [];
+const placementStack = [];
 //up, down, left, right
 
-var origin;
+let origin;
 
-var framebuffer;
+let framebuffer;
 
-var flag = false;
+let flag = false;
 
-var color = new Uint8Array(4);
+let color = new Uint8Array(4);
 
 //arrowdirection keys
-var arrowdirection = [false, false];
+const arrowdirection = [false, false];
 
-var vertices = [
+const vertices = [
         vec4(-0.5, -0.5,  0.5, 1.0),
         vec4(-0.5,  0.5,  0.5, 1.0),
         vec4(0.5,  0.5,  0.5, 1.0),
@@ -42,7 +44,7 @@ var vertices = [
         vec4(0.5, -0.5, -0.5, 1.0),
     ];
 
-var vertexColors = [
+const vertexColors = [
         vec4(0.0, 0.0, 0.0, 1.0),  // black
         vec4(1.0, 0.0, 0.0, 1.0),  // red
         vec4(0.0, 1.0, 0.0, 1.0),  // green
@@ -56,7 +58,7 @@ var vertexColors = [
 
     
 
-    var texCoordsArray = new Float32Array([
+    const texCoordsArray = new Float32Array([
         0.25, 1.0,
         0.25, 0.5,
         0.5 ,0.5 ,
@@ -102,40 +104,41 @@ var vertexColors = [
         0.25 ,0 ,
     ]);
 
-var lightPosition = vec4(1.0, 1.0, 10.0, 0.0 );
-var lightAmbient = vec4(0.2, 0.2, 0.2, 1.0 );
-var lightDiffuse = vec4( 1.0, 1.0, 1.0, 1.0 );
-var lightSpecular = vec4( 1.0, 1.0, 1.0, 1.0 );
+const lightPosition = vec4(1.0, 1.0, 10.0, 0.0 );
+const lightAmbient = vec4(0.2, 0.2, 0.2, 1.0 );
+const lightDiffuse = vec4( 1.0, 1.0, 1.0, 1.0 );
+const lightSpecular = vec4( 1.0, 1.0, 1.0, 1.0 );
 
-var materialAmbient = vec4( 1.0, 0.0, 1.0, 1.0 );
-var materialDiffuse = vec4( 1.0, 0.8, 0.0, 1.0);
-var materialSpecular = vec4( 1.0, 0.8, 0.0, 1.0 );
-var materialShininess = 40.0;
+const materialAmbient = vec4( 1.0, 0.0, 1.0, 1.0 );
+const materialDiffuse = vec4( 1.0, 0.8, 0.0, 1.0);
+const materialSpecular = vec4( 1.0, 0.8, 0.0, 1.0 );
+const materialShininess = 40.0;
 
-var ambientColor, diffuseColor, specularColor;
-var modelViewMatrix, projectionMatrix;
-var viewerPos;
-var at;
-var up;
+let ambientColor, diffuseColor, specularColor;
+let modelViewMatrix, projectionMatrix;
+let viewerPos;
+let at;
+let up;
 
-var program;
+let texture;
+let textureLocation;
+const xAxis = 0;
+const yAxis = 1;
+const zAxis = 2;
+let axis = xAxis;
 
-var texture;
-var textureLocation;
-var xAxis = 0;
-var yAxis = 1;
-var zAxis = 2;
-var axis = xAxis;
+const theta = vec3(0.0, 0.0, 0.0);
 
-var theta = vec3(0.0, 0.0, 0.0);
+const projectionOrtho = ortho(-10, 10, -10, 10, -10, 10);
+const projectionPerspective = perspective(70, WIDTH/HEIGHT, 0.1, 20);
 
-var viewtheta = [0,0];
-var camerapos;
+const viewtheta = [0,0];
+let camerapos;
 
-var thetaLoc;
+let thetaLoc;
 
-var isclicked;
-var x, y;
+let isclicked;
+let x, y;
 
 //types of modes
 const Fixed = "Fixed";
@@ -144,7 +147,7 @@ const Look = "Look";
 const Rotate = "Rotate";
 const Present = "Present";
 
-var Mode;
+let Mode;
 
 //Sounds
 const audio_place = new Audio('Place.wav');
@@ -205,7 +208,6 @@ window.onload = function init() {
 
     gl = canvas.getContext('webgl2');
     if (!gl) alert("WebGL isn't available");
-
 
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clearColor(0.5, 0.5, 0.5, 1.0);
@@ -270,7 +272,6 @@ window.onload = function init() {
     gl.vertexAttribPointer(texCoordLoc, 2, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(texCoordLoc);
 
-
     configureTexture(texture_wood);
 
     isclicked = false;
@@ -287,11 +288,6 @@ window.onload = function init() {
 
     origin = [0,0,0];
     placementStack.push(origin);
-    
-    //projectionMatrix = ortho(-10, 10, -10, 10, -10, 10);
-    projectionMatrix = perspective(70, canvas.width/canvas.height, 0.1, 20);
-
-   
 
     var ambientProduct = mult(lightAmbient, materialAmbient);
     var diffuseProduct = mult(lightDiffuse, materialDiffuse);
@@ -326,29 +322,34 @@ window.onload = function init() {
         }
     }
 
+    document.getElementById("ProjectionS").onchange = function(event){
+        switch(parseInt(event.target.value)){
+            case 0:
+                gl.uniformMatrix4fv( gl.getUniformLocation(program, "uProjectionMatrix"),
+                    false, flatten(projectionPerspective) );
+                break;
+            case 1:
+                gl.uniformMatrix4fv( gl.getUniformLocation(program, "uProjectionMatrix"),
+                    false, flatten(projectionOrtho) );
+                break;
+        }
+    }
+
     canvas.addEventListener("mousedown", function(event){
-        
         x = event.clientX;
-        y = canvas.height -event.clientY;
+        y = canvas.height - event.clientY;
+
         isclicked = true;
     });
 
+    gl.uniform4fv(gl.getUniformLocation(program, "uAmbientProduct"), ambientProduct);
 
-    gl.uniform4fv(gl.getUniformLocation(program, "uAmbientProduct"),
-       ambientProduct);
-
-    gl.uniform4fv(gl.getUniformLocation(program, "uDiffuseProduct"),
-       diffuseProduct );
-    gl.uniform4fv(gl.getUniformLocation(program, "uSpecularProduct"),
-       specularProduct );
-    gl.uniform4fv(gl.getUniformLocation(program, "uLightPosition"),
-       lightPosition );
-
-    gl.uniform1f(gl.getUniformLocation(program,
-       "uShininess"),materialShininess);
-
+    gl.uniform4fv(gl.getUniformLocation(program, "uDiffuseProduct"), diffuseProduct );
+    gl.uniform4fv(gl.getUniformLocation(program, "uSpecularProduct"), specularProduct );
+    gl.uniform4fv(gl.getUniformLocation(program, "uLightPosition"), lightPosition );
+    gl.uniform1f(gl.getUniformLocation(program, "uShininess"),materialShininess);
     gl.uniformMatrix4fv( gl.getUniformLocation(program, "uProjectionMatrix"),
-       false, flatten(projectionMatrix) );
+         false, flatten(projectionPerspective) );
 
     //changed to WASD keys to prevent browser window from scrolling
     document.addEventListener('keydown', function(event){
@@ -404,6 +405,7 @@ function configureTexture(image){
 
 //Renders on the canvas each frame
 var render = function(){
+
     if(Mode != Fixed || Mode != Present){
         if(Mode == Look){
             //turns camera, no tilting
@@ -468,13 +470,12 @@ var render = function(){
     var translationMat;
 
     gl.uniform1i(gl.getUniformLocation(program, "multicolor"), 0);
-    
-    
+
     //First the first origin cube is initialized with rotation matrix, then rendered, then the next transformation info about matrices is being passed in.
     var i;
     for(i = 0; i < placementStack.length; i++){
         translationMat = translate(...placementStack[0]);
-        if(i == 0){
+        if(i == 0) {
             modelViewMatrix = mult(viewMatrix, translationMat);
             modelViewMatrix = mult(modelViewMatrix, rotate(theta[xAxis], vec3(1, 0, 0)));
             modelViewMatrix = mult(modelViewMatrix, rotate(theta[yAxis], vec3(0, 1, 0)));
@@ -490,7 +491,7 @@ var render = function(){
         
         if(i == placementStack.length-1) break;
         
-        gl.drawArrays(gl.TRIANGLES, 0, numPositions);
+        gl.drawArrays(gl.TRIANGLES, 0, NUM_POSITIONS);
     }
 
     if(Mode == Present){
@@ -502,10 +503,10 @@ var render = function(){
     //Do this for the final Cube 
     if(isclicked){
         isclicked = false;
-        gl.drawArrays(gl.TRIANGLES, 0, numPositions);      
+        gl.drawArrays(gl.TRIANGLES, 0, NUM_POSITIONS);
         gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, color);
 
-        gl.drawArrays(gl.TRIANGLES, 0, numPositions);
+        gl.drawArrays(gl.TRIANGLES, 0, NUM_POSITIONS);
         
         var posoff = getface(color);
         
@@ -515,6 +516,6 @@ var render = function(){
         }
     }
 
-    gl.drawArrays(gl.TRIANGLES, 0, numPositions);
+    gl.drawArrays(gl.TRIANGLES, 0, NUM_POSITIONS);
     requestAnimationFrame(render);
 }
