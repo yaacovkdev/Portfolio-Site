@@ -12,6 +12,13 @@
   import ConnectButton from "$lib/components/ProfileCard/ConnectButton.svelte";
   import BlueLink from "$lib/components/BlueLink.svelte";
 
+  import bachelors_icon from "$lib/images/icons/bachelors.svg";
+  import work_icon from "$lib/images/icons/work.svg";
+  import skills_icon from "$lib/images/icons/skills.svg";
+  import language_icon from "$lib/images/icons/language.svg";
+  import project_icon from "$lib/images/icons/project.svg";
+  import volunteering_icon from "$lib/images/icons/volunteer.png";
+
   let dropCard;
   let returnCard;
 
@@ -132,28 +139,28 @@
     </div>
 
     <div class="card__content">
-      <ProfileInfoCard title="Fullstack Developer" icon="work">
+      <ProfileInfoCard title="Fullstack Developer" icon={work_icon}>
         Currently Employed at <BlueLink href="https://albernionline.ca/" end={true}>Alberni Online</BlueLink>
       </ProfileInfoCard>
 
-      <ProfileInfoCard title="Intern Software Engineer" icon="work">
+      <ProfileInfoCard title="Intern Software Engineer" icon={work_icon}>
         1 year as a Software Engineer for <BlueLink href="https://www.happinessmountain.com/" end={true}>Happiness Mountain Inc.</BlueLink>
       </ProfileInfoCard>
 
-      <ProfileInfoCard title="Bachelor's Degree" icon="bachelors">
+      <ProfileInfoCard title="Bachelor's Degree" icon={bachelors_icon}>
         BSc. in Computing Science from <BlueLink href="https://twu.ca/" end={true}>Trinity Western University</BlueLink>
       </ProfileInfoCard>
 
       <ProfileInfoCard
         title="Skills"
-        icon="skills"
+        icon={skills_icon}
       >
         Amazon Web Services, TypeScript, NodeJS, Flutter, Python, Restful API, Pendo SDK, MySQL, Airtable
       </ProfileInfoCard>
 
       <ProfileInfoCard
         title="Volunteering"
-        icon="volunteering"
+        icon={volunteering_icon}
       >
         Youth Group<br>
         Worship Team
@@ -161,7 +168,7 @@
 
       <ProfileInfoCard
         title="Projects "
-        icon="project"
+        icon={project_icon}
       >
         <BlueLink href="https://github.com/yaacovkdev/Quality-Flooring">Quality Flooring</BlueLink> - Web app with <BlueLink href="https://github.com/yaacovkdev/Flooring-API">API</BlueLink><br>
         <BlueLink href="https://github.com/nicmart-dev/feedmenow">FeedMeNow</BlueLink> - AI Recipe Generator

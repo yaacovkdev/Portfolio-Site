@@ -1,5 +1,5 @@
 let c, x, y, v, gamespeed, fps = 30, multiplier = 8, score, screentype;
-const G = -9.81, RADIUS = 10, STARTX = 600;
+const G = -9.81, RADIUS = 10, STARTX = 600, INITGAMESPEED = 120;
 
 //array of Obstacle objects that store values needed to rendere them on the canvas
 let ObstacleArray = [];
@@ -51,7 +51,7 @@ function resetValues(){
     initObstacles();
     screentype = 1;
     frameCounter = 0;
-    gamespeed = 90;
+    gamespeed = INITGAMESPEED;
     loop();
 }
 
@@ -126,7 +126,6 @@ function increaseDifficulty(){
     if(frameCounter == 120){
         frameCounter = 0;
         gamespeed++;
-        print(gamespeed);
     }
 }
 
@@ -155,7 +154,7 @@ function keyPressed(){
         initObstacles();
         screentype = byte(1);
         frameCounter = 0;
-        gamespeed = 90;
+        gamespeed = INITGAMESPEED;
 		loop();
 		return;
     }

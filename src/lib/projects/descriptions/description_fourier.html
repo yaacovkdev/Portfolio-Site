@@ -1,0 +1,21 @@
+<p>After watching this awesome video that explains Fourier Series, made by <a class="blue-link" href="https://www.youtube.com/@3blue1brown">3Blue1Brown</a>:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/r6sGWTCMz2k?si=QjsTbz41SZ46D80i" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<p>I decided to create a web app that takes a script and produces drawings from the rotating vectors. Here are some cool vectors you can observe:</p>
+
+<ol>
+    <li>mainArm.push(150,10);<br>
+        mainArm.push(150,-25);</li>
+    <li>//This particular set of arms demonstrates the irrationality of PI<br>
+        mainArm.push(200,10);<br>
+        mainArm.push(200,Math.pow(Math.E,Math.PI));</li>
+    <li>
+        mainArm.pushA(200,-2,0);<br>
+        mainArm.pushA(100,2,0);<br>
+        mainArm.pushA(50,30,Math.PI/2);<br>
+        mainArm.pushA(50,-30,Math.PI/2);
+    </li>
+</ol>
+
+<p>The Javascript text field sends the script to be executed in the sandbox environment that prevents malicious code from running.</p>

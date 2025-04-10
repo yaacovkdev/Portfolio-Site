@@ -33,7 +33,7 @@
 
 <style lang="scss">
   .project-card {
-    background-color: $purple;
+    @include button-hover;
 
     &__picture {
       height: 83%;
@@ -51,13 +51,12 @@
         scale: 1;
       }
       to {
-        scale: 1.05;
+        scale: 1.03;
       }
     }
 
     &:hover {
-      box-shadow: 0 0 3px 3px rgb(0 0 0);
-      animation: 0.25s zoom forwards ease-in-out;
+      animation: 0.15s zoom forwards ease-in-out;
     }
 
     &__info {
@@ -66,9 +65,9 @@
       padding: 0 1rem;
 
       h3 {
+        @include shine-active($white);
         flex: 4;
         text-align: start;
-        color: $white;
       }
     }
 

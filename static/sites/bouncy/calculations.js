@@ -2,25 +2,25 @@
 //Source: https://www.geeksforgeeks.org/check-if-any-point-overlaps-the-given-circle-and-rectangle/
 //very optimized code to determine if the circle shape and rectangle shape overlap
 function circleRectOverlap(rad, xc, yc, x1, y1, x2, y2){
-    var xn = Math.max(x1, Math.min(xc, x2));
-    var yn = Math.max(y1, Math.min(yc, y2));
+    let xn = Math.max(x1, Math.min(xc, x2));
+    let yn = Math.max(y1, Math.min(yc, y2));
 
-    var dist_x = xn - xc;
-    var dist_y = yn - yc;
+    let dist_x = xn - xc;
+    let dist_y = yn - yc;
     return (dist_x * dist_x + dist_y * dist_y) <= rad * rad;
 }
 
 //breaks down the rectangles of the obstacle to check it they collide
 function obstacleCollide(xc, yc, xo, yo, y1, y2, width, height){
     //turn all starting points of the rectangles from top left
-    var toprect = {
+    let toprect = {
         x1: xo,
         y1: yo,
         x2: xo+width,
         y2: y1
     };
 
-    var botrect = {
+    let botrect = {
         x1: xo,
         y1: y2,
         x2: xo+width,

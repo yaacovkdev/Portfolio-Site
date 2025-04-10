@@ -3,16 +3,16 @@
     import {shineNav} from "$lib/scripts/selectedNav";
     const root_paths: String[] = ['/', '/graphics', '/fullstack'];
 
-  const firstpath = $page.url.pathname.match(/\/[^\/]*/gm)[0];
+    const firstpath = $page.url.pathname.match(/\/[^\/]*/gm)[0];
 
-  let localShine:Number = $state(root_paths.indexOf(firstpath)+1);
+    let localShine:Number = $state(root_paths.indexOf(firstpath)+1);
 
-  $effect(() => {
-      localShine = $shineNav;
-  });
-
+    $effect(() => {
+        localShine = $shineNav;
+    });
 </script>
 
+<!--This setup allows for properly colored links before the route loading.-->
 {#if localShine == 1}
     <a class="nav-link nav-link--1 shine" href="/">Home</a>
 {:else}
@@ -33,10 +33,12 @@
 
 <style lang="scss">
   a {
-    @include shine-effect;
-    position: relative;
-
+    @include shine-active($purple);
     @apply text-3xl;
+
+    position: relative;
+    color: $purple;
+    width: max-content;
     margin: 1rem 0;
 
     @include tablet {

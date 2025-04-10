@@ -5,6 +5,12 @@
   import HeaderMenu from "$lib/components/Header/HeaderMenu.svelte";
   import HeaderMobileSlide from "$lib/components/Header/HeaderMobileSlide.svelte";
   import {clickedMobileNav} from "$lib/scripts/resetNavButton";
+  import {onMount} from "svelte";
+
+  //when page fully loads
+  onMount(() => {
+    document.querySelector("#siteLogo").classList.add("sitelogoanimate");
+  });
 </script>
 
 <header>
@@ -56,11 +62,6 @@
     @include mobile {
       position: fixed;
       width: 100%;
-    }
-
-    @include tablet {
-      padding: $desktop-padding;
-      height: auto;
     }
   }
 

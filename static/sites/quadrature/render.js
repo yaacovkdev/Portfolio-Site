@@ -33,9 +33,9 @@ let f = function(x){
     return x.toNumber();
 }
 
-var starting = toCanvas(domain[0],0);
-var x = starting[0];
-var y = f(x);
+let starting = toCanvas(domain[0],0);
+let x = starting[0];
+let y = f(x);
 
 line1.lineStyle(3, 0xffffff)
     .moveTo(0,HEIGHT/2)
@@ -58,9 +58,10 @@ app.stage.addChild(boxes);
 interval *= pxdiv;
 //interval += interval/2;
 
-var midpoint_approx = new BigNumber(0);
-var trapezoid_approx = new BigNumber(0);
-var calculatedintegral = new BigNumber(domain[1]).exponentiatedBy(3).dividedBy(60).minus(new BigNumber(Math.cos(domain[1])).plus(-1));
+let midpoint_approx = new BigNumber(0);
+let trapezoid_approx = new BigNumber(0);
+let calculatedintegral = new BigNumber(domain[1]).exponentiatedBy(3).dividedBy(60).minus(new BigNumber(Math.cos(domain[1])))
+    .minus(new BigNumber(domain[0]).exponentiatedBy(3).dividedBy(60).minus(new BigNumber(Math.cos(domain[0]))));;
 
 app.ticker.add((delta) => {
     line1.moveTo(x,y);
@@ -68,11 +69,9 @@ app.ticker.add((delta) => {
     y = f(x);
     
      //trapezoid rule calculation
-    var global_relative_y = new BigNumber(ORIGINY).minus(y).dividedBy(pxdiv);
-    var global_delta_x = new BigNumber(interval).dividedBy(pxdiv);
+    let global_relative_y = new BigNumber(ORIGINY).minus(y).dividedBy(pxdiv);
+    let global_delta_x = new BigNumber(interval).dividedBy(pxdiv);
     if(x % interval == 0){
-       
-        
         if((x) == starting[0] || x == domain[1]*pxdiv + ORIGINX){
             trapezoid_approx = trapezoid_approx.plus(global_relative_y);
         } else {
@@ -93,7 +92,7 @@ app.ticker.add((delta) => {
             .drawCircle(x,y,2)
             .endFill());
 
-        var rect = {
+        const rect = {
             x: 0,
             y: 0,
             width:0,
@@ -106,8 +105,8 @@ app.ticker.add((delta) => {
         rect.height = ORIGINY-y;
 
         //midpoint rule calculation
-        var relative_width = new BigNumber(interval).dividedBy(pxdiv);
-        var relative_y = new BigNumber(ORIGINY).minus(y).dividedBy(pxdiv);
+        let relative_width = new BigNumber(interval).dividedBy(pxdiv);
+        let relative_y = new BigNumber(ORIGINY).minus(y).dividedBy(pxdiv);
         midpoint_approx = midpoint_approx.plus((relative_width).multipliedBy(relative_y));
 
         //render of midpoint intervals
