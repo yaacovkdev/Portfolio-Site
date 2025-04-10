@@ -13,7 +13,6 @@ let x1 = STARTING_X;
 let y1 = STARTING_Y;
 let x2 = 0;
 let y2 = 0;
-let angle = 0;
 
 let displayarm = false;
 let drawspeed = 1;
@@ -54,7 +53,10 @@ function setSpeed(s) {
 
 function resetValues() {
   x1 = STARTING_X;
-  (y1 = STARTING_Y), (x2 = STARTING_X), (y2 = STARTING_Y), (angle = 0);
+  y1 = STARTING_Y;
+  x2 = STARTING_X;
+  y2 = STARTING_Y;
+
   nam = {
     started: false,
     old_x: STARTING_X,
@@ -85,23 +87,20 @@ function resetValues() {
 
 function displayVectors(drawArm) {
   x1 = STARTING_X;
-  (y1 = STARTING_Y), (x2 = STARTING_X), (y2 = STARTING_Y), (angle = 0);
+  y1 = STARTING_Y;
+  x2 = STARTING_X;
+  y2 = STARTING_Y;
 
   if (drawArm) linegraphics.background(0);
 
   for (var i = 0; i < mainArm.vectors; i++) {
-    var vec = mainArm.pos(i);
+    const vec = mainArm.pos(i);
 
-    angle += vec.angle;
-    if (i != 0) {
-      angle += mainArm.pos(i - 1).angle;
-    }
+    if ( vec.angle > 2 * Math.PI)  vec.angle -= 2 * Math.PI;
+    if ( vec.angle < 0)  vec.angle += 2 * Math.PI;
 
-    if (angle > 2 * Math.PI) angle -= 2 * Math.PI;
-    if (angle < 0) angle += 2 * Math.PI;
-
-    x2 += vec.length * Math.cos(angle);
-    y2 += vec.length * -Math.sin(angle); //negative is up in WebGL
+    x2 += vec.length * Math.cos( vec.angle);
+    y2 += vec.length * -Math.sin( vec.angle); //negative is up in WebGL
     if (drawArm) linegraphics.line(x1, y1, x2, y2);
     x1 = x2;
     y1 = y2;

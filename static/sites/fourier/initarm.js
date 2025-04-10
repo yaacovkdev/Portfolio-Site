@@ -4,7 +4,7 @@ let initial_code = `/*In this field you can program in javascript anything you l
 //To speed up the drawing process ten times faster\n//setSpeed(10);\n
 //first vector having length of 100 px and rotating at speed of 2/(2 PI) per frame\n
 //starting at PI/2\nmainArm.pushA(100,2,Math.PI/2);\n
-mainArm.push(10,30);`;
+mainArm.push(10,36);`;
 document.getElementById("codefield").value = initial_code;
 let code_field = initial_code;
 
