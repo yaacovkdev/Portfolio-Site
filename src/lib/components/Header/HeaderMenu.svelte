@@ -58,7 +58,7 @@
     </button>
 
     <div class="flex justify-between items-center md:w-full relative">
-        <a href="/" id="siteLogo" class="text-3xl ml-6 ">
+        <a href="/" id="siteLogo" class="text-3xl ml-6 opacity-0">
             <img src={sitelogo} alt="logo" class="w-[260px] object-contain"/>
         </a>
 

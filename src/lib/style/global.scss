@@ -131,6 +131,7 @@ section {
 .sitelogoanimate {
   animation: logo-appear-top 700ms forwards ease-out;
 
+
   @include tablet {
     animation: logo-appear-left 700ms forwards 250ms ease-out;
   }
