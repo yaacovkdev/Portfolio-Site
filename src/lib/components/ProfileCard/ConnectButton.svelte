@@ -25,8 +25,7 @@
         revAction();
         clicked = !clicked;
       }
-    }}>{clicked ? text2 : text1}</button
-  >
+    }}>{clicked ? text2 : text1}</button>
 </div>
 
 <style lang="scss">
@@ -35,10 +34,7 @@
   }
 
   .button {
-    @include interactive-radius;
-    @include shine-effect;
-    background-color: $purple;
-    color: $white;
+    @include button-hover;
     min-width: 15rem;
     height: 3rem;
     margin: auto;
@@ -47,19 +43,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
-    &:hover {
-      background: linear-gradient(
-        225deg,
-        rgba($diamondblue, 0.7),
-        rgba($purple, 0.2) 100%
-      ),
-      linear-gradient(
-        157deg,
-        rgba($darkpurple, 0.6),
-        rgba($black, 0.3) 50%
-      );
-    }
 
     @include tablet {
       padding: $desktop-padding;

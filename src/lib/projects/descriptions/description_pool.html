@@ -1,8 +1,8 @@
-<p>After watching this very insightful video by <a class="blue-link" href="https://www.youtube.com/@3blue1brown">3Blue1Brown</a>: </p>
+<p>After watching yet another very insightful video by <a class="blue-link" href="https://www.youtube.com/@3blue1brown">3Blue1Brown</a>: </p>
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/HEfHFsfGXjs?si=6FSBqwt7fDZAhPrH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-<p>I decided to simulate the same phenomena on the web, by making the browser record the number collisions and perform the calculations of velocities of both objects after their ellastic collision. The browser computes velocities from these two formulas: </p>
+<p>I decided to simulate the same phenomenon, of computing the digits of PI on the web, by making the browser record the number collisions and perform the calculations of velocities of both objects after their ellastic collision. The browser computes velocities from these two formulas: </p>
 
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
     <msub>
@@ -187,3 +187,29 @@
         </mrow>
     </msub>
 </math>
+
+<p>After playing around with the mass of the moving object, we can find that interestingly if the Mass of the moving block is any one of:</p>
+
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+    <msub>
+        <mi>M</mi>
+        <mn>2</mn>
+    </msub>
+    <mo>=</mo>
+    <msup>
+        <mtext>100kg</mtext>
+        <mi>I</mi>
+    </msup>
+    <mo fence="false" stretchy="false">{</mo>
+    <mi>I</mi>
+    <mo>&#x2208;</mo>
+    <msub>
+        <mrow data-mjx-texclass="ORD">
+            <mi mathvariant="double-struck">N</mi>
+        </mrow>
+        <mn>0</mn>
+    </msub>
+    <mo fence="false" stretchy="false">}</mo>
+</math>
+
+<p>With these conditions the amount of collisions happens to be the trailing digits of PI.</p>

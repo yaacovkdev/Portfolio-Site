@@ -1,7 +1,6 @@
 let mainArm;
 
 let initial_code = `/*In this field you can program in javascript anything you like and set mainArm\n vectors with any type of algorithms*/\n
-//vector arm\nmainArm = new VectorArm();\n
 //To speed up the drawing process ten times faster\n//setSpeed(10);\n
 //first vector having length of 100 px and rotating at speed of 2/(2 PI) per frame\n
 //starting at PI/2\nmainArm.pushA(100,2,Math.PI/2);\n
@@ -22,6 +21,8 @@ const sandboxFunction = (parsedJS) => {
     const clearTimeout = undefined;
     const clearInterval = undefined;
     const Function = undefined;
+    
+    mainArm = new VectorArm();
 
     // Execute the user code in a scope where \`window\` and \`document\` are nullified
     (function() {

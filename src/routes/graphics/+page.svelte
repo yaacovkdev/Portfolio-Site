@@ -6,17 +6,17 @@
   import {dynamicDarkBackground, genBackgroundImage, getTFromTime} from "$lib/scripts/dynamicDarkBackground";
   import Subtitle from "$lib/components/Titles/Subtitle.svelte";
 
-  let initStyleGraphics: string = genBackgroundImage(getTFromTime());
+  //this allows for server rendered background, so there is dynamic background color preloaded
+  const initStyleGraphics: string = genBackgroundImage(getTFromTime());
 
   selectedNav(2);
   resetNavButton();
-  dynamicDarkBackground();
+  dynamicDarkBackground(); //this actually makes the background change over time
 </script>
 
 <div id="graphicsPageSection" class="background-purple" style={`background-image: ${initStyleGraphics}`}>
   <div class="main-limit-width">
   <MainTitle>Graphics Projects</MainTitle>
-  <Subtitle class="m-0"><span class="project-announce__text">Project Descriptions Coming Soon!!!</span></Subtitle>
 
   <section>
     <Subtitle>PIXI.js Projects</Subtitle>
@@ -52,11 +52,6 @@
 <style lang="scss">
   #graphicsPageSection {
     padding: 1rem;
-  }
-
-  .project-announce__text {
-    text-decoration: underline;
-    animation: 7s goldToDark ease-in-out infinite;
   }
 
   @keyframes goldToDark {

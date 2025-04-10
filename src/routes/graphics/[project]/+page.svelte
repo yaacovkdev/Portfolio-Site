@@ -4,12 +4,9 @@
   import {resetNavButton} from "$lib/scripts/resetNavButton";
   import {onMount} from "svelte";
   import selectedNav from "$lib/scripts/selectedNav";
+  import type { LoadResult } from "./$types";
 
-  export let data: {
-    url_name: string;
-    name: string;
-    inst: string;
-  };
+  let { data }: LoadResult = $props();
 
   selectedNav(2);
   resetNavButton();

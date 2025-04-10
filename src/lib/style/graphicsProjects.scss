@@ -26,32 +26,57 @@ due to making iframe a javascript object for extra security measures.
   }
 
   .project-instructions, .project-description {
-
     a.blue-link {
       color: $diamondblue;
       font-weight: 500;
     }
 
     p, ul, ol {
+      @include scale-fonts-regular;
       text-align: left;
+    }
+
+    p {
+      @include paragraph-margins;
+    }
+
+    ul, ol {
+      @include list-margins;
+    }
+
+    iframe {
+      margin: auto;
+      min-width: 320px;
+      max-width: 100vw;
+
+      @include mobile {
+        margin-left: -$mobile-padding;
+        width: 100vw;
+      }
+    }
+
+    math {
+      @include paragraph-margins;
+      @include scale-fonts-regular;
     }
 
     ol {
       margin-left: 1.5rem;
+      list-style-type: decimal;
+
+      ol {
+        list-style-type: lower-alpha;
+
+        ol {
+          list-style-type: lower-roman;
+        }
+      }
     }
 
     h2 {
       @include scale-fonts-subtitle;
 
       @include subtitle-margins;
-    }
-
-    ol {
-      list-style-type: decimal;
-
-      ol {
-        list-style-type: lower-alpha;
-      }
     }
 
     li {
@@ -80,8 +105,6 @@ due to making iframe a javascript object for extra security measures.
       width: 1300px;
       height: 750px;
     }
-
-
   }
 
   &--fourier {
@@ -187,7 +210,6 @@ due to making iframe a javascript object for extra security measures.
       color: $black;
     }
     .project-iframe {
-
 
       iframe {
         width: 740px;

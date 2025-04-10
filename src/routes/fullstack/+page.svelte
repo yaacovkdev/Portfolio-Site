@@ -14,9 +14,9 @@
     Symbolic Boolean Calculator
   </MainTitle>
   <h3 class="padding-default text-lg">
-    Also Available on <BlueLink href="https://boolean.yaacov.site" end={true}>boolean.yaacov.site</BlueLink>
+    Also Available on <BlueLink href="https://boolean.yaacovk.dev" end={true}>boolean.yaacovk.dev</BlueLink>
   </h3>
-  <iframe src="https://boolean.yaacov.site" title="Boolean Calculator"></iframe>
+  <iframe src="https://boolean.yaacovk.dev" title="Boolean Calculator"></iframe>
 </div>
 
 <style lang="scss">

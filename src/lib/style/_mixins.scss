@@ -27,6 +27,24 @@
   }
 }
 
+@mixin paragraph-margins {
+  margin-top: 1.5rem;
+  margin-bottom: 1em;
+
+  @include tablet {
+    margin-bottom: 1.25em;
+  }
+}
+
+@mixin list-margins {
+  margin-top: 1rem;
+  margin-bottom: 1em;
+
+  @include tablet {
+    margin-bottom: 0.875em;
+  }
+}
+
 @mixin margin-top {
   margin-top: 1.5rem;
 
@@ -81,10 +99,10 @@
   }
 }
 
-@mixin shine-effect {
+@mixin shine-active($initcolor) {
   @keyframes shine {
     from {
-      color: $purple;
+      color: $initcolor;
     }
 
     to {
@@ -92,11 +110,28 @@
     }
   }
 
-  &:active {
-    animation: shine 0.25s forwards;
-  }
-
-  &:active {
+  &:active, &:active * {
     animation: shine 0.5s ease forwards;
+  }
+}
+
+//this goes on any element where you want to apply purple - blue/green hover effect
+@mixin button-hover {
+  @include interactive-radius;
+  @include shine-active($white);
+  background-color: $purple;
+  color: $white;
+
+  &:hover {
+    background: linear-gradient(
+      225deg,
+      rgba($diamondblue, 0.7),
+      rgba($purple, 0.2) 100%
+    ),
+    linear-gradient(
+      157deg,
+      rgba($darkpurple, 0.6),
+      rgba($black, 0.3) 50%
+    );
   }
 }

@@ -4,7 +4,3 @@ let suppose = `/*In this field you can program in javascript anything you like a
 //first vector having length of 100 px and rotating at speed of 2/(2 PI) per frame\n
 //starting at PI/2\nmainArm.pushA(100,2,Math.PI/2);\n
 mainArm.push(10,30);`
-
-function codeParse(s) {
-
-}
