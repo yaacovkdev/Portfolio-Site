@@ -30,11 +30,15 @@
 
 <style lang="scss">
   .connect-button {
-    margin-top: 3rem;
+    margin-top: 2rem;
+
+    @include tablet {
+      margin-top: 3rem;
+    }
   }
 
   .button {
-    @include button-hover;
+    @include button-color($black, $lightpurple, "blue");
     min-width: 15rem;
     height: 3rem;
     margin: auto;

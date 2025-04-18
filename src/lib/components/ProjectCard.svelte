@@ -1,18 +1,18 @@
 <script lang="ts">
   export let name: string;
 
-  import { ProjectsInfo } from "$lib/projects/projects";
+  import { GraphicsProjectsInfo } from "$lib/projects/graphicsProjects";
   import icon_desktop from "$lib/images/icons/icon-desktop.svg";
   import icon_mobile from "$lib/images/icons/icon-mobile.svg";
   import { onMount } from "svelte";
 
-  const full_name: string = ProjectsInfo[name].name;
-  const description: string = ProjectsInfo[name].desc;
-  const main_image: any = ProjectsInfo[name].image;
+  const full_name: string = GraphicsProjectsInfo[name].name;
+  const description: string = GraphicsProjectsInfo[name].desc;
+  const main_image: any = GraphicsProjectsInfo[name].image;
 
   onMount(() => {
     const mobileIcon = document.querySelector(`#${name} .img--mobile`);
-    if(ProjectsInfo[name].mobileIcon) mobileIcon.style.display = "block";
+    if(GraphicsProjectsInfo[name].mobileIcon) mobileIcon.style.display = "block";
 
   });
 </script>
@@ -33,7 +33,7 @@
 
 <style lang="scss">
   .project-card {
-    @include button-hover;
+    @include button-color($white, $purple);
 
     &__picture {
       height: 83%;
