@@ -1,4 +1,6 @@
 <script lang="ts">
+    import {redirect} from "@sveltejs/kit";
+
     export let projectName: string;
     export let projectDescription: string;
     export let projectHref: string = null;
@@ -10,10 +12,9 @@
         <h2>{projectName}</h2>
         <div class="newsproject__description">{@html projectDescription}</div>
     </div>
-    <div class="newsproject__panel w-full flex flex-row justify-end">
-        <a class="newsproject__button self-end" href={projectHref}>{projectButtonText}</a>
+    <div class="newsproject__panel w-full flex flex-row justify-center md:justify-end">
+        <button class="newsproject__button w-full text-center md:w-72 xl:w-80" on:click={() => open("https://feedmenow-client.onrender.com/")}>{projectButtonText}</button>
     </div>
-
 </div>
 
 <style lang="scss">
@@ -25,7 +26,7 @@
         @include scale-fonts-subtitle;
       }
 
-      &__description {
+      &__description, &__panel {
         @include scale-fonts-regular;
       }
 

@@ -148,16 +148,29 @@
   }
 }
 
-@mixin grad-purple-blue {
+@mixin grad-blue {
   background: linear-gradient(
                   225deg,
                   rgba($rockblue, 0.7),
-                  rgba($primary, 0.2) 100%
+                  rgba($primary, 0.3) 100%
   ),
   linear-gradient(
                   157deg,
                   rgba($amour, 0.6),
-                  rgba($swamp, 0.3) 50%
+                  rgba($swamp, 0.4) 50%
+  );
+}
+
+@mixin grad-purple {
+  background: linear-gradient(
+                  225deg,
+                  rgba($primary, 0.7),
+                  rgba($primary, 0.2) 100%
+  ),
+  linear-gradient(
+                  157deg,
+                  rgba($topaz, 0.6),
+                  rgba($darkblue, 0.4) 50%
   );
 }
 
@@ -170,9 +183,11 @@
 
   &:hover {
     @if $grad-opt == 'blue' {
-      @include grad-purple-blue;
+      @include grad-blue;
+    } @else if $grad-opt == 'purple' {
+      @include grad-purple;
     } @else {
-      @include grad-purple-blue;
+      @include grad-blue;
     }
 
   }

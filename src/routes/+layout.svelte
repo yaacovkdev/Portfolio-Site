@@ -46,7 +46,7 @@
 
   header {
     z-index: 3;
-    background-color: $background;
+    background: $background;
     border-bottom: 2px $secondary solid;
     padding: 0 $mobile-padding;
     height: $mobile-header-height;

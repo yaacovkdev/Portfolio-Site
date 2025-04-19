@@ -5,6 +5,6 @@ export const MainProjectsInfo: { [key: string]: { name: string; desc: string, im
     name: "Feed Me Now!",
     desc: description_feedmenow,
     link: "https://feedmenow-client.onrender.com/",
-    linktext: "Public Beta Available Now!"
+    linktext: "Test Version Available Now!!!"
   },
 };
