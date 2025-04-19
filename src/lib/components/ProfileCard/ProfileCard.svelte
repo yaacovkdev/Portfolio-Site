@@ -167,7 +167,7 @@
       </ProfileInfoCard>
 
       <ProfileInfoCard
-        title="Projects "
+        title="Projects"
         icon={project_icon}
       >
         <BlueLink href="https://github.com/yaacovkdev/Quality-Flooring">Quality Flooring</BlueLink> - Web app with <BlueLink href="https://github.com/yaacovkdev/Flooring-API">API</BlueLink><br>
@@ -196,7 +196,7 @@
     @include scale-fonts-regular;
     position: relative;
     width: 100%;
-    min-height: 42rem;
+    min-height: 608px;
     padding: $mobile-padding;
     display: flex;
     flex-direction: row;
@@ -289,7 +289,7 @@
 
         &__status {
           @include scale-fonts-small;
-          background-color: $lightgreen;
+          background-color: $swamp;
           line-height: 1rem;
           border-radius: 0.5rem;
           padding: 0 0.25rem;
@@ -319,10 +319,10 @@
       margin: 0.25rem 0;
       background: linear-gradient(
         to right,
-        $amber,
-        $gold 30%,
-        $gold 70%,
-        $amber
+                      $mango,
+        $secondary 30%,
+        $secondary 70%,
+                      $mango
       );
       position: relative;
     }

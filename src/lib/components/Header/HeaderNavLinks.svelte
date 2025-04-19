@@ -33,11 +33,11 @@
 
 <style lang="scss">
   a {
-    @include shine-active($purple);
+    @include shine-active($primary);
     @apply text-3xl;
 
     position: relative;
-    color: $purple;
+    color: $primary;
     width: max-content;
     margin: 1rem 0;
 

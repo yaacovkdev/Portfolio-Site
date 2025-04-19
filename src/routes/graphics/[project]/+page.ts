@@ -1,12 +1,12 @@
-import { ProjectsInfo } from "$lib/projects/projects";
+import { GraphicsProjectsInfo } from "$lib/projects/graphicsProjects";
 import type { LoadResult } from "./$types";
 import type { LoadParams } from "./$types";
 
 export const load = ({ params }: LoadParams): LoadResult => {
   return {
     url_name: params.project,
-    name: ProjectsInfo[params.project].name,
-    instructions: ProjectsInfo[params.project].inst,
-    description: ProjectsInfo[params.project].desc,
+    name: GraphicsProjectsInfo[params.project].name,
+    instructions: GraphicsProjectsInfo[params.project].inst,
+    description: GraphicsProjectsInfo[params.project].desc,
   };
 };

@@ -49,8 +49,7 @@
 
 <style lang="scss">
   #homeTitle {
-    color: $gold;
-    text-shadow: rgba($purpleheart, 0.4) 2px 2px 2px;
+    @include flashy-text;
   }
 
   .fade-out {

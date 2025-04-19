@@ -131,7 +131,7 @@
   }
 
   .hamburger-dash {
-    background: $purple;
+    background: $primary;
 
     width: 2rem;
     height: 2px;

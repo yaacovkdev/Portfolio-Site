@@ -30,7 +30,7 @@ import instructions_pool from "$lib/projects/instructions/instructions_pool.html
 import description_fourier from "$lib/projects/descriptions/description_fourier.html?raw";
 import instrctions_fourier from "$lib/projects/instructions/instructions_fourier.html?raw";
 
-export const ProjectsInfo: { [key: string]: { name: string; inst: string, desc: string, mobileIcon: boolean, image: any } } = {
+export const GraphicsProjectsInfo: { [key: string]: { name: string; inst: string, desc: string, mobileIcon: boolean, image: any } } = {
   rocket: {
     name: "Rocket",
     inst: instruction_rocket,

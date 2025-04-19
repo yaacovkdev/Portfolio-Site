@@ -13,7 +13,7 @@
 
 <style lang="scss">
   a {
-    color: $diamondblue;
+    color: $azure;
     font-weight: 500;
   }
 </style>
