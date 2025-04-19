@@ -34,7 +34,7 @@
       }
 
       &__button {
-        @include button-color($black, $lightpurple, "blue");
+        @include button-color($black, $amour, "blue");
 
         padding: $mobile-padding;
 

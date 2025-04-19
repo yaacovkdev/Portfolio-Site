@@ -3,7 +3,7 @@
     import WelcomeTitle from "$lib/components/Titles/WelcomeTitle.svelte";
     import {resetNavButton} from "$lib/scripts/resetNavButton";
     import selectedNav from "$lib/scripts/selectedNav";
-    import MainTitleLight from "$lib/components/Titles/MainTitleLight.svelte";
+    import FlashyTitle from "$lib/components/Titles/FlashyTitle.svelte";
     import NewsProjectCard from "$lib/components/NewsProjectCard.svelte";
     import {MainProjectsInfo as projects} from "$lib/projects/mainProjects.ts";
 
@@ -23,7 +23,7 @@
 
 <section class="section-news main-limit-width">
     <div class="padding-default">
-        <MainTitleLight>Upcoming Projects!</MainTitleLight>
+        <FlashyTitle>Upcoming Projects!</FlashyTitle>
     </div>
 
     <div class="padding-default">

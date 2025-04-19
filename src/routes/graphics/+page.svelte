@@ -56,15 +56,15 @@
 
   @keyframes goldToDark {
     0% {
-      color: $gold;
+      color: $secondary;
     }
 
     50% {
-      color: $pirategold;
+      color: $red;
     }
 
     100% {
-      color: $gold;
+      color: $secondary;
     }
   }
 

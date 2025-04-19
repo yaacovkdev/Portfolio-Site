@@ -33,7 +33,7 @@
 
 <style lang="scss">
   .project-card {
-    @include button-color($white, $purple);
+    @include button-color($white, $primary);
 
     &__picture {
       height: 83%;

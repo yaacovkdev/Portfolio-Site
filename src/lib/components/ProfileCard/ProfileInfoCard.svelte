@@ -19,7 +19,7 @@
     width: 18rem;
     padding: 1rem;
     padding-top: 1.25rem;
-    border: 2px solid $gray;
+    border: 2px solid $darkpink;
     border-radius: 1rem;
     text-align: start;
     background-color: $background;

@@ -38,7 +38,7 @@
   }
 
   .button {
-    @include button-color($black, $lightpurple, "blue");
+    @include button-color($black, $amour, "blue");
     min-width: 15rem;
     height: 3rem;
     margin: auto;

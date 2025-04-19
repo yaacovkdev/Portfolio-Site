@@ -26,10 +26,7 @@ due to making iframe a javascript object for extra security measures.
   }
 
   .project-instructions, .project-description {
-    a.blue-link {
-      color: $diamondblue;
-      font-weight: 500;
-    }
+    @include blue-link;
 
     p, ul, ol {
       @include scale-fonts-regular;

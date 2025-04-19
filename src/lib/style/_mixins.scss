@@ -120,6 +120,11 @@
   }
 }
 
+@mixin flashy-text {
+  color: $secondary;
+  text-shadow: rgba($primary, 0.4) 2px 2px 2px;
+}
+
 @mixin shine-active($initcolor) {
   @keyframes shine {
     from {
@@ -127,7 +132,7 @@
     }
 
     to {
-      color: $amber;
+      color: $corn;
     }
   }
 
@@ -136,16 +141,23 @@
   }
 }
 
+@mixin blue-link {
+  a.blue-link {
+    color: $azure;
+    font-weight: 500;
+  }
+}
+
 @mixin grad-purple-blue {
   background: linear-gradient(
                   225deg,
-                  rgba($diamondblue, 0.7),
-                  rgba($purple, 0.2) 100%
+                  rgba($rockblue, 0.7),
+                  rgba($primary, 0.2) 100%
   ),
   linear-gradient(
                   157deg,
-                  rgba($darkpurple, 0.6),
-                  rgba($black, 0.3) 50%
+                  rgba($amour, 0.6),
+                  rgba($swamp, 0.3) 50%
   );
 }
 
