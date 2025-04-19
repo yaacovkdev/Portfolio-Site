@@ -1,5 +1,5 @@
 <script lang="ts">
-  import "$lib/projects/projects";
+  import "$lib/projects/graphicsProjects";
   import "$lib/style/graphicsProjects.scss";
   import {resetNavButton} from "$lib/scripts/resetNavButton";
   import {onMount} from "svelte";

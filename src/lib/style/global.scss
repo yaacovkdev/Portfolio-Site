@@ -3,6 +3,7 @@
 @use "./mixins" as *;
 
 * {
+  @include blue-link;
   color: $black;
 }
 
@@ -41,7 +42,7 @@
 }
 
 section {
-  margin: 0 auto 4rem auto;
+  margin: 0 auto 6rem auto;
 
   @include tablet {
     margin: 0 auto 4.5rem auto;
@@ -67,20 +68,20 @@ section {
 }
 
 .shine {
-  $textshine-amber: linear-gradient(45deg, rgba($darkgold,0.75), rgba($amber,0.5), rgba($pirategold, 0.75)), linear-gradient(100deg, rgba($pirategold,0.75), rgba($amber,0.5), rgba($darkgold,0.75));
-  $textshine-purple: linear-gradient(45deg, rgba($darkgold,0.75), rgba($purple,0.2), rgba($pirategold, 0.75)), linear-gradient(100deg, rgba($pirategold,0.75), rgba($purple,0.2), rgba($darkgold,0.75));
+  $textshine-amber: linear-gradient(45deg, rgba($orange,0.75), rgba($mango,0.5), rgba($red, 0.75)), linear-gradient(100deg, rgba($red,0.75), rgba($mango,0.5), rgba($orange,0.75));
+  $textshine-purple: linear-gradient(45deg, rgba($orange,0.75), rgba($primary,0.2), rgba($red, 0.75)), linear-gradient(100deg, rgba($red,0.75), rgba($primary,0.2), rgba($orange,0.75));
 
   background: $textshine-amber;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: $gold 1px;
+  text-shadow: $secondary 1px;
 
   @include tablet {
     background: $textshine-purple;
 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: $gold 1px;
+    text-shadow: $secondary 1px;
   }
 
   &:after {
@@ -101,9 +102,9 @@ section {
 }
 
 .gradient-gold-background {
-  background: linear-gradient(45deg, rgba($background,1), rgba($gold,0.3), rgba($background,1)),
-  linear-gradient(90deg, rgba($background,1), rgba($purple,0.3), rgba($background,1)),
-  linear-gradient(135deg, rgba($background,1), rgba($amber,0.4), rgba($background,1));
+  background: linear-gradient(45deg, rgba($background,1), rgba($secondary,0.3), rgba($background,1)),
+  linear-gradient(90deg, rgba($background,1), rgba($primary,0.3), rgba($background,1)),
+  linear-gradient(135deg, rgba($background,1), rgba($mango,0.4), rgba($background,1));
 }
 
 @keyframes logo-appear-left {
@@ -135,5 +136,4 @@ section {
   @include tablet {
     animation: logo-appear-left 700ms forwards 250ms ease-out;
   }
-
 }
