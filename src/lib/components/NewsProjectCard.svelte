@@ -3,7 +3,7 @@
 
     export let projectName: string;
     export let projectDescription: string;
-    export let projectHref: string = null;
+    export let projectHref: string = "";
     export let projectButtonText: string = "Check it NOW!"
 </script>
 
@@ -13,7 +13,7 @@
         <div class="newsproject__description">{@html projectDescription}</div>
     </div>
     <div class="newsproject__panel w-full flex flex-row justify-center md:justify-end">
-        <button class="newsproject__button w-full text-center md:w-72 xl:w-80" on:click={() => open("https://feedmenow-client.onrender.com/")}>{projectButtonText}</button>
+        <button class="newsproject__button w-full text-center md:w-auto" on:click={() => open(projectHref)}>{projectButtonText}</button>
     </div>
 </div>
 

@@ -4,7 +4,7 @@ export const MainProjectsInfo: { [key: string]: { name: string; desc: string, im
   feedmenow: {
     name: "Feed Me Now!",
     desc: description_feedmenow,
-    link: "https://feedmenow-client.onrender.com/",
-    linktext: "Test Version Available Now!!!"
+    link: "https://github.com/nicmart-dev/feedmenow",
+    linktext: "Project Source"
   },
 };
