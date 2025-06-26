@@ -31,8 +31,9 @@
         <NewsProjectCard
             projectName={project.name}
             projectDescription={project.desc}
-            projectHref={project.link}
-            projectButtonText={project.linktext}
+            projectSourceHref={project.sourcelink}
+            projectLeadHref={project.link}
+            projectLeadButtonText={project.linktext}
         />
         {/each}
     </div>
