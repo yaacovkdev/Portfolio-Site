@@ -32,8 +32,6 @@
             projectName={project.name}
             projectDescription={project.desc}
             projectSourceHref={project.sourcelink}
-            projectLeadHref={project.link}
-            projectLeadButtonText={project.linktext}
         />
         {/each}
     </div>
