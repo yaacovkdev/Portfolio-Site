@@ -10,7 +10,6 @@
 
 <div class="connect-button">
   <button
-    class="button"
     on:click={() => {
       if (!clicked) {
         if(!timeoutStarted) {
@@ -37,19 +36,9 @@
     }
   }
 
-  .button {
-    @include button-color($black, $amour, "blue");
-    min-width: 15rem;
-    height: 3rem;
-    margin: auto;
-    padding: $mobile-padding;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    @include tablet {
-      padding: $desktop-padding;
-    }
+  button {
+    @include scale-fonts-regular;
+    @include button-color($darkgreen, $amour, "blue");
+    @include home-button;
   }
 </style>

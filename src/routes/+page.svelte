@@ -11,33 +11,37 @@
     resetNavButton();
 </script>
 
-<section class="main-limit-width">
-    <div class="padding-default">
-        <WelcomeTitle />
-    </div>
+<div class="main-content-sections main-limit-width">
+    <section>
+        <div class="profile-card-section padding-default no-mobile-padding">
+            <ProfileCard />
+        </div>
+    </section>
 
-    <div class="padding-default no-mobile-padding">
-        <ProfileCard />
-    </div>
-</section>
+    <section class="section-news">
+        <div class="padding-default">
+            <FlashyTitle>Developed Projects!</FlashyTitle>
+        </div>
 
-<section class="section-news main-limit-width">
-    <div class="padding-default">
-        <FlashyTitle>Upcoming Projects!</FlashyTitle>
-    </div>
-
-    <div class="padding-default">
-        {#each Object.entries(projects) as [_i, project]}
-        <NewsProjectCard
-            projectName={project.name}
-            projectDescription={project.desc}
-            projectSourceHref={project.sourcelink}
-        />
-        {/each}
-    </div>
-</section>
+        <div class="padding-default">
+            {#each Object.entries(projects) as [_i, project]}
+            <NewsProjectCard
+                projectName={project.name}
+                projectDescription={project.desc}
+                projectSourceHref={project.sourcelink}
+                projectLiveHref={project.livelink}
+                datastatus={project.datastatus}
+            />
+            {/each}
+        </div>
+    </section>
+</div>
 
 <style lang="scss">
+  .profile-card-section {
+    margin-top: 6rem;
+  }
+
   .section-news {
     z-index: -1;
     &__content {
