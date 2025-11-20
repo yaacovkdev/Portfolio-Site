@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ProjectCard from "$lib/components/ProjectCard.svelte";
+  import GraphicsProjectCard from "$lib/components/GraphicsProjectCard.svelte";
   import MainTitle from "$lib/components/Titles/MainTitle.svelte";
   import selectedNav from "$lib/scripts/selectedNav";
   import {resetNavButton} from "$lib/scripts/resetNavButton";
@@ -22,8 +22,8 @@
     <Subtitle>PIXI.js Projects</Subtitle>
 
     <div class="project-cards">
-      <a href="/graphics/polygon"><ProjectCard name="polygon" /></a>
-      <a href="/graphics/quadrature"><ProjectCard name="quadrature" /></a>
+      <a href="/graphics/polygon"><GraphicsProjectCard name="polygon" /></a>
+      <a href="/graphics/quadrature"><GraphicsProjectCard name="quadrature" /></a>
     </div>
   </section>
 
@@ -31,10 +31,10 @@
     <Subtitle>p5.js Projects</Subtitle>
 
     <div class="project-cards">
-      <a href="/graphics/pool"><ProjectCard name="pool" /></a>
-      <a href="/graphics/fourier"><ProjectCard name="fourier" /></a>
-      <a href="/graphics/spinning"><ProjectCard name="spinning" /></a>
-      <a href="/graphics/bouncy"><ProjectCard name="bouncy" /></a>
+      <a href="/graphics/pool"><GraphicsProjectCard name="pool" /></a>
+      <a href="/graphics/fourier"><GraphicsProjectCard name="fourier" /></a>
+      <a href="/graphics/spinning"><GraphicsProjectCard name="spinning" /></a>
+      <a href="/graphics/bouncy"><GraphicsProjectCard name="bouncy" /></a>
 
     </div>
   </section>
@@ -42,8 +42,8 @@
     <section>
       <Subtitle>WebGL Projects</Subtitle>
       <div class="project-cards">
-        <a href="/graphics/cube"><ProjectCard name="cube" /></a>
-        <a href="/graphics/rocket"><ProjectCard name="rocket" /></a>
+        <a href="/graphics/cube"><GraphicsProjectCard name="cube" /></a>
+        <a href="/graphics/rocket"><GraphicsProjectCard name="rocket" /></a>
       </div>
     </section>
   </div>
@@ -51,7 +51,7 @@
 
 <style lang="scss">
   #graphicsPageSection {
-    padding: 1rem;
+    display: flow-root;
   }
 
   @keyframes goldToDark {

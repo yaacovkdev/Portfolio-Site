@@ -15,7 +15,7 @@
   import bachelors_icon from "$lib/images/icons/bachelors.svg";
   import work_icon from "$lib/images/icons/work.svg";
   import skills_icon from "$lib/images/icons/skills.svg";
-  import language_icon from "$lib/images/icons/language.svg";
+  import experience_icon from "$lib/images/icons/experience.png";
   import project_icon from "$lib/images/icons/project.svg";
   import volunteering_icon from "$lib/images/icons/volunteer.png";
 
@@ -121,7 +121,7 @@
       <div class="card__title">
         <h2 class="card__name mt-8">Jacob Kochatkov</h2>
         <h4 class="card__description">
-          BSc. of Computer Science upskilling in Full Stack Development
+          Fullstack Developer and One Happy Thousandanaire!
         </h4>
 
         <div class="location my-2">
@@ -131,48 +131,53 @@
               class="location__img w-4"
               src={location_icon}
               alt="location"
-            />British Columbia
+            />British Columbia, Canada
           </p>
-          <h4 class="location__status">OPEN TO RELOCATION</h4>
         </div>
       </div>
     </div>
 
     <div class="card__content">
-      <ProfileInfoCard title="Fullstack Developer" icon={work_icon}>
-        Currently Employed at <BlueLink href="https://albernionline.ca/" end={true}>Alberni Online</BlueLink>
-      </ProfileInfoCard>
+        <ProfileInfoCard title="Fullstack Developer" icon={work_icon}>
+            Fullstack Engineer at <BlueLink href="https://albernionline.ca/" end={true}>Alberni Online</BlueLink><br>
+            Freelancer
+        </ProfileInfoCard>
 
-      <ProfileInfoCard title="Intern Software Engineer" icon={work_icon}>
-        1 year as a Software Engineer for <BlueLink href="https://www.happinessmountain.com/" end={true}>Happiness Mountain Inc.</BlueLink>
-      </ProfileInfoCard>
+        <ProfileInfoCard title="Past Experience" icon={experience_icon}>
+            Intern Software Engineer at <BlueLink href="https://www.happinessmountain.com/" end={true}>Happiness Mountain Inc</BlueLink><br>
+            Instructor of Computer Science at <BlueLink href="https://regent.bc.ca/" end={true}>Regent Christian Academy</BlueLink>
+        </ProfileInfoCard>
 
-      <ProfileInfoCard title="Bachelor's Degree" icon={bachelors_icon}>
-        BSc. in Computing Science from <BlueLink href="https://twu.ca/" end={true}>Trinity Western University</BlueLink>
-      </ProfileInfoCard>
+        <ProfileInfoCard title="Bachelor's Degree" icon={bachelors_icon}>
+            BSc. in Computing Science from <BlueLink href="https://twu.ca/" end={true}>Trinity Western University</BlueLink>
+        </ProfileInfoCard>
 
       <ProfileInfoCard
         title="Skills"
         icon={skills_icon}
       >
-        Amazon Web Services, TypeScript, NodeJS, Flutter, Python, Restful API, Pendo SDK, MySQL, Airtable
+        Amazon Web Services, Web Development, Mobile Development, Data Collection,<br>
+          Python, JS/TS, PHP, C++, Flutter
       </ProfileInfoCard>
 
       <ProfileInfoCard
         title="Volunteering"
         icon={volunteering_icon}
       >
-        Youth Group<br>
-        Worship Team
+          Worship Team<br>
+          VanJS<br>
+          YVR AI Meetup
       </ProfileInfoCard>
 
-      <ProfileInfoCard
-        title="Projects"
-        icon={project_icon}
-      >
-        <BlueLink href="https://github.com/yaacovkdev/Quality-Flooring">Quality Flooring</BlueLink> - Web app with <BlueLink href="https://github.com/yaacovkdev/Flooring-API">API</BlueLink><br>
-        <BlueLink href="https://github.com/nicmart-dev/feedmenow">FeedMeNow</BlueLink> - AI Recipe Generator
-      </ProfileInfoCard>
+        <ProfileInfoCard
+            title="Pursuits"
+            icon={project_icon}
+        >
+            AWS Certification<br>
+            Self-Hosting<br>
+            Public Speaking<br>
+            Descrete Mathematics
+        </ProfileInfoCard>
     </div>
   </div>
 
@@ -291,8 +296,8 @@
           @include scale-fonts-small;
           background-color: $swamp;
           line-height: 1rem;
-          border-radius: 0.5rem;
-          padding: 0 0.25rem;
+          border-radius: 1rem;
+          padding: 2px 0.25rem;
         }
       }
     }
