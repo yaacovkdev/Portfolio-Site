@@ -37,9 +37,8 @@
   }
 
   button {
+    @include scale-fonts-regular;
     @include button-color($darkgreen, $amour, "blue");
-    min-width: 15rem;
-    height: 3rem;
-    margin: auto;
+    @include home-button;
   }
 </style>
