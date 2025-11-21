@@ -9,10 +9,6 @@ const fourierParse = (code: String) => {
     if (match) {
         const num1 = parseInt(match[1], 10); // First number
         const num2 = parseInt(match[2], 10); // Second number
-        console.log("First number:", num1);
-        console.log("Second number:", num2);
-    } else {
-        console.log("No match found.");
     }
 }
 

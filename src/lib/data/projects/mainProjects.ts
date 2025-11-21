@@ -1,5 +1,5 @@
-import description_feedmenow from "$lib/projects/descriptions/description_feedmenow.html?raw";
-import description_riseabove from "$lib/projects/descriptions/description_riseabove.html?raw";
+import description_feedmenow from "$lib/data/projects/descriptions/description_feedmenow.html?raw";
+import description_riseabove from "$lib/data/projects/descriptions/description_riseabove.html?raw";
 
 export const MainProjectsInfo: { [key: string]: {
         name: string,
