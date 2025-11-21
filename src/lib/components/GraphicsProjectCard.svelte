@@ -1,7 +1,7 @@
 <script lang="ts">
   export let name: string;
 
-  import { GraphicsProjectsInfo } from "$lib/projects/graphicsProjects";
+  import { GraphicsProjectsInfo } from "$lib/data/projects/graphicsProjects";
   import icon_desktop from "$lib/images/icons/icon-desktop.svg";
   import icon_mobile from "$lib/images/icons/icon-mobile.svg";
   import { onMount } from "svelte";

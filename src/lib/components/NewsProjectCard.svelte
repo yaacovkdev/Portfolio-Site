@@ -23,9 +23,9 @@
     </div>
 
     <div class="newsproject__panel w-full mt-6 flex flex-col justify-center gap-4 md:flex-row md:items-center md:justify-between">
-        <div class={`newsproject__data-label newsproject__data-label--${datastatus_to_label_tag[datastatus][0]} flex-shrink-0`}>
+        <p class={`newsproject__data-label newsproject__data-label--${datastatus_to_label_tag[datastatus][0]} flex-shrink-0 px-6 py-[4px] w-fit button-border-radius`}>
             {datastatus_to_label_tag[datastatus][1]}
-        </div>
+        </p>
         <div class="newsproject__buttons w-full flex flex-col justify-end flex-shrink-1 md:flex-row">
             {#if projectLiveHref !== ""}
                 <button on:click={() => open(projectLiveHref)}>{projectLiveButtonText}</button>
@@ -50,11 +50,13 @@
       }
 
       &__data-label {
-        padding: 4px 1rem;
-        border-radius: 2rem 0rem 2rem 0rem;
-        width: fit-content;
-        height: 3rem;
-        line-height: 2.25em;
+        display: inline-block;
+        @include scale-fonts-small;
+        line-height: 2em;
+
+        @include tablet {
+          line-height: 40px;
+        }
 
         &--no-col {
           background-color: $swamp;
@@ -85,5 +87,9 @@
           }
         }
       }
+    }
+
+    .button-border-radius {
+      border-radius: 4rem 0 4rem 0;
     }
 </style>

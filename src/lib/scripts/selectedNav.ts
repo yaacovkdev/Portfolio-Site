@@ -6,7 +6,7 @@ import {writable} from "svelte/store";
 export let shineNav = writable<Number>(0);
 
 const selectedNav = (n: number): void => {
-  shineNav.set(n);
+    shineNav.set(n);
 }
 
 export default selectedNav;

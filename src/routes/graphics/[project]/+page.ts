@@ -1,8 +1,7 @@
-import { GraphicsProjectsInfo } from "$lib/projects/graphicsProjects";
-import type { LoadResult } from "./$types";
-import type { LoadParams } from "./$types";
+import { GraphicsProjectsInfo } from "$lib/data/projects/graphicsProjects";
+import type {PageLoad} from "../../../../.svelte-kit/types/src/routes/graphics/[project]/$types";
 
-export const load = ({ params }: LoadParams): LoadResult => {
+export const load: PageLoad = ({ params }) => {
   return {
     url_name: params.project,
     name: GraphicsProjectsInfo[params.project].name,

@@ -18,12 +18,13 @@
   import experience_icon from "$lib/images/icons/experience.png";
   import project_icon from "$lib/images/icons/project.svg";
   import volunteering_icon from "$lib/images/icons/volunteer.png";
+  import StatusDot from "$lib/components/Animated/StatusDot.svelte";
 
   let dropCard;
   let returnCard;
 
   const msInterval = 16; //to run animation at 60FPS.
-  const timeInterval = 400 / 1000;
+  const timeInterval = 0.4;
 
   onMount(() => {
     const profileCard = document.querySelector(".profile-card");
@@ -34,12 +35,16 @@
     card.classList.remove("rotate-anim");
     profileCard.style.visibility = "visible"; //prevents seeing rotation animation from playing on launch
 
-    //function to resize
-    const handleResize = () => {
-      if (card.style.display !== "none")
-        cardBack.style.height = `${card.getBoundingClientRect().height}px`;
-      else cardBack.style.height = "";
-    };
+    const resizeObserver = new ResizeObserver((entries) => {
+        if (entries[0].contentBoxSize) {
+            const cardHeight = entries[0].borderBoxSize[0].blockSize;
+
+            if(cardHeight > 0) cardBack.style.height = `${cardHeight}px`;
+            else cardBack.style.height = "";
+        }
+    });
+
+    resizeObserver.observe(card);
 
     dropCard = () => {
       let time = 0;
@@ -55,7 +60,6 @@
           card.classList.remove("rotate-anim");
           card.style.top = "0";
           time = 0;
-          handleResize();
         }
       }, msInterval);
     };
@@ -64,15 +68,10 @@
       const card = document.querySelector(".card");
       card.style.display = "block";
       card.style.top = "0";
-      handleResize();
     };
 
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-
     return(() => {
-      window.removeEventListener("resize", handleResize);
+      resizeObserver.unobserve(card);
     });
   });
 </script>
@@ -118,11 +117,16 @@
       <div class="card__profile">
         <img class="profile-image" src={profile_picture} alt="profile" />
       </div>
-      <div class="card__title">
+      <div class="card__title max-w-[350px]">
         <h2 class="card__name mt-8">Jacob Kochatkov</h2>
-        <h4 class="card__description">
-          Fullstack Developer and One Happy Thousandanaire!
-        </h4>
+        <div class="card__description">
+            <div class="inline-flex flex-row justify-start items-start gap-4 w-full">
+                <h4 class="flex-shrink-0">Fullstack Developer</h4>
+                <div class="flex-shrink-2">
+                    <StatusDot />
+                </div>
+            </div>
+        </div>
 
         <div class="location my-2">
           <p class="location__text">
@@ -156,8 +160,8 @@
         title="Skills"
         icon={skills_icon}
       >
-        Amazon Web Services, Web Development, Mobile Development, Data Collection,<br>
-          Python, JS/TS, PHP, C++, Flutter
+        Backend, Web, Mobile Development,<br>
+          Python, JS/TS, PHP, C++, Flutter, AWS
       </ProfileInfoCard>
 
       <ProfileInfoCard
@@ -273,7 +277,7 @@
         border-radius: 50%;
         min-width: 14rem;
         width: 14rem;
-        border: 10px solid rgb(214, 214, 214);
+        border: 10px solid $gray;
       }
     }
 
@@ -310,7 +314,7 @@
       }
     }
 
-    &__description,
+    &__description > h4,
     .location {
       @include scale-fonts-regular;
     }

@@ -7,28 +7,28 @@ import preview_rocket from "$lib/images/preview/preview_rocket.png";
 import polygon_preview from "$lib/images/preview/polygon_preview.png";
 import quadrature_preview from "$lib/images/preview/quadrature_preview.png";
 
-import instruction_rocket from "$lib/projects/instructions/instructions_rocket.html?raw";
-import description_rocket from "$lib/projects/descriptions/description_rocket.html?raw";
+import instruction_rocket from "$lib/data/projects/instructions/instructions_rocket.html?raw";
+import description_rocket from "$lib/data/projects/descriptions/description_rocket.html?raw";
 
-import instruction_cube from "$lib/projects/instructions/instructions_cube.html?raw";
-import description_cube from "$lib/projects/descriptions/description_cube.html?raw";
+import instruction_cube from "$lib/data/projects/instructions/instructions_cube.html?raw";
+import description_cube from "$lib/data/projects/descriptions/description_cube.html?raw";
 
-import instruction_spinning from "$lib/projects/instructions/instructions_spinning.html?raw";
-import description_spinning from "$lib/projects/descriptions/description_spinning.html?raw";
+import instruction_spinning from "$lib/data/projects/instructions/instructions_spinning.html?raw";
+import description_spinning from "$lib/data/projects/descriptions/description_spinning.html?raw";
 
-import instruction_bouncy from "$lib/projects/instructions/instructions_bouncy.html?raw";
-import description_bouncy from "$lib/projects/descriptions/description_bouncy.html?raw";
+import instruction_bouncy from "$lib/data/projects/instructions/instructions_bouncy.html?raw";
+import description_bouncy from "$lib/data/projects/descriptions/description_bouncy.html?raw";
 
-import description_quadrature from "$lib/projects/descriptions/description_quadrature.html?raw";
+import description_quadrature from "$lib/data/projects/descriptions/description_quadrature.html?raw";
 
-import description_polygon from "$lib/projects/descriptions/description_polygon.html?raw";
-import instructions_polygon from "$lib/projects/instructions/instructions_polygon.html?raw";
+import description_polygon from "$lib/data/projects/descriptions/description_polygon.html?raw";
+import instructions_polygon from "$lib/data/projects/instructions/instructions_polygon.html?raw";
 
-import description_pool from "$lib/projects/descriptions/description_pool.html?raw";
-import instructions_pool from "$lib/projects/instructions/instructions_pool.html?raw";
+import description_pool from "$lib/data/projects/descriptions/description_pool.html?raw";
+import instructions_pool from "$lib/data/projects/instructions/instructions_pool.html?raw";
 
-import description_fourier from "$lib/projects/descriptions/description_fourier.html?raw";
-import instrctions_fourier from "$lib/projects/instructions/instructions_fourier.html?raw";
+import description_fourier from "$lib/data/projects/descriptions/description_fourier.html?raw";
+import instrctions_fourier from "$lib/data/projects/instructions/instructions_fourier.html?raw";
 
 export const GraphicsProjectsInfo: { [key: string]: { name: string; inst: string, desc: string, mobileIcon: boolean, image: any } } = {
   rocket: {

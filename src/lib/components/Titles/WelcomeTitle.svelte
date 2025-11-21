@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { messages } from "../messages.json";
+  import { messages } from "$lib/data/messages.json";
   let homeTitle: HTMLElement;
   let messageKeys = ["English", "French", "Spanish", "Mandarin", "Hindi"];
   let key_i = 1;
