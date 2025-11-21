@@ -4,16 +4,30 @@ import {author_status} from "$lib/data/getStatus";
 
 const CHARACTER_LIMIT = 30;
 
+let timeout = null;
+let isWaiting = false;
+
 export const fetchStatus = async () => {
-    try {
-        const authHeader = { 'Authorization': `Bearer ${STATUS_SERVER_API_KEY}` }
-        const response: any = await axios.get("https://kfcloud.yaacovk.dev/status", { 'headers': authHeader });
-        author_status.status = response.data.status;
+    if(!isWaiting) {
+        console.log("Enter infreq");
+        try {
+            const authHeader = { 'Authorization': `Bearer ${STATUS_SERVER_API_KEY}` }
+            const response: any = await axios.get("https://kfcloud.yaacovk.dev/status", { 'headers': authHeader });
+            author_status.status = response.data.status;
 
-        if(response.data.status !== "UNAVAILABLE")
-            author_status.message = response.data.message.length > CHARACTER_LIMIT ? `${response.data.message.substring(0, CHARACTER_LIMIT).trim()}...` : response.data.message;
+            if(response.data.status !== "UNAVAILABLE")
+                author_status.message = response.data.message.length > CHARACTER_LIMIT ? `${response.data.message.substring(0, CHARACTER_LIMIT).trim()}...` : response.data.message;
 
-    } catch(error) {
-        console.error(error);
+        } catch(error) {
+            console.error(error);
+        }
+
+        isWaiting = true;
+        timeout = setInterval(() => {
+            isWaiting = false;
+            clearTimeout(timeout);
+        }, 300000);
     }
+
+    return author_status;
 }

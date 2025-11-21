@@ -5,9 +5,13 @@
     import FlashyTitle from "$lib/components/Titles/FlashyTitle.svelte";
     import NewsProjectCard from "$lib/components/NewsProjectCard.svelte";
     import {MainProjectsInfo as projects} from "$lib/data/projects/mainProjects";
+    import {setContext} from "svelte";
 
     selectedNav(1);
     resetNavButton();
+
+    let {data} = $props();
+    setContext("author-status", data.author_status);
 </script>
 
 <div class="main-content-sections main-limit-width">

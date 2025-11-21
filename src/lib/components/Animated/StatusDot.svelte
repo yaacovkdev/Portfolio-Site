@@ -1,6 +1,6 @@
 <script lang="ts">
-    import {author_status} from "$lib/data/getStatus";
-    import {onMount} from "svelte";
+    import {getContext, onMount} from "svelte";
+    import type {AuthorStatus} from "$lib/data/getStatus";
 
     const statusToCSS = {
         "ONLINE": "online",
@@ -9,15 +9,11 @@
         "NODISTURB": "no-disturb",
     }
 
-    let status_state = $state(author_status);
+    const author_status: AuthorStatus = getContext("author-status"); //requests on home page loading
+
+    let status_state: AuthorStatus = $state(author_status);
     let status = $derived(status_state.status);
     let message = $derived(status_state.message);
-    $effect(() => {
-        if(status == "UNAVAILABLE") {
-            status = "";
-            message = "";
-        }
-    })
 
     onMount(() => {
         const clientFetchStatus = async () => {
@@ -31,7 +27,7 @@
             status_state = {status: response.status, message: response.message};
         };
 
-        clientFetchStatus();
+        clientFetchStatus(); //requests on home page DOM loading
         const getStatusInterval = setInterval( async () => {
             clientFetchStatus();
         }, 60000);
@@ -40,7 +36,6 @@
             clearInterval(getStatusInterval);
         });
     });
-
 </script>
 
 {#if status !== "UNAVAILABLE" && statusToCSS[status]}
