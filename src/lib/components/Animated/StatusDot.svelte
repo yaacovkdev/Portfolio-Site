@@ -49,12 +49,12 @@
 </div>
 {/if}
 
-
-
-
 <style style lang="scss">
   .status-block {
     @include scale-fonts-small;
+    @include desktop {
+      @apply text-sm;
+    }
   }
 
   .blink, .pulse {
