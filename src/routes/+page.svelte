@@ -47,10 +47,5 @@
 
   .section-news {
     z-index: -1;
-    &__content {
-      @include tablet {
-        padding: $desktop-padding;
-      }
-    }
   }
 </style>

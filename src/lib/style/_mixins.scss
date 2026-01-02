@@ -136,7 +136,7 @@
     }
   }
 
-  &:active, &:active * {
+  &:active {
     animation: shine 0.5s ease forwards;
   }
 }
