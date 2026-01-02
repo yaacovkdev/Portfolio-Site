@@ -25,7 +25,6 @@
 
   let dropCard = null, returnCard = null;
 
-
   onMount(() => {
     const profileCard = document.querySelector(".profile-card");
     const card = document.querySelector(".card");
