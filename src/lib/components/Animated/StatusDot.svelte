@@ -15,13 +15,17 @@
     let status = $derived(status_state.status);
     let message = $derived(status_state.message);
 
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     onMount(() => {
         const clientFetchStatus = async () => {
             const response = await fetch('/status', {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                }
+                },
+                signal: signal,
             }).then(res => res.json());
 
             status_state = {status: response.status, message: response.message};
@@ -33,6 +37,7 @@
         }, 60000);
 
         return(() => {
+            controller.abort();
             clearInterval(getStatusInterval);
         });
     });

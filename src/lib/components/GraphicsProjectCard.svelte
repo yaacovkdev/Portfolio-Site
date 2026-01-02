@@ -65,7 +65,6 @@
       padding: 0 1rem;
 
       h3 {
-        @include shine-active($white);
         flex: 4;
         text-align: start;
       }
@@ -87,7 +86,7 @@
     }
   }
 
-  .icon-colors {
-    fill: hsl(from color 1 2 3);
-  }
+  //.icon-colors {
+  //  fill: hsl(from color 1 2 3);
+  //}
 </style>

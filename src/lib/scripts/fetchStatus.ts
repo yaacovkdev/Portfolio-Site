@@ -9,7 +9,6 @@ let isWaiting = false;
 
 export const fetchStatus = async () => {
     if(!isWaiting) {
-        console.log("Enter infreq");
         try {
             const authHeader = { 'Authorization': `Bearer ${STATUS_SERVER_API_KEY}` }
             const response: any = await axios.get("https://kfcloud.yaacovk.dev/status", { 'headers': authHeader });

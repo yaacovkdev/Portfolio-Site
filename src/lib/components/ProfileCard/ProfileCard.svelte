@@ -20,19 +20,20 @@
   import volunteering_icon from "$lib/images/icons/volunteer.png";
   import StatusDot from "$lib/components/Animated/StatusDot.svelte";
 
-  let dropCard;
-  let returnCard;
+  const INTERVAL_MS = 16; //to run animation at 60FPS.
+  const TIME_INTERVAL = 0.4;
 
-  const msInterval = 16; //to run animation at 60FPS.
-  const timeInterval = 0.4;
+  let dropCard = null, returnCard = null;
 
   onMount(() => {
     const profileCard = document.querySelector(".profile-card");
     const card = document.querySelector(".card");
     const cardBack = document.querySelector(".card-back");
+    const svelteBody = document.querySelector("#svelteBody");
 
     card.style.top = "0";
     card.classList.remove("rotate-anim");
+    card.overflow = "hidden";
     profileCard.style.visibility = "visible"; //prevents seeing rotation animation from playing on launch
 
     const resizeObserver = new ResizeObserver((entries) => {
@@ -46,28 +47,33 @@
 
     resizeObserver.observe(card);
 
-    dropCard = () => {
-      let time = 0;
-      card.classList.add("rotate-anim");
+    let fallingAnimationInterval = null;
 
-      const fallingAnimation = setInterval(() => {
-        const pos = fallDistance((time += timeInterval));
+    dropCard = () => {
+        svelteBody.style.overflow = "hidden";
+        card.classList.add("rotate-anim");
+        let time = 0;
+        fallingAnimationInterval = setInterval(() => {
+            const pos = fallDistance((time += TIME_INTERVAL));
         card.style.top = `${pos}px`;
 
-        if (time > 15) {
-          clearInterval(fallingAnimation);
+        if (time > 20) {
           card.style.display = "none";
           card.classList.remove("rotate-anim");
           card.style.top = "0";
           time = 0;
+          clearInterval(fallingAnimationInterval);
+          svelteBody.style.overflow = "visible";
         }
-      }, msInterval);
+      }, INTERVAL_MS);
     };
 
     returnCard = () => {
-      const card = document.querySelector(".card");
       card.style.display = "block";
+      card.classList.remove("rotate-anim");
       card.style.top = "0";
+      clearInterval(fallingAnimationInterval);
+        svelteBody.style.overflow = "visible";
     };
 
     return(() => {
@@ -194,6 +200,7 @@
 <style lang="scss">
   .profile-card {
     position: relative;
+    z-index: 2;
 
     margin: auto;
     max-width: 64rem;
@@ -249,10 +256,10 @@
 
   .card {
     position: absolute;
-    width: 100%;
+    width: inherit;
     padding: $mobile-padding;
     background-color: $background;
-    z-index: 1;
+    z-index: 4;
 
     background-image: url("/src/lib/images/misc/card_background.svg");
     background-position: center 50px;
@@ -285,6 +292,7 @@
       text-align: start;
 
       .location {
+        @include scale-fonts-regular;
         display: flex;
         justify-content: start;
         gap: 1rem;
@@ -295,14 +303,6 @@
           align-items: baseline;
           gap: 0.2rem;
         }
-
-        &__status {
-          @include scale-fonts-small;
-          background-color: $swamp;
-          line-height: 1rem;
-          border-radius: 1rem;
-          padding: 2px 0.25rem;
-        }
       }
     }
 
@@ -312,11 +312,6 @@
       @include desktop {
         @apply text-4xl;
       }
-    }
-
-    &__description > h4,
-    .location {
-      @include scale-fonts-regular;
     }
 
     &__description::before {
