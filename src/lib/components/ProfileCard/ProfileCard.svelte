@@ -292,6 +292,7 @@
       text-align: start;
 
       .location {
+        @include scale-fonts-regular;
         display: flex;
         justify-content: start;
         gap: 1rem;
@@ -302,14 +303,6 @@
           align-items: baseline;
           gap: 0.2rem;
         }
-
-        &__status {
-          @include scale-fonts-small;
-          background-color: $swamp;
-          line-height: 1rem;
-          border-radius: 1rem;
-          padding: 2px 0.25rem;
-        }
       }
     }
 
@@ -319,11 +312,6 @@
       @include desktop {
         @apply text-4xl;
       }
-    }
-
-    &__description > h4,
-    .location {
-      @include scale-fonts-regular;
     }
 
     &__description::before {
