@@ -1,19 +1,11 @@
 <script lang="ts">
-    import {redirect} from "@sveltejs/kit";
-
     export let projectName: string;
     export let projectDescription: string;
     export let projectSourceHref: string = "";
     export let projectSourceButtonText: string = "View Source";
     export let projectLiveHref: string = "";
     export let projectLiveButtonText: string = "Visit!";
-    export let datastatus: number = 2;
 
-    const datastatus_to_label_tag: [string, string][] = [
-        ['no-col', 'Data Not Collected'],
-        ['yes-col', 'Data Is Collected'],
-        ['unk-col', 'Unknown Data Collection Status']
-    ]
 </script>
 
 <div class="newsproject w-full min-h-[20rem] my-16 p-8 flex flex-col justify-between items-start text-left">
@@ -23,9 +15,6 @@
     </div>
 
     <div class="newsproject__panel w-full mt-6 flex flex-col justify-center gap-4 md:flex-row md:items-center md:justify-between">
-        <p class={`newsproject__data-label newsproject__data-label--${datastatus_to_label_tag[datastatus][0]} flex-shrink-0 px-6 py-[4px] w-fit button-border-radius`}>
-            {datastatus_to_label_tag[datastatus][1]}
-        </p>
         <div class="newsproject__buttons w-full flex flex-col justify-end flex-shrink-1 md:flex-row">
             {#if projectLiveHref !== ""}
                 <button on:click={() => open(projectLiveHref)}>{projectLiveButtonText}</button>
