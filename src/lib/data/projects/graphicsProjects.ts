@@ -6,6 +6,7 @@ import preview_cube from "$lib/images/preview/preview_cube.png";
 import preview_rocket from "$lib/images/preview/preview_rocket.png";
 import polygon_preview from "$lib/images/preview/polygon_preview.png";
 import quadrature_preview from "$lib/images/preview/quadrature_preview.png";
+import preview_cosmos from "$lib/images/preview/preview_cosmos.jpg";
 
 import instruction_rocket from "$lib/data/projects/instructions/instructions_rocket.html?raw";
 import description_rocket from "$lib/data/projects/descriptions/description_rocket.html?raw";
@@ -29,6 +30,8 @@ import instructions_pool from "$lib/data/projects/instructions/instructions_pool
 
 import description_fourier from "$lib/data/projects/descriptions/description_fourier.html?raw";
 import instrctions_fourier from "$lib/data/projects/instructions/instructions_fourier.html?raw";
+
+import description_cosmos from "$lib/data/projects/descriptions/description_cosmos.html?raw";
 
 export const GraphicsProjectsInfo: { [key: string]: { name: string; inst: string, desc: string, mobileIcon: boolean, image: any } } = {
   rocket: {
@@ -93,5 +96,13 @@ export const GraphicsProjectsInfo: { [key: string]: { name: string; inst: string
     desc: description_quadrature,
     mobileIcon: false,
     image: quadrature_preview
+  },
+
+  cosmos: {
+    name: "Cosmos Courier",
+    inst: "",
+    desc: description_cosmos,
+    mobileIcon: false,
+    image: preview_cosmos
   }
 };

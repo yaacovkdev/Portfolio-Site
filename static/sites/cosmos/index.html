@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COSMOS COURIER</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0f;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; font-family: 'Courier New', monospace;
+            overflow: hidden; user-select: none;
+        }
+        #wrapper { position: relative; width: 1024px; height: 700px; }
+        canvas { display: block; background: #0d0d1a; cursor: pointer; }
+        #tooltip { position: absolute; background: #111827; color: #cbd5e1; border: 1px solid #4b5563;
+            padding: 8px 12px; border-radius: 4px; font-size: 13px; pointer-events: none; display: none;
+            max-width: 280px; line-height: 1.5; z-index: 10; }
+    </style>
+</head>
+<body>
+<div id="wrapper"><canvas id="game"></canvas><div id="tooltip"></div></div>
+<script>
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  const tooltip = document.getElementById('tooltip');
+  const W = 1024, H = 700;
+  canvas.width = W; canvas.height = H;
+
+  let mouse = { x: 0, y: 0 };
+  let mouseDown = false;
+  let hoveredButton = null;
+  let allButtons = [];
+  let lastClickTime = 0;  // For double-click detection
+
+  // ==================== AUDIO ====================
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  let audioCtx = null;
+  function initAudio() { if (!audioCtx) audioCtx = new AudioCtx(); }
+  function beep(freq, dur, vol = 0.08) {
+    if (!audioCtx) return;
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'square'; o.frequency.value = freq;
+    g.gain.value = vol;
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(); o.stop(audioCtx.currentTime + dur);
+  }
+  function sfxClick() { beep(800, 0.06, 0.05); }
+  function sfxAccept() { beep(600, 0.08, 0.05); beep(900, 0.08, 0.05); }
+  function sfxDamage() { beep(120, 0.2, 0.08); }
+  function sfxWin() { beep(440, 0.1, 0.06); beep(660, 0.1, 0.06); beep(880, 0.15, 0.07); }
+  function sfxAlert() { beep(200, 0.15, 0.06); beep(300, 0.15, 0.06); }
+
+  // ==================== HELPERS ====================
+  function rng(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  function dist(a, b) { return Math.abs(a.x - b.x) + Math.abs(a.y - b.y); }
+
+  // ==================== GAME STATE ====================
+  const FIRST_NAMES = ['Kai','Zara','Rex','Nova','Jett','Luna','Ash','Sage','Orion','Vex','Iris','Talon','Mira','Drake','Sola','Finn','Vega','Kane','Rhea','Zane'];
+  const LAST_NAMES = ['Stormborn','Ironhelm','Voidwalker','Starweaver','Darkmoor','Lightforge','Shadowmere','Steelheart','Nightsky','Dawnstrike','Runeweaver','Sunblade'];
+  const CONTRACT_TYPES = [
+    { name: 'Cargo Transport', icon: '📦', desc: 'Deliver cargo safely across the sector.', illegalChance: 0.15 },
+    { name: 'Combat Skirmish', icon: '⚔️', desc: 'Eliminate hostile forces in the area.', illegalChance: 0.25 },
+    { name: 'Science Expedition', icon: '🔬', desc: 'Collect research data from anomalies.', illegalChance: 0.10 },
+    { name: 'Salvage Operation', icon: '🔧', desc: 'Recover valuable debris and tech.', illegalChance: 0.35 },
+  ];
+
+  function createGameState() {
+    return {
+      scene: 'title',
+      credits: 500,
+      ship: { hull: 100, maxHull: 100, cargoSpace: 10, cargoUsed: 0, upgrades: [] },
+      crew: [],
+      crewDeployedIds: [],
+      contracts: [],
+      contractQueue: [],
+      contractBatchStart: 0,
+      batchIndex: 0,
+      BATCH_SIZES: [2, 3, 3, 4, 5],
+      activeContract: null,
+      mission: null,
+      message: '',
+      messageTimer: 0,
+      turnCount: 0,
+      difficulty: 1,
+      illegalCargo: 0,
+      patrolActive: false,
+      captainId: null,
+      skills: { hr: 1, street: 1, haggle: 1, med: 1, train: 1 },
+      skillPoints: 2,
+      gameOverReason: '', // 'captain_dead', 'hull', or 'broke'
+    };
+  }
+
+  let G = createGameState();
+
+  // ==================== CREW PAYMENT CALC ====================
+  function calcCrewRates(c) {
+    // Compute pay rates based on stats (higher stats = more expensive crew)
+    const statTotal = c.eng + c.cmb + c.plt + c.sci;
+    // idleRate: $30 - $100, scaled by statTotal (typical range 4-20)
+    const idleRate = Math.round(30 + Math.min(1, statTotal / 20) * 70);
+    // contractMultiplier: 1.25 - 1.75, scaled by statTotal
+    const contractMultiplier = Math.round((1.25 + Math.min(1, statTotal / 20) * 0.5) * 100) / 100;
+    return { idleRate, contractMultiplier };
+  }
+
+  // ==================== CREW ====================
+  const CREW_CLASSES = [
+    { name: 'Engineer', icon: '🔧', color: '#f59e0b', stats: { eng: 5, cmb: 1, plt: 2, sci: 1 } },
+    { name: 'Soldier', icon: '⚔️', color: '#ef4444', stats: { eng: 1, cmb: 5, plt: 1, sci: 1 } },
+    { name: 'Pilot', icon: '✈️', color: '#3b82f6', stats: { eng: 2, cmb: 1, plt: 5, sci: 1 } },
+  ];
+
+  function createCrewMember(cls) {
+    let c;
+    if (cls) {
+      c = cls;
+    } else {
+      const roll = Math.random();
+      if (roll < 0.25) {
+        c = CREW_CLASSES[1]; // 25% Soldier
+      } else if (roll < 0.58) {
+        c = CREW_CLASSES[0]; // 33% Engineer
+      } else if (roll < 0.91) {
+        c = CREW_CLASSES[2]; // 33% Pilot
+      } else {
+        c = { name: 'Crew Staff', icon: '👨‍🚀', color: '#64748b', stats: { eng: 1, cmb: 1, plt: 1, sci: 1 } }; // 9%
+      }
+    }
+    const engineerAbility = c.name === 'Engineer' ? pick(['sentry', 'trap']) : null;
+    const medBonus = 1 + (G.skills.med - 1) * 2;
+    const trainBonus = G.skills.train - 1;
+    let crewHp = 20 + medBonus, crewMaxHp = 20 + medBonus, crewCmb = c.stats.cmb + trainBonus;
+    let bonusActions = 0;
+    let specialTag = '';
+    // HR skill increases rare variant chances
+    const hrBonus = (G.skills.hr - 1) * 0.005;
+    if (c.name === 'Pilot') {
+      bonusActions = 1; // All Pilots get 3 actions (2 base + 1 bonus)
+      if (Math.random() < 0.05 + hrBonus) {
+        bonusActions = 3; // Distinguished Pilot: 2 base + 3 bonus = 5 actions
+        specialTag = '⭐Distinguished ';
+      }
+    }
+    if (c.name === 'Soldier' && Math.random() < 0.015 + hrBonus) {
+      crewHp = 40; crewMaxHp = 40; crewCmb = Math.max(10, crewCmb); // Battle-hardened: 40hp, ≥10 atk, 3 actions
+      bonusActions = 1; // 2 base + 1 bonus = 3 actions
+      specialTag = '💀Battle-Hardened ';
+    }
+    const eng = c.stats.eng + rng(-1, 2);
+    const cmb = crewCmb + rng(-1, 2);
+    const plt = c.stats.plt + rng(-1, 2);
+    const sci = c.stats.sci + rng(-1, 2);
+    const crewObj = {
+      id: Date.now() + Math.random(),
+      firstName: pick(FIRST_NAMES), lastName: pick(LAST_NAMES),
+      class: specialTag + c.name, icon: c.icon, color: c.color,
+      eng, cmb, plt, sci,
+      hp: crewHp, maxHp: crewMaxHp, xp: 0,
+      deployPos: null, actions: 2, alive: true,
+      powerup: null,
+      engineerAbility, abilityUsed: false, bonusActions,
+    };
+    // Compute payment rates based on generated stats
+    const rates = calcCrewRates(crewObj);
+    crewObj.idleRate = rates.idleRate;
+    crewObj.contractMultiplier = rates.contractMultiplier;
+    return crewObj;
+  }
+
+  // ==================== CONTRACTS ====================
+  function recalcContractRewards() {
+    G.contractQueue.forEach((c, i) => {
+      const batchNum = getBatchForIndex(i);
+      const risk = c.risk;
+      const baseReward = 200 + rng(0, 120);
+      const haggleBonus = 1 + (G.skills.haggle - 1) * 0.05;
+      c.reward = Math.floor(baseReward * risk * haggleBonus);
+      if (batchNum >= 3) c.reward = Math.floor(c.reward * 1.1);
+      if (batchNum >= 4) c.reward = Math.floor(c.reward * 1.1);
+    });
+    // Update currently visible contracts too
+    const start = G.contractBatchStart;
+    const size = G.batchIndex < G.BATCH_SIZES.length ? G.BATCH_SIZES[G.batchIndex] : 0;
+    G.contracts = G.contractQueue.slice(start, start + size);
+  }
+  function getBatchForIndex(idx) {
+    let sum = 0;
+    for (let b = 0; b < G.BATCH_SIZES.length; b++) {
+      sum += G.BATCH_SIZES[b];
+      if (idx < sum) return b;
+    }
+    return G.BATCH_SIZES.length - 1;
+  }
+  function generateAllContracts() {
+    G.contractQueue = [];
+    G.contractBatchStart = 0;
+    G.batchIndex = 0;
+    const totalContracts = G.BATCH_SIZES.reduce((a, b) => a + b, 0); // 17
+    for (let i = 0; i < totalContracts; i++) {
+      const type = pick(CONTRACT_TYPES);
+      const batchNum = getBatchForIndex(i);
+      // Difficulty scales hard per batch
+      const diff = Math.min(5, 1 + batchNum + rng(0, batchNum));
+      const risk = type.name === 'Combat Skirmish' ? 1.4 : type.name === 'Salvage Operation' ? 1.2 : 1.0;
+      const baseReward = 200 + rng(0, 120);
+      const haggleBonus = 1 + (G.skills.haggle - 1) * 0.05;
+      let reward = Math.floor(baseReward * risk * haggleBonus);
+      // Slight bump for later batches
+      if (batchNum >= 3) reward = Math.floor(reward * 1.1);
+      if (batchNum >= 4) reward = Math.floor(reward * 1.1);
+      G.contractQueue.push({
+        id: 1000 + i,
+        number: i + 1,
+        type: type.name, icon: type.icon, desc: type.desc,
+        difficulty: diff, reward: reward, risk: risk,
+        illegalChance: type.illegalChance,
+        completed: false,
+      });
+    }
+    G.contracts = G.contractQueue.slice(0, G.BATCH_SIZES[0]);
+  }
+
+  function advanceContractBatch() {
+    G.batchIndex++;
+    if (G.batchIndex >= G.BATCH_SIZES.length) return;
+    // Sum previous batch sizes for the new start
+    let start = 0;
+    for (let b = 0; b < G.batchIndex; b++) start += G.BATCH_SIZES[b];
+    G.contractBatchStart = start;
+    const size = G.BATCH_SIZES[G.batchIndex];
+    G.contracts = G.contractQueue.slice(start, start + size);
+  }
+
+  // ==================== MISSION ====================
+  const GRID_W = 12, GRID_H = 10, CELL = 52;
+  const GRID_OX = Math.floor((W - GRID_W * CELL) / 2);
+  const GRID_OY = 60;
+  const TILE = { EMPTY: 0, WALL: 1, OBJECTIVE: 2, HAZARD: 3, SENTRY: 4, TRAP: 5 };
+
+  function createMission(contract) {
+    const grid = [];
+    for (let y = 0; y < GRID_H; y++) { grid[y] = []; for (let x = 0; x < GRID_W; x++) grid[y][x] = TILE.EMPTY; }
+
+    const wallCount = 8 + contract.difficulty * 3;
+    for (let i = 0; i < wallCount; i++) {
+      let x = rng(1, GRID_W - 2), y = rng(1, GRID_H - 2);
+      if (grid[y][x] === TILE.EMPTY) grid[y][x] = TILE.WALL;
+    }
+
+    const hazCount = rng(1, 3);
+    for (let i = 0; i < hazCount; i++) {
+      let x, y;
+      do { x = rng(1, GRID_W - 2); y = rng(1, GRID_H - 2); } while (grid[y][x] !== TILE.EMPTY);
+      grid[y][x] = TILE.HAZARD;
+    }
+
+    const enemyTypes = [
+      { name: 'Pirate', icon: '☠', color: '#ef4444', hp: 8, atk: 3, xpVal: 10 },
+      { name: 'Drone', icon: '🤖', color: '#f97316', hp: 5, atk: 2, xpVal: 6 },
+      { name: 'Mutant', icon: '👾', color: '#a855f7', hp: 12, atk: 5, xpVal: 18 },
+      { name: 'Raider', icon: '💀', color: '#dc2626', hp: 10, atk: 4, xpVal: 14 },
+    ];
+    const enemyCount = 2 + contract.difficulty;
+    const enemies = [];
+    for (let i = 0; i < enemyCount; i++) {
+      let x, y;
+      do { x = rng(4, GRID_W - 2); y = rng(1, GRID_H - 2); } while (grid[y][x] !== TILE.EMPTY);
+      const et = pick(enemyTypes);
+      enemies.push({ ...et, id: i, x, y, hp: et.hp + contract.difficulty, maxHp: et.hp + contract.difficulty, alive: true });
+    }
+
+    // Clear spawn columns
+    for (let y = 0; y < GRID_H; y++)
+      for (let x = 0; x < 2; x++)
+        if (grid[y][x] !== TILE.EMPTY) grid[y][x] = TILE.EMPTY;
+
+    // Place objectives LAST on remaining empty squares (1 or 2 stars)
+    const objCount = contract.difficulty <= 2 ? 1 : 2;
+    const objectives = [];
+    for (let i = 0; i < objCount; i++) {
+      let x, y;
+      do { x = rng(1, GRID_W - 2); y = rng(1, GRID_H - 2); } while (grid[y][x] !== TILE.EMPTY);
+      grid[y][x] = TILE.OBJECTIVE;
+      objectives.push({ x, y, collected: false });
+    }
+
+    const maxTurns = 8 + contract.difficulty * 3;
+
+    return { grid, objectives, enemies, contract, turn: 0, maxTurns,
+      phase: 'player', selectedCrew: null, crewDeployed: [], deployables: [], log: [], won: false, lost: false };
+  }
+
+  function deployCrewToMission(mission) {
+    mission.crewDeployed = [];
+    mission.deployables = [];
+    let selected = G.crew.filter(c => c.alive && G.crewDeployedIds.includes(c.id));
+    if (selected.length === 0) selected = G.crew.filter(c => c.alive);
+    const available = selected.slice(0, 5);
+    const spawnX = [0, 1, 0, 1, 0], spawnY = [0, 0, GRID_H - 1, GRID_H - 1, Math.floor(GRID_H / 2)];
+    available.forEach((c, i) => {
+      const bonus = c.bonusActions || 0;
+      const fromClass = 2 + bonus;
+      const baseActions = (c.powerup && c.powerup.type === 'speed_up') ? Math.max(3, fromClass) : fromClass;
+      const mbr = { ...c, deployPos: { x: spawnX[i], y: spawnY[i] }, actions: baseActions, alive: true, engineerAbility: c.engineerAbility, abilityUsed: c.abilityUsed };
+      if (c.powerup && c.powerup.type === 'hp_up') { mbr.maxHp += 5; mbr.hp = Math.min(mbr.hp + 5, mbr.maxHp); }
+      if (c.powerup && c.powerup.type === 'atk_up') { mbr.cmb += 2; }
+      if (mbr.engineerAbility && mbr.abilityUsed) { mbr.engineerAbility = null; }
+      mission.crewDeployed.push(mbr);
+    });
+  }
+
+  // ==================== BUTTON SYSTEM ====================
+  function Button(x, y, w, h, label, action, color, hoverColor, textColor) {
+    this.x = x; this.y = y; this.w = w; this.h = h;
+    this.label = label; this.action = action;
+    this.color = color || '#1e293b'; this.hoverColor = hoverColor || '#334155';
+    this.textColor = textColor || '#e2e8f0'; this.disabled = false; this.tooltip = '';
+  }
+  Button.prototype.contains = function(mx, my) { return mx >= this.x && mx <= this.x + this.w && my >= this.y && my <= this.y + this.h; };
+  Button.prototype.draw = function(ctx) {
+    ctx.fillStyle = this.disabled ? '#1a1a2e' : (hoveredButton === this ? this.hoverColor : this.color);
+    ctx.strokeStyle = hoveredButton === this ? '#64748b' : '#475569';
+    ctx.lineWidth = 2; ctx.beginPath(); ctx.roundRect(this.x, this.y, this.w, this.h, 6); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = this.disabled ? '#555' : this.textColor;
+    ctx.font = '14px "Courier New", monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(this.label, this.x + this.w / 2, this.y + this.h / 2);
+  };
+
+  // ==================== RENDERING HELPERS ====================
+  function drawPanel(x, y, w, h, title) {
+    ctx.fillStyle = '#111827cc'; ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.roundRect(x, y, w, h, 8); ctx.fill(); ctx.stroke();
+    if (title) {
+      ctx.fillStyle = '#94a3b8'; ctx.font = 'bold 13px "Courier New", monospace'; ctx.textAlign = 'left';
+      ctx.fillText(title, x + 12, y + 22);
+      ctx.strokeStyle = '#374151'; ctx.beginPath();
+      ctx.moveTo(x + 10, y + 32); ctx.lineTo(x + w - 10, y + 32); ctx.stroke();
+    }
+  }
+  function drawText(text, x, y, color, size, align) {
+    ctx.fillStyle = color || '#e2e8f0'; ctx.font = (size || 14) + 'px "Courier New", monospace';
+    ctx.textAlign = align || 'left'; ctx.textBaseline = 'top'; ctx.fillText(text, x, y);
+  }
+  function drawStars() {
+    for (let i = 0; i < 120; i++) {
+      const sx = (i * 173 + 41) % W, sy = (i * 257 + 13) % H;
+      const b = 0.3 + 0.7 * Math.sin(i * 0.7 + G.turnCount * 0.01);
+      ctx.fillStyle = `rgba(255,255,255,${b})`; ctx.fillRect(sx, sy, 1.5, 1.5);
+    }
+  }
+
+  // ==================== SCENE: TITLE ====================
+  function drawTitle() {
+    drawStars();
+    ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 52px "Courier New", monospace'; ctx.textAlign = 'center';
+    ctx.fillText('COSMOS COURIER', W / 2, 180);
+    ctx.fillStyle = '#94a3b8'; ctx.font = '18px "Courier New", monospace';
+    ctx.fillText('Captain · Crew · Contracts', W / 2, 240);
+    ctx.fillStyle = '#64748b'; ctx.font = '13px "Courier New", monospace';
+    ctx.fillText('A Turn-Based Space Adventure', W / 2, 275);
+    allButtons = [
+      new Button(W / 2 - 100, 340, 200, 44, '▶  NEW GAME', 'newgame', '#16a34a', '#22c55e'),
+      new Button(W / 2 - 100, 400, 200, 44, '📂  CONTINUE', 'continue', '#2563eb', '#3b82f6'),
+    ];
+    if (!localStorage.getItem('cosmos_save')) allButtons[1].disabled = true;
+    allButtons.forEach(b => b.draw(ctx));
+  }
+
+  // ==================== SCENE: HUB ====================
+  let hubTab = 'contracts';
+
+  function drawHub() {
+    drawStars();
+
+    if (G.patrolActive) {
+      drawPatrolOverlay();
+      return;
+    }
+
+    drawText(`₡${G.credits}`, 20, 12, '#fbbf24', 16);
+    drawText(`HULL: ${G.ship.hull}/${G.ship.maxHull}`, 170, 12, '#10b981', 14);
+    drawText(`CREW: ${G.crew.filter(c => c.alive).length}`, 350, 12, '#3b82f6', 14);
+    if (G.illegalCargo > 0) drawText(`ILLEGAL: 📦${G.illegalCargo}`, 500, 12, '#ef4444', 14);
+    drawText(`BATCH ${G.batchIndex + 1}/${G.BATCH_SIZES.length}`, 680, 12, '#a78bfa', 14);
+
+    const tabs = [
+      { id: 'contracts', label: '📋 Contracts' },
+      { id: 'crew', label: '👥 Crew' },
+      { id: 'ship', label: '🚀 Ship' },
+      { id: 'skills', label: '⭐ Skills' },
+    ];
+    let tabX = 30;
+    tabs.forEach(t => {
+      const btn = new Button(tabX, 44, 170, 32, t.label, 'tab_' + t.id,
+        hubTab === t.id ? '#fbbf24' : '#1e293b',
+        hubTab === t.id ? '#f59e0b' : '#334155',
+        hubTab === t.id ? '#000' : '#e2e8f0');
+      allButtons.push(btn); btn.draw(ctx); tabX += 180;
+    });
+
+    if (hubTab === 'contracts') drawContractBoard();
+    else if (hubTab === 'crew') drawCrewRoster();
+    else if (hubTab === 'ship') drawShipStatus();
+    else if (hubTab === 'skills') drawSkillsBoard();
+
+    if (G.messageTimer > 0) {
+      ctx.fillStyle = `rgba(251,191,36,${Math.min(1, G.messageTimer / 30)})`;
+      ctx.font = '15px "Courier New", monospace'; ctx.textAlign = 'center';
+      ctx.fillText(G.message, W / 2, H - 30);
+    }
+  }
+
+  function drawContractBoard() {
+    drawPanel(30, 88, 960, 570, `CONTRACT BOARD — Batch ${G.batchIndex + 1} of ${G.BATCH_SIZES.length}`);
+    if (G.contracts.length === 0) {
+      drawText('All contracts completed in this batch!', 50, 155, '#64748b', 14);
+      const totalContracts = G.BATCH_SIZES.reduce((a, b) => a + b, 0);
+      if (G.batchIndex < G.BATCH_SIZES.length - 1) {
+        const btn = new Button(W / 2 - 60, 200, 120, 36, 'NEXT BATCH ▶', 'next_batch', '#8b5cf6', '#a78bfa');
+        allButtons.push(btn); btn.draw(ctx);
+      } else {
+        drawText(`ALL ${totalContracts} CONTRACTS COMPLETE! You are a legend.`, 50, 200, '#fbbf24', 16);
+      }
+      return;
+    }
+    G.contracts.forEach((c, i) => {
+      const y = 140 + i * 92;
+      const diffColor = ['#10b981', '#84cc16', '#fbbf24', '#f97316', '#ef4444'][c.difficulty - 1] || '#fff';
+      drawPanel(50, y, 920, 80, null);
+      drawText(`#${c.number}  ${c.icon} ${c.type}`, 70, y + 10, '#e2e8f0', 15);
+      drawText(c.desc, 70, y + 34, '#64748b', 11);
+      drawText(`₡${c.reward}`, 500, y + 10, '#fbbf24', 14);
+      drawText('Diff:', 500, y + 34, '#94a3b8', 11);
+      ctx.fillStyle = diffColor; ctx.font = 'bold 13px "Courier New", monospace'; ctx.textAlign = 'left';
+      ctx.fillText('★'.repeat(c.difficulty) + '☆'.repeat(5 - c.difficulty), 545, y + 34);
+      const illegalPct = Math.round(c.illegalChance * 100);
+      const illegalLabel = illegalPct >= 30 ? '☠ HIGH' : illegalPct >= 20 ? '⚠ MED' : '⚡ LOW';
+      const illegalColor = illegalPct >= 30 ? '#ef4444' : illegalPct >= 20 ? '#fbbf24' : '#10b981';
+      drawText(`Illegal: ${illegalLabel} (${illegalPct}%)`, 545, y + 54, illegalColor, 10);
+      const btn = new Button(840, y + 22, 110, 32, 'ACCEPT', 'accept_' + i, '#16a34a', '#22c55e');
+      if (G.crew.filter(cr => cr.alive).length < 2) { btn.disabled = true; btn.tooltip = 'Need 2+ crew'; }
+      allButtons.push(btn); btn.draw(ctx);
+    });
+  }
+
+  function drawCrewRoster() {
+    drawPanel(30, 88, 960, 570, 'CREW ROSTER — Check ✅ crew to deploy (max 5)  |  Payroll charged after each contract');
+    const totalCrew = G.crew.filter(c => c.alive).length;
+    const hireBtn = new Button(830, 98, 140, 32, '➕ Hire (₡200)', 'hire_crew', '#8b5cf6', '#a78bfa');
+    if (G.credits < 200) { hireBtn.disabled = true; hireBtn.tooltip = 'Need ₡200'; }
+    if (totalCrew >= 8) { hireBtn.disabled = true; hireBtn.tooltip = 'Max 8 crew'; }
+    allButtons.push(hireBtn); hireBtn.draw(ctx);
+    const selectedCount = G.crewDeployedIds.filter(id => G.crew.some(c => c.alive && c.id === id)).length;
+    drawText(`Selected for mission: ${selectedCount}/5  |  Cost to heal = missing HP × ₡5`, 50, 610, '#475569', 10);
+
+    const alive = G.crew.filter(c => c.alive);
+    if (alive.length === 0) { drawText('No crew! Hire some first.', 50, 160, '#64748b', 14); return; }
+    alive.forEach((c, i) => {
+      const y = 150 + i * 68;
+      drawPanel(50, y, 920, 58, null);
+      // Checkbox for deployment selection
+      const isSelected = G.crewDeployedIds.includes(c.id);
+      const checked = isSelected ? '✅' : '☐';
+      const checkBtn = new Button(50, y + 14, 28, 28, checked, 'toggle_deploy_' + c.id, isSelected ? '#fbbf24' : '#1e293b', isSelected ? '#f59e0b' : '#334155', isSelected ? '#000' : '#64748b');
+      if (selectedCount >= 5 && !isSelected) { checkBtn.disabled = true; checkBtn.tooltip = 'Max 5 crew selected'; }
+      allButtons.push(checkBtn); checkBtn.draw(ctx);
+      ctx.fillStyle = c.color; ctx.beginPath(); ctx.arc(105, y + 29, 18, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#fff'; ctx.font = '20px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(c.icon, 105, y + 29);
+      // Captain indicator
+      const isCaptain = G.captainId === c.id;
+      const captainLabel = isCaptain ? '👑 CAPTAIN — ' : '';
+      drawText(captainLabel, 135, y + 6, '#fbbf24', 14);
+      drawText(`${c.firstName} ${c.lastName}`, isCaptain ? 310 : 135, y + 6, '#e2e8f0', 14);
+      const hpPct = c.hp / c.maxHp;
+      const hpColor = hpPct > 0.5 ? '#10b981' : hpPct > 0.25 ? '#fbbf24' : '#ef4444';
+      const abiStr = c.engineerAbility ? ` | ${c.engineerAbility === 'sentry' ? '🔫 Sentry' : '💣 Trap'}` + (c.abilityUsed ? ' (used)' : '') : '';
+      drawText(`${c.class}  |  HP:${c.hp}/${c.maxHp}${abiStr}`, 135, y + 26, hpColor, 11);
+      drawText(`XP:${c.xp}  |  ATK:${Math.max(1, Math.floor(c.cmb * hpPct))}`, 360, y + 26, '#64748b', 11);
+      // Payment rates
+      const idleRate = c.idleRate || calcCrewRates(c).idleRate;
+      const contractRate = Math.round(idleRate * (c.contractMultiplier || calcCrewRates(c).contractMultiplier));
+      if (isCaptain) {
+        drawText(`👑 Captain — No payroll`, 360, y + 42, '#fbbf24', 11);
+      } else {
+        drawText(`💰 Idle: ₡${idleRate}/turn  |  Contract: ₡${contractRate}/turn`, 360, y + 42, '#f59e0b', 11);
+      }
+      const pw = c.powerup ? ` ⚡${c.powerup.type.replace('_', ' ').toUpperCase()}` : '';
+      drawText(`🔧${c.eng} ⚔${c.cmb} ✈${c.plt} 🔬${c.sci}${pw}`, 135, y + 42, c.powerup ? '#fbbf24' : '#94a3b8', 11);
+      // Heal button
+      const missingHp = c.maxHp - c.hp;
+      const healCost = missingHp * 5;
+      if (missingHp > 0) {
+        const healBtn = new Button(695, y + 14, 120, 28, `💊 Heal (₡${healCost})`, 'heal_' + c.id, '#10b981', '#34d399');
+        if (G.credits < healCost) { healBtn.disabled = true; healBtn.tooltip = `Need ₡${healCost}`; }
+        allButtons.push(healBtn); healBtn.draw(ctx);
+      }
+      // Fire button
+      const fireBtn = new Button(830, y + 14, 75, 28, '🔥 Fire', 'fire_' + c.id, '#ef4444', '#dc2626');
+      if (isCaptain) { fireBtn.disabled = true; fireBtn.tooltip = 'Cannot fire the captain!'; }
+      else if (totalCrew <= 1) { fireBtn.disabled = true; fireBtn.tooltip = 'Must have at least 1 crew'; }
+      allButtons.push(fireBtn); fireBtn.draw(ctx);
+      // Resupply engineer ability button
+      if (c.engineerAbility && c.abilityUsed) {
+        const resupBtn = new Button(695, y + 14, 200, 28, `🔧 Resupply ${c.engineerAbility} (₡80)`, 'resupply_' + c.id, '#f59e0b', '#fbbf24', '#000');
+        if (G.credits < 80) { resupBtn.disabled = true; resupBtn.tooltip = 'Need ₡80'; }
+        allButtons.push(resupBtn); resupBtn.draw(ctx);
+      }
+    });
+  }
+
+  function drawShipStatus() {
+    drawPanel(30, 88, 960, 570, 'SHIP STATUS');
+    drawText(`Hull: ${G.ship.hull}/${G.ship.maxHull}`, 60, 140, '#10b981', 15);
+    const barW = 300, barH = 20, barX = 60, barY = 168;
+    ctx.fillStyle = '#1e293b'; ctx.fillRect(barX, barY, barW, barH);
+    const hpPct = G.ship.hull / G.ship.maxHull;
+    ctx.fillStyle = hpPct > 0.5 ? '#10b981' : hpPct > 0.25 ? '#fbbf24' : '#ef4444';
+    ctx.fillRect(barX, barY, barW * hpPct, barH);
+    ctx.strokeStyle = '#475569'; ctx.strokeRect(barX, barY, barW, barH);
+
+    const missingHull = G.ship.maxHull - G.ship.hull;
+    const repairCost = missingHull > 0 ? Math.max(50, Math.floor(missingHull * 4)) : 50;
+    const rBtn = new Button(60, 205, 200, 32, `🔧 Repair (₡${repairCost})`, 'repair', '#2563eb', '#3b82f6');
+    if (G.ship.hull >= G.ship.maxHull || G.credits < repairCost) rBtn.disabled = true;
+    allButtons.push(rBtn); rBtn.draw(ctx);
+
+    drawText(`Cargo: ${G.ship.cargoUsed}/${G.ship.cargoSpace}`, 60, 255, '#94a3b8', 14);
+    drawText(`Upgrades: ${G.ship.upgrades.length > 0 ? G.ship.upgrades.join(', ') : 'None'}`, 60, 285, '#94a3b8', 14);
+
+    drawText(`Illegal Cargo: ${G.illegalCargo} 📦`, 60, 330, G.illegalCargo > 0 ? '#ef4444' : '#475569', 15);
+    if (G.illegalCargo > 0) {
+      const sellBtn = new Button(60, 360, 180, 32, '💰 Sell (₡100 each)', 'sell_cargo', '#f59e0b', '#fbbf24', '#000');
+      allButtons.push(sellBtn); sellBtn.draw(ctx);
+      const distBtn = new Button(255, 360, 200, 32, '⚡ Give to Crew (powerup)', 'distribute_cargo', '#8b5cf6', '#a78bfa');
+      allButtons.push(distBtn); distBtn.draw(ctx);
+      drawText('Sell for credits OR give to random crew for a permanent powerup:', 60, 410, '#64748b', 11);
+      drawText('HP UP: +5 maxHP  |  ATK UP: +2 combat  |  SPEED UP: 3 actions/turn', 60, 430, '#64748b', 11);
+    }
+  }
+
+  // ==================== SKILLS BOARD ====================
+  function drawSkillsBoard() {
+    drawPanel(30, 88, 960, 570, 'SKILLS — Invest points to upgrade your captain abilities');
+    const skills = [
+      { id: 'hr', name: 'Human Resource', icon: '👥', desc: 'Better crew stats & rare variant chance', effect: `${G.skills.hr}/10` },
+      { id: 'street', name: 'Street-Smarts', icon: '🕵️', desc: 'Lower chance of patrol officers appearing', effect: `${G.skills.street}/10` },
+      { id: 'haggle', name: 'Haggling', icon: '💰', desc: 'Increased contract rewards', effect: `${G.skills.haggle}/10` },
+      { id: 'med', name: 'Medicine', icon: '💊', desc: 'Increased HP for all crew members', effect: `${G.skills.med}/10` },
+      { id: 'train', name: 'Training', icon: '⚔️', desc: 'Increased damage for all crew members', effect: `${G.skills.train}/10` },
+    ];
+
+    drawText(`Available Skill Points: ${G.skillPoints}`, 60, 140, '#fbbf24', 16);
+
+    skills.forEach((s, i) => {
+      const y = 180 + i * 82;
+      drawPanel(50, y, 920, 70, null);
+      drawText(`${s.icon}  ${s.name}`, 70, y + 10, '#e2e8f0', 15);
+      drawText(`${s.desc}`, 70, y + 32, '#64748b', 11);
+      // Level bar
+      const barX = 440, barY = y + 12, barW = 200, barH = 18;
+      ctx.fillStyle = '#1e293b'; ctx.fillRect(barX, barY, barW, barH);
+      const levelPct = G.skills[s.id] / 10;
+      ctx.fillStyle = '#fbbf24'; ctx.fillRect(barX, barY, barW * levelPct, barH);
+      ctx.strokeStyle = '#475569'; ctx.strokeRect(barX, barY, barW, barH);
+      drawText(`Level ${G.skills[s.id]}/10`, barX + barW / 2, barY + barH / 2, '#000', 12, 'center');
+
+      const upgradeBtn = new Button(660, y + 10, 80, 28, '⬆ Upgrade', 'skill_up_' + s.id, '#f59e0b', '#fbbf24', '#000');
+      if (G.skillPoints <= 0) { upgradeBtn.disabled = true; upgradeBtn.tooltip = 'No skill points'; }
+      if (G.skills[s.id] >= 10) { upgradeBtn.disabled = true; upgradeBtn.tooltip = 'Max level!'; }
+      allButtons.push(upgradeBtn); upgradeBtn.draw(ctx);
+    });
+  }
+
+  // ==================== PATROL OVERLAY ====================
+  function drawPatrolOverlay() {
+    drawStars();
+    drawText(`₡${G.credits}`, 20, 12, '#555', 14);
+    ctx.fillStyle = 'rgba(0,0,0,0.75)';
+    ctx.fillRect(0, 0, W, H);
+
+    drawText('🚨 PATROL OFFICER', W / 2, 150, '#ef4444', 32, 'center');
+    drawText('"Halt! Sector patrol. We need to inspect your vessel."', W / 2, 210, '#cbd5e1', 15, 'center');
+
+    if (G.illegalCargo > 0) {
+      drawText(`You have ${G.illegalCargo} illegal cargo aboard!`, W / 2, 260, '#ef4444', 14, 'center');
+      const bribeCost = G.illegalCargo * 40 + 30;
+      drawText(`Bribe cost: ₡${bribeCost}`, W / 2, 290, '#fbbf24', 13, 'center');
+
+      const bribeBtn = new Button(W / 2 - 140, 330, 280, 40, `💸 Bribe Officer (₡${bribeCost})`, 'bribe', '#f59e0b', '#fbbf24', '#000');
+      if (G.credits < bribeCost) { bribeBtn.disabled = true; bribeBtn.tooltip = 'Not enough credits'; }
+      allButtons.push(bribeBtn); bribeBtn.draw(ctx);
+
+      const surrenderBtn = new Button(W / 2 - 140, 385, 280, 40, '😰 Surrender Cargo', 'surrender_cargo', '#ef4444', '#dc2626');
+      allButtons.push(surrenderBtn); surrenderBtn.draw(ctx);
+      const fine = Math.floor(G.illegalCargo * 20);
+      drawText(`Surrendering costs a ₡${fine} fine (less than bribing).`, W / 2, 440, '#64748b', 11, 'center');
+    } else {
+      drawText('Your ship is clean. You have nothing to hide.', W / 2, 260, '#10b981', 14, 'center');
+      const passBtn = new Button(W / 2 - 80, 330, 160, 40, '✅ Let them inspect', 'pass_patrol', '#2563eb', '#3b82f6');
+      allButtons.push(passBtn); passBtn.draw(ctx);
+    }
+  }
+
+  // ==================== SCENE: MISSION ====================
+  function drawMission() {
+    const M = G.mission;
+    if (!M) return;
+    drawStars();
+
+    // Grid
+    for (let y = 0; y < GRID_H; y++) {
+      for (let x = 0; x < GRID_W; x++) {
+        const sx = GRID_OX + x * CELL, sy = GRID_OY + y * CELL;
+        ctx.fillStyle = (x + y) % 2 === 0 ? '#13132a' : '#181835';
+        ctx.fillRect(sx, sy, CELL, CELL);
+        ctx.strokeStyle = '#1e1e3a'; ctx.strokeRect(sx, sy, CELL, CELL);
+        const tile = M.grid[y][x];
+        if (tile === TILE.WALL) {
+          ctx.fillStyle = '#374151'; ctx.fillRect(sx + 4, sy + 4, CELL - 8, CELL - 8);
+          drawText('■', sx + CELL / 2, sy + CELL / 2 - 8, '#6b7280', 20, 'center');
+        } else if (tile === TILE.OBJECTIVE) {
+          const obj = M.objectives.find(o => o.x === x && o.y === y);
+          if (obj && !obj.collected) {
+            ctx.fillStyle = '#fbbf24'; ctx.beginPath();
+            ctx.arc(sx + CELL / 2, sy + CELL / 2, 12, 0, Math.PI * 2); ctx.fill();
+            drawText('★', sx + CELL / 2, sy + CELL / 2 - 8, '#000', 20, 'center');
+          }
+        } else if (tile === TILE.HAZARD) {
+          ctx.fillStyle = '#7f1d1d'; ctx.fillRect(sx + 6, sy + 6, CELL - 12, CELL - 12);
+          drawText('☢', sx + CELL / 2, sy + CELL / 2 - 8, '#ef4444', 16, 'center');
+        } else if (tile === TILE.SENTRY) {
+          ctx.fillStyle = '#1e3a5f'; ctx.fillRect(sx + 4, sy + 4, CELL - 8, CELL - 8);
+          drawText('🔫', sx + CELL / 2, sy + CELL / 2 - 8, '#3b82f6', 18, 'center');
+        } else if (tile === TILE.TRAP) {
+          ctx.fillStyle = '#5f1e1e'; ctx.fillRect(sx + 4, sy + 4, CELL - 8, CELL - 8);
+          drawText('💣', sx + CELL / 2, sy + CELL / 2 - 8, '#ef4444', 18, 'center');
+        }
+      }
+    }
+
+    // Enemies
+    M.enemies.forEach(e => {
+      if (!e.alive) return;
+      const sx = GRID_OX + e.x * CELL + CELL / 2, sy = GRID_OY + e.y * CELL + CELL / 2;
+      ctx.fillStyle = e.color; ctx.beginPath(); ctx.arc(sx, sy, 18, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.stroke();
+      drawText(e.icon, sx, sy - 6, '#fff', 16, 'center');
+      const hpW = 30; ctx.fillStyle = '#000'; ctx.fillRect(sx - hpW / 2, sy - 26, hpW, 4);
+      ctx.fillStyle = '#ef4444'; ctx.fillRect(sx - hpW / 2, sy - 26, hpW * (e.hp / e.maxHp), 4);
+    });
+
+    // Deployed crew
+    M.crewDeployed.forEach(c => {
+      if (!c.alive || !c.deployPos) return;
+      const sx = GRID_OX + c.deployPos.x * CELL + CELL / 2, sy = GRID_OY + c.deployPos.y * CELL + CELL / 2;
+      const isSel = M.selectedCrew === c;
+      const depleted = c.actions <= 0;
+      ctx.fillStyle = depleted ? '#555566' : c.color;
+      ctx.globalAlpha = depleted ? 0.5 : 1.0;
+      ctx.beginPath(); ctx.arc(sx, sy, 16, 0, Math.PI * 2); ctx.fill();
+      if (isSel) {
+        ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 3; ctx.globalAlpha = 1.0;
+        ctx.beginPath(); ctx.arc(sx, sy, 20, 0, Math.PI * 2); ctx.stroke();
+        ctx.globalAlpha = depleted ? 0.5 : 1.0;
+      }
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(sx, sy, 16, 0, Math.PI * 2); ctx.stroke();
+      ctx.globalAlpha = 1.0;
+      drawText(c.icon, sx, sy - 6, depleted ? '#888' : '#fff', 14, 'center');
+      // HP bar
+      const hpW = 28; ctx.fillStyle = '#000'; ctx.fillRect(sx - hpW / 2, sy - 24, hpW, 4);
+      ctx.fillStyle = '#10b981'; ctx.fillRect(sx - hpW / 2, sy - 24, hpW * (c.hp / c.maxHp), 4);
+      // Action dots
+      const bonus = c.bonusActions || 0;
+      const fromClass = 2 + bonus;
+      const maxAct = (c.powerup && c.powerup.type === 'speed_up') ? Math.max(3, fromClass) : fromClass;
+      for (let a = 0; a < maxAct; a++) {
+        ctx.fillStyle = a < c.actions ? '#fbbf24' : '#374151';
+        ctx.beginPath(); ctx.arc(sx - (maxAct - 1) * 7 + a * 14, sy + 20, 4, 0, Math.PI * 2); ctx.fill();
+      }
+      // Powerup indicator
+      if (c.powerup) {
+        drawText('⚡', sx + 14, sy - 20, '#fbbf24', 10, 'center');
+      }
+      // Engineer ability indicator
+      if (c.engineerAbility) {
+        drawText(c.engineerAbility === 'sentry' ? '🔫' : '💣', sx - 14, sy - 20, '#94a3b8', 10, 'center');
+      }
+    });
+
+    // HUD
+    drawText(`TURN ${M.turn}/${M.maxTurns}  |  ${M.phase.toUpperCase()} PHASE`, 20, 10, '#fbbf24', 13);
+    const turnsLeft = M.maxTurns - M.turn;
+    const turnColor = turnsLeft <= 2 ? '#ef4444' : turnsLeft <= 5 ? '#fbbf24' : '#10b981';
+    drawText(`TURNS LEFT: ${turnsLeft}`, 340, 10, turnColor, 13);
+    drawText(`★ ${M.objectives.filter(o => o.collected).length}/${M.objectives.length}`, 550, 10, '#fbbf24', 13);
+    drawText(`ENEMIES: ${M.enemies.filter(e => e.alive).length}`, 680, 10, '#ef4444', 13);
+
+    // Selected crew info
+    if (M.selectedCrew) {
+      const sc = M.selectedCrew;
+      drawPanel(10, H - 55, 400, 48, null);
+      const bonus = sc.bonusActions || 0;
+      const fromClass = 2 + bonus;
+      const maxA = (sc.powerup && sc.powerup.type === 'speed_up') ? Math.max(3, fromClass) : fromClass;
+      const abiInfo = sc.engineerAbility ? ` | ${sc.engineerAbility === 'sentry' ? '🔫Sentry' : '💣Trap'} (double-click own tile to deploy)` : '';
+      drawText(`${sc.icon} ${sc.firstName}  |  HP:${sc.hp}  |  Actions: ${sc.actions}/${maxA}${abiInfo}`, 20, H - 42, sc.color, 11);
+      if (sc.actions <= 0) drawText('⚠ OUT OF ACTIONS — Select another crew or END TURN', 20, H - 24, '#fbbf24', 11);
+    }
+    if (M.phase === 'player' && M.crewDeployed.every(c => !c.alive || c.actions <= 0)) {
+      drawText('ALL CREW DONE — Press END TURN →', W / 2, H - 15, '#fbbf24', 15, 'center');
+    }
+
+    // Buttons
+    if (M.phase === 'player') {
+      const endBtn = new Button(W - 180, 10, 130, 34, '⏩ END TURN', 'end_turn', '#fbbf24', '#f59e0b', '#000');
+      allButtons.push(endBtn); endBtn.draw(ctx);
+    }
+    const retreatBtn = new Button(W - 180, 50, 130, 30, '🏃 RETREAT', 'retreat', '#ef4444', '#dc2626');
+    allButtons.push(retreatBtn); retreatBtn.draw(ctx);
+
+    // Win/lose overlay
+    if (M.won || M.lost) {
+      ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(0, 0, W, H);
+      const msg = M.won ? '⭐ MISSION COMPLETE!' : 'MISSION FAILED';
+      const clr = M.won ? '#fbbf24' : '#ef4444';
+      drawText(msg, W / 2, H / 2 - 40, clr, 36, 'center');
+      if (M.won) drawText(`Reward: ₡${M.contract.reward}`, W / 2, H / 2 + 10, '#10b981', 20, 'center');
+      else {
+        const reason = M.turn >= M.maxTurns ? 'Turn limit reached!' : 'All crew fell!';
+        drawText(reason, W / 2, H / 2 + 10, '#94a3b8', 14, 'center');
+      }
+      const returnBtn = new Button(W / 2 - 80, H / 2 + 60, 160, 40, 'RETURN TO HUB', 'return_hub', '#2563eb', '#3b82f6');
+      allButtons.push(returnBtn); returnBtn.draw(ctx);
+    }
+  }
+
+  // ==================== GAME OVER ====================
+  function drawGameOver() {
+    drawStars();
+    drawText('GAME OVER', W / 2, 250, '#ef4444', 42, 'center');
+    let reasonText = 'Your ship has been destroyed...';
+    if (G.gameOverReason === 'captain_dead') reasonText = 'The captain has fallen...';
+    else if (G.gameOverReason === 'broke') reasonText = 'You ran out of credits to pay your crew!';
+    else if (G.gameOverReason === 'hull') reasonText = 'Your ship\'s hull has been destroyed...';
+    drawText(reasonText, W / 2, 310, '#94a3b8', 16, 'center');
+    drawText(`Final credits: ₡${G.credits}`, W / 2, 340, '#fbbf24', 14, 'center');
+    allButtons.push(new Button(W / 2 - 100, 400, 200, 44, '🔄 NEW GAME', 'newgame', '#16a34a', '#22c55e'));
+  }
+
+  // ==================== EVENT HANDLING ====================
+  function handleButton(action) {
+    if (action === 'newgame') {
+      initAudio();
+      G = createGameState();
+      G.crew.push(createCrewMember(CREW_CLASSES[0]));
+      G.crew.push(createCrewMember(CREW_CLASSES[1]));
+      G.crew.push(createCrewMember(CREW_CLASSES[2]));
+      // Randomly assign one of the initial 3 crew as captain
+      G.captainId = pick(G.crew.map(c => c.id));
+      generateAllContracts();
+      G.scene = 'hub';
+      G.patrolActive = false; // No patrol on new game
+      sfxAccept();
+    } else if (action === 'continue') {
+      loadGame();
+      if (G.scene === 'title') return;
+      initAudio(); sfxClick();
+    } else if (action === 'tab_contracts') { hubTab = 'contracts'; sfxClick(); }
+    else if (action === 'tab_crew') { hubTab = 'crew'; sfxClick(); }
+    else if (action === 'tab_ship') { hubTab = 'ship'; sfxClick(); }
+    else if (action === 'tab_skills') { hubTab = 'skills'; sfxClick(); }
+    else if (action.startsWith('skill_up_')) {
+      const skillId = action.split('skill_up_')[1];
+      if (G.skillPoints > 0 && G.skills[skillId] !== undefined && G.skills[skillId] < 10) {
+        G.skillPoints--;
+        G.skills[skillId]++;
+        sfxAccept();
+        // Apply immediate effects
+        if (skillId === 'haggle') recalcContractRewards();
+        if (skillId === 'med') {
+          const medBonus = 2;
+          G.crew.forEach(c => {
+            if (c.alive) {
+              c.maxHp += medBonus;
+              c.hp += medBonus;
+            }
+          });
+        }
+        if (skillId === 'train') {
+          G.crew.forEach(c => { if (c.alive) c.cmb += 1; });
+        }
+        G.message = `Skill upgraded! ${skillId.toUpperCase()} is now level ${G.skills[skillId]}.`;
+        G.messageTimer = 60;
+      }
+    }
+    else if (action === 'next_batch') { advanceContractBatch(); sfxClick(); }
+    else if (action === 'hire_crew') {
+      const totalCrew = G.crew.filter(c => c.alive).length;
+      if (G.credits >= 200 && totalCrew < 8) {
+        G.credits -= 200; G.crew.push(createCrewMember(pick(CREW_CLASSES)));
+        sfxAccept(); G.message = 'New crew hired!'; G.messageTimer = 60;
+      }
+    } else if (action.startsWith('heal_')) {
+      const cid = parseFloat(action.split('_')[1]);
+      const c = G.crew.find(cr => cr.id === cid);
+      if (c && c.alive) {
+        const missingHp = c.maxHp - c.hp;
+        const healCost = missingHp * 5;
+        if (G.credits >= healCost && missingHp > 0) {
+          G.credits -= healCost;
+          c.hp = c.maxHp;
+          sfxAccept(); G.message = `${c.firstName} healed to full!`; G.messageTimer = 60;
+        }
+      }
+    } else if (action.startsWith('fire_')) {
+      const cid = parseFloat(action.split('_')[1]);
+      if (G.captainId === cid) return; // Cannot fire the captain
+      const totalAlive = G.crew.filter(c => c.alive).length;
+      if (totalAlive <= 1) return; // Must keep at least 1 crew
+      const c = G.crew.find(cr => cr.id === cid);
+      if (c) {
+        c.alive = false;
+        G.crewDeployedIds = G.crewDeployedIds.filter(id => id !== cid);
+        G.crew = G.crew.filter(cr => cr.alive);
+        sfxDamage(); G.message = `${c.firstName} has been fired and left the crew.`; G.messageTimer = 60;
+      }
+    } else if (action.startsWith('resupply_')) {
+      const cid = parseFloat(action.split('_')[1]);
+      const c = G.crew.find(cr => cr.id === cid);
+      if (c && c.engineerAbility && c.abilityUsed && G.credits >= 80) {
+        G.credits -= 80;
+        c.abilityUsed = false;
+        // Engineer keeps the SAME ability they were hired with
+        sfxAccept(); G.message = `${c.firstName}'s ${c.engineerAbility} resupplied!`; G.messageTimer = 60;
+      }
+    } else if (action.startsWith('toggle_deploy_')) {
+      const cid = parseFloat(action.split('toggle_deploy_')[1]);
+      const idx = G.crewDeployedIds.indexOf(cid);
+      if (idx >= 0) {
+        G.crewDeployedIds.splice(idx, 1);
+      } else {
+        const selectedCount = G.crewDeployedIds.filter(id => G.crew.some(cr => cr.alive && cr.id === id)).length;
+        if (selectedCount < 5) {
+          G.crewDeployedIds.push(cid);
+        }
+      }
+      sfxClick();
+    } else if (action === 'repair') {
+      const missingHull = G.ship.maxHull - G.ship.hull;
+      const repairCost = missingHull > 0 ? Math.max(50, Math.floor(missingHull * 4)) : 50;
+      if (G.credits >= repairCost && G.ship.hull < G.ship.maxHull) {
+        G.credits -= repairCost; G.ship.hull = G.ship.maxHull;
+        sfxClick(); G.message = `Hull fully repaired for ₡${repairCost}!`; G.messageTimer = 60;
+      }
+    } else if (action === 'sell_cargo') {
+      if (G.illegalCargo > 0) {
+        const earnings = G.illegalCargo * 100;
+        G.credits += earnings;
+        G.illegalCargo = 0;
+        sfxAccept(); G.message = `Sold illegal cargo for ₡${earnings}!`; G.messageTimer = 60;
+      }
+    } else if (action === 'distribute_cargo') {
+      if (G.illegalCargo > 0) {
+        const alive = G.crew.filter(c => c.alive);
+        const pwTypes = ['hp_up', 'atk_up', 'speed_up'];
+        const pwNames = { hp_up: 'HP UP (+5)', atk_up: 'ATK UP (+2 CMB)', speed_up: 'SPEED UP (3 actions)' };
+        const given = [];
+        for (let i = 0; i < G.illegalCargo && alive.length > 0; i++) {
+          const target = pick(alive);
+          const pwType = pick(pwTypes);
+          target.powerup = { type: pwType };
+          if (pwType === 'hp_up') { target.maxHp += 5; target.hp += 5; }
+          given.push(`${target.firstName}: ${pwNames[pwType]}`);
+        }
+        G.illegalCargo = 0;
+        sfxAccept();
+        G.message = `Distributed powerups! ${given.join(' | ')}`; G.messageTimer = 120;
+      }
+    } else if (action === 'bribe') {
+      const bribeCost = G.illegalCargo * 40 + 30;
+      if (G.credits >= bribeCost) {
+        G.credits -= bribeCost;
+        G.patrolActive = false;
+        sfxClick(); G.message = 'Officer bribed. They look the other way...'; G.messageTimer = 60;
+      }
+    } else if (action === 'surrender_cargo') {
+      const fine = Math.floor(G.illegalCargo * 20);
+      G.credits = Math.max(0, G.credits - fine);
+      G.illegalCargo = 0;
+      G.patrolActive = false;
+      sfxDamage(); G.message = `Illegal cargo confiscated. Paid ₡${fine} fine.`; G.messageTimer = 60;
+    } else if (action === 'pass_patrol') {
+      G.patrolActive = false;
+      sfxClick(); G.message = 'Clean inspection. You are free to go.'; G.messageTimer = 60;
+    } else if (action.startsWith('accept_')) {
+      const idx = parseInt(action.split('_')[1]);
+      if (idx < G.contracts.length && G.crew.filter(c => c.alive).length >= 2) {
+        G.activeContract = G.contracts[idx];
+        G.contracts.splice(idx, 1);
+        G.mission = createMission(G.activeContract);
+        deployCrewToMission(G.mission);
+        G.scene = 'mission';
+        sfxAccept(); G.message = ''; G.messageTimer = 0;
+      }
+    } else if (action === 'end_turn') {
+      if (G.mission && G.mission.phase === 'player') {
+        G.mission.phase = 'enemy'; sfxClick();
+        processEnemyTurn();
+        // Process sentries
+        processSentryAttacks();
+        G.mission.turn++;
+        // Reset player actions
+        G.mission.crewDeployed.forEach(c => {
+          const bonus = c.bonusActions || 0;
+          const fromClass = 2 + bonus;
+          const maxA = (c.powerup && c.powerup.type === 'speed_up') ? Math.max(3, fromClass) : fromClass;
+          c.actions = maxA;
+        });
+        // Hazard damage: 75% chance of 3 damage
+        G.mission.crewDeployed.forEach(c => {
+          if (c.alive && c.deployPos && G.mission.grid[c.deployPos.y][c.deployPos.x] === TILE.HAZARD) {
+            if (Math.random() < 0.75) {
+              c.hp -= 3;
+              G.mission.log.push(`${c.firstName} took 3 hazard damage!`);
+              if (c.hp <= 0) { c.alive = false; G.mission.log.push(`${c.firstName} died from hazard!`); }
+            }
+          }
+        });
+        // Turn limit check
+        if (G.mission.turn >= G.mission.maxTurns && !G.mission.won) {
+          G.mission.lost = true;
+          G.mission.log.push('Turn limit reached! Contract failed.');
+        }
+        checkMissionEnd();
+        G.mission.phase = 'player';
+        G.mission.selectedCrew = null;
+      }
+    } else if (action === 'retreat') {
+      G.mission.lost = true;
+      G.mission.forfeit = true;
+      G.mission.log.push('Forfeited! Contract must be redone.');
+      sfxDamage();
+    } else if (action === 'return_hub') {
+      const deployedIds = G.mission.crewDeployed.map(d => d.id);
+
+      // ===== CREW PAYROLL: Charge all alive crew after every contract =====
+      let totalPayroll = 0;
+      const payrollLines = [];
+      G.crew.forEach(c => {
+        if (!c.alive || c.id === G.captainId) return; // Skip dead crew and captain
+        const rates = calcCrewRates(c);
+        const wasDeployed = deployedIds.includes(c.id);
+        const charge = wasDeployed ? Math.round(rates.idleRate * rates.contractMultiplier) : rates.idleRate;
+        totalPayroll += charge;
+        const label = wasDeployed ? 'Contract' : 'Idle';
+        payrollLines.push(`${c.firstName} (${label}): ₡${charge}`);
+      });
+
+      if (G.mission.won) {
+        G.credits += G.mission.contract.reward;
+        G.skillPoints += 2;
+        // Heal/update crew
+        G.crew.forEach(c => {
+          const deployed = G.mission.crewDeployed.find(d => d.id === c.id);
+          if (deployed) {
+            c.hp = deployed.hp; c.alive = deployed.alive; c.xp += deployed.xp || 0;
+            // Sync ability-used flag only; never change the ability type
+            c.abilityUsed = deployed.abilityUsed || c.abilityUsed;
+          }
+          if (!c.alive) G.crew = G.crew.filter(cr => cr.id !== c.id);
+        });
+        // Chance of finding illegal cargo
+        if (Math.random() < G.mission.contract.illegalChance) {
+          const amount = rng(1, 3);
+          G.illegalCargo += amount;
+          G.mission.log.push(`Found ${amount} illegal cargo!`);
+        }
+        sfxWin();
+      } else {
+        // Sync engineer ability state on mission loss
+        G.crew.forEach(c => {
+          const deployed = G.mission.crewDeployed.find(d => d.id === c.id);
+          if (deployed) {
+            c.hp = Math.max(1, deployed.hp);
+            c.alive = deployed.alive;
+            c.abilityUsed = deployed.abilityUsed;
+          }
+        });
+        G.crew = G.crew.filter(c => c.alive);
+        sfxDamage();
+        // Forfeit: put contract back in the board to redo
+        if (G.mission.forfeit) {
+          G.contracts.push(G.mission.contract);
+        }
+      }
+
+      // Deduct crew payroll
+      G.credits -= totalPayroll;
+      const payrollMsg = totalPayroll > 0 ? ` | Crew payroll: ₡${totalPayroll} (${payrollLines.join(', ')})` : '';
+
+      if (G.mission.won) {
+        G.message = `Contract #${G.mission.contract.number} complete! +₡${G.mission.contract.reward}${payrollMsg}`;
+        G.messageTimer = 180;
+      } else if (G.mission.forfeit) {
+        G.message = `Contract forfeited. Must be redone.${payrollMsg}`;
+        G.messageTimer = 180;
+      } else {
+        G.message = `Mission failed. Crew returned to ship.${payrollMsg}`;
+        G.messageTimer = 180;
+      }
+
+      // Ship takes hull damage after EVERY contract (win, lose, or forfeit)
+      const hullDamage = 8 + G.mission.contract.difficulty * rng(3, 5);
+      G.ship.hull = Math.max(0, G.ship.hull - hullDamage);
+      G.mission.log.push(`Ship took ${hullDamage} hull damage!`);
+      G.mission = null;
+      G.activeContract = null;
+      G.scene = 'hub';
+      // Auto-advance batch if empty and more batches remain
+      if (G.contracts.length === 0 && G.batchIndex < G.BATCH_SIZES.length - 1) {
+        advanceContractBatch();
+      }
+      // Check game over conditions
+      // 1. Captain dead → game over
+      if (G.captainId && !G.crew.some(c => c.alive && c.id === G.captainId)) {
+        G.scene = 'gameover';
+        G.gameOverReason = 'captain_dead';
+      }
+      // 2. Ship hull <= 0 → game over
+      else if (G.ship.hull <= 0) {
+        G.scene = 'gameover';
+        G.gameOverReason = 'hull';
+      }
+      // 3. Can't pay crew → game over (credits went negative from payroll)
+      else if (G.credits < 0) {
+        G.scene = 'gameover';
+        G.gameOverReason = 'broke';
+      }
+      // Maybe trigger patrol
+      maybeTriggerPatrol();
+    }
+  }
+
+  function maybeTriggerPatrol() {
+    if (G.scene !== 'hub') return; // Only trigger in hub
+    const reduction = (G.skills.street - 1) * 0.03;
+    const baseChance = (G.illegalCargo > 0 ? 0.6 : 0.3) * (1 - reduction);
+    if (Math.random() < baseChance) {
+      G.patrolActive = true;
+      sfxAlert();
+    }
+  }
+
+  // ==================== MISSION LOGIC ====================
+  function processEnemyTurn() {
+    const M = G.mission; if (!M) return;
+    M.log.push(`--- Enemy Turn ${M.turn + 1} ---`);
+    M.enemies.forEach(e => {
+      if (!e.alive) return;
+      let nearest = null, nearestDist = 999;
+      M.crewDeployed.forEach(c => {
+        if (!c.alive || !c.deployPos) return;
+        const d = dist({ x: e.x, y: e.y }, c.deployPos);
+        if (d < nearestDist) { nearestDist = d; nearest = c; }
+      });
+      if (nearestDist <= 1) {
+        const dmg = e.atk + rng(-1, 1);
+        nearest.hp -= dmg;
+        M.log.push(`${e.name} attacks ${nearest.firstName} for ${dmg} damage!`);
+        sfxDamage();
+        if (nearest.hp <= 0) { nearest.alive = false; nearest.deployPos = null; M.log.push(`${nearest.firstName} has fallen!`); }
+      } else {
+        const dirs = [{ dx: 0, dy: -1 }, { dx: 0, dy: 1 }, { dx: -1, dy: 0 }, { dx: 1, dy: 0 }];
+        const dir = pick(dirs);
+        const nx = e.x + dir.dx, ny = e.y + dir.dy;
+        if (nx >= 0 && nx < GRID_W && ny >= 0 && ny < GRID_H && M.grid[ny][nx] !== TILE.WALL && M.grid[ny][nx] !== TILE.SENTRY && M.grid[ny][nx] !== TILE.TRAP) {
+          const blocked = M.crewDeployed.some(c => c.alive && c.deployPos && c.deployPos.x === nx && c.deployPos.y === ny);
+          const enemyBlocked = M.enemies.some(oe => oe !== e && oe.alive && oe.x === nx && oe.y === ny);
+          if (!blocked && !enemyBlocked) {
+            // Check for trap
+            if (M.grid[ny][nx] === TILE.TRAP) {
+              e.hp -= 8;
+              M.log.push(`${e.name} stepped on a trap for 8 damage!`);
+              M.grid[ny][nx] = TILE.EMPTY; // Trap consumed
+              if (e.hp <= 0) { e.alive = false; M.log.push(`${e.name} destroyed by trap!`); }
+            } else {
+              e.x = nx; e.y = ny;
+            }
+          }
+        }
+      }
+    });
+  }
+
+  function processSentryAttacks() {
+    const M = G.mission; if (!M) return;
+    for (let y = 0; y < GRID_H; y++) {
+      for (let x = 0; x < GRID_W; x++) {
+        if (M.grid[y][x] !== TILE.SENTRY) continue;
+        // Find nearest enemy within 5 tiles
+        let best = null, bestDist = 999;
+        M.enemies.forEach(e => {
+          if (!e.alive) return;
+          const d = dist({ x, y }, { x: e.x, y: e.y });
+          if (d < bestDist && d <= 5) { bestDist = d; best = e; }
+        });
+        if (best) {
+          const dmg = 4 + rng(0, 3);
+          best.hp -= dmg;
+          M.log.push(`Sentry at (${x},${y}) fires at ${best.name} for ${dmg} damage!`);
+          if (best.hp <= 0) { best.alive = false; M.log.push(`${best.name} destroyed by sentry!`); }
+        }
+      }
+    }
+  }
+
+  function checkMissionEnd() {
+    const M = G.mission; if (!M) return;
+    const allObjDone = M.objectives.every(o => o.collected);
+    if (allObjDone && !M.lost) {
+      M.won = true;
+      M.log.push('All objectives secured! Mission success!');
+    }
+    const allCrewDown = M.crewDeployed.every(c => !c.alive);
+    if (allCrewDown && !M.won) { M.lost = true; M.log.push('All crew have fallen...'); }
+  }
+
+  function handleGridClick(gx, gy) {
+    const M = G.mission;
+    if (!M || M.phase !== 'player' || M.won || M.lost) return;
+
+    const now = Date.now();
+    const isDouble = (now - lastClickTime < 400);
+    lastClickTime = now;
+
+    // Engineer double-click: deploy sentry/trap on own tile
+    if (isDouble && M.selectedCrew && M.selectedCrew.engineerAbility && !M.selectedCrew.abilityUsed && M.selectedCrew.actions > 0) {
+      const sc = M.selectedCrew;
+      const tile = M.grid[gy][gx];
+      if (tile === TILE.EMPTY && sc.deployPos.x === gx && sc.deployPos.y === gy) {
+        const blocked = M.crewDeployed.some(c => c !== sc && c.alive && c.deployPos && c.deployPos.x === gx && c.deployPos.y === gy);
+        const enemyBlocked = M.enemies.some(e => e.alive && e.x === gx && e.y === gy);
+        if (!blocked && !enemyBlocked) {
+          const deployTile = sc.engineerAbility === 'sentry' ? TILE.SENTRY : TILE.TRAP;
+          M.grid[gy][gx] = deployTile;
+          sc.abilityUsed = true;
+          sc.actions--;
+          M.log.push(`${sc.firstName} deployed a ${sc.engineerAbility}!`);
+          beep(500, 0.12, 0.06);
+          return;
+        }
+      }
+    }
+
+    // Attack enemy
+    const enemy = M.enemies.find(e => e.alive && e.x === gx && e.y === gy);
+    if (enemy && M.selectedCrew && M.selectedCrew.actions > 0) {
+      const sc = M.selectedCrew;
+      if (dist(sc.deployPos, { x: gx, y: gy }) <= 1.5) {
+        const hpPct = sc.hp / sc.maxHp;
+        const scaledAtk = Math.max(1, Math.floor(sc.cmb * Math.max(0.2, hpPct)));
+        const dmg = Math.max(1, scaledAtk + rng(-1, 2));
+        enemy.hp -= dmg; sc.actions--;
+        M.log.push(`${sc.firstName} attacks ${enemy.name} for ${dmg} damage!`);
+        beep(200, 0.1, 0.05);
+        if (enemy.hp <= 0) { enemy.alive = false; sc.xp += enemy.xpVal; M.log.push(`${enemy.name} destroyed! +${enemy.xpVal} XP`); beep(400, 0.15, 0.06); }
+        checkMissionEnd(); return;
+      }
+    }
+
+    // Collect objective
+    const obj = M.objectives.find(o => o.x === gx && o.y === gy && !o.collected);
+    if (obj && M.selectedCrew && M.selectedCrew.actions > 0) {
+      if (dist(M.selectedCrew.deployPos, { x: gx, y: gy }) <= 1.5) {
+        obj.collected = true; M.selectedCrew.actions--; M.selectedCrew.xp += 20;
+        M.log.push(`${M.selectedCrew.firstName} collected objective ★! +20 XP`);
+        beep(600, 0.12, 0.06);
+        M.grid[gy][gx] = TILE.EMPTY;
+        checkMissionEnd(); return;
+      }
+    }
+
+    // Select crew
+    const crew = M.crewDeployed.find(c => c.alive && c.deployPos && c.deployPos.x === gx && c.deployPos.y === gy);
+    if (crew) { M.selectedCrew = crew; sfxClick(); return; }
+
+    // Move
+    if (M.selectedCrew && M.selectedCrew.actions <= 0) {
+      M.log.push(`${M.selectedCrew.firstName} is out of actions! Select another crew or END TURN.`);
+      return;
+    }
+    if (M.selectedCrew && M.selectedCrew.actions > 0 && M.grid[gy][gx] !== TILE.WALL && M.grid[gy][gx] !== TILE.SENTRY && M.grid[gy][gx] !== TILE.TRAP) {
+      const sc = M.selectedCrew;
+      if (dist(sc.deployPos, { x: gx, y: gy }) <= 1.5) {
+        const blocked = M.crewDeployed.some(c => c !== sc && c.alive && c.deployPos && c.deployPos.x === gx && c.deployPos.y === gy);
+        const enemyBlocked = M.enemies.some(e => e.alive && e.x === gx && e.y === gy);
+        if (!blocked && !enemyBlocked) { sc.deployPos = { x: gx, y: gy }; sc.actions--; beep(1000, 0.04, 0.03); }
+      }
+    }
+  }
+
+  // ==================== INPUT ====================
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = (e.clientX - rect.left) * (W / rect.width);
+    mouse.y = (e.clientY - rect.top) * (H / rect.height);
+    hoveredButton = null;
+    for (const btn of allButtons) { if (btn.contains(mouse.x, mouse.y)) { hoveredButton = btn; break; } }
+    canvas.style.cursor = hoveredButton ? 'pointer' : 'default';
+  });
+  canvas.addEventListener('mousedown', () => { initAudio(); mouseDown = true; });
+  canvas.addEventListener('mouseup', e => {
+    if (!mouseDown) return; mouseDown = false;
+    const rect = canvas.getBoundingClientRect();
+    const mx = (e.clientX - rect.left) * (W / rect.width);
+    const my = (e.clientY - rect.top) * (H / rect.height);
+    for (const btn of allButtons) { if (btn.contains(mx, my) && !btn.disabled) { handleButton(btn.action); return; } }
+    if (G.scene === 'mission' && G.mission) {
+      const gx = Math.floor((mx - GRID_OX) / CELL), gy = Math.floor((my - GRID_OY) / CELL);
+      if (gx >= 0 && gx < GRID_W && gy >= 0 && gy < GRID_H) handleGridClick(gx, gy);
+    }
+  });
+
+  // ==================== SAVE / LOAD ====================
+  function saveGame() {
+    localStorage.setItem('cosmos_save', JSON.stringify({
+      credits: G.credits, ship: G.ship, crew: G.crew,
+      contractQueue: G.contractQueue, contractBatchStart: G.contractBatchStart,
+      contracts: G.contracts, scene: G.scene, illegalCargo: G.illegalCargo,
+      skills: G.skills, skillPoints: G.skillPoints, captainId: G.captainId,
+      batchIndex: G.batchIndex, gameOverReason: G.gameOverReason,
+    }));
+  }
+  function loadGame() {
+    const raw = localStorage.getItem('cosmos_save');
+    if (!raw) return;
+    try {
+      const data = JSON.parse(raw);
+      G.credits = data.credits; G.ship = data.ship; G.crew = data.crew;
+      G.contractQueue = data.contractQueue || [];
+      G.contractBatchStart = data.contractBatchStart || 0;
+      G.contracts = data.contracts || [];
+      G.illegalCargo = data.illegalCargo || 0;
+      G.skills = data.skills || { hr: 1, street: 1, haggle: 1, med: 1, train: 1 };
+      G.skillPoints = data.skillPoints !== undefined ? data.skillPoints : 2;
+      G.batchIndex = data.batchIndex || 0;
+      G.captainId = data.captainId || null;
+      G.gameOverReason = data.gameOverReason || '';
+      // Recalculate rates for any crew that don't have them (backward compat)
+      G.crew.forEach(c => {
+        if (c.idleRate === undefined) {
+          const rates = calcCrewRates(c);
+          c.idleRate = rates.idleRate;
+          c.contractMultiplier = rates.contractMultiplier;
+        }
+      });
+      G.scene = 'hub'; G.message = 'Game loaded!'; G.messageTimer = 60;
+      G.patrolActive = false; // Don't trigger patrol on load
+      maybeTriggerPatrol();
+    } catch (e) { console.error('Load failed', e); }
+  }
+  setInterval(() => { if (G.scene === 'hub' && !G.patrolActive) saveGame(); }, 5000);
+
+  // ==================== GAME LOOP ====================
+  function update() { if (G.scene === 'hub' && G.messageTimer > 0) G.messageTimer--; }
+  function render() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#0d0d1a'; ctx.fillRect(0, 0, W, H);
+    allButtons = [];
+    switch (G.scene) {
+      case 'title': drawTitle(); break;
+      case 'hub': drawHub(); break;
+      case 'mission': drawMission(); break;
+      case 'gameover': drawGameOver(); break;
+    }
+    if (hoveredButton && hoveredButton.tooltip) {
+      tooltip.style.display = 'block';
+      tooltip.style.left = (mouse.x + 16) + 'px';
+      tooltip.style.top = (mouse.y + 16) + 'px';
+      tooltip.textContent = hoveredButton.tooltip;
+    } else { tooltip.style.display = 'none'; }
+  }
+  function gameLoop() { update(); render(); requestAnimationFrame(gameLoop); }
+  gameLoop();
+</script>
+</body>
+</html>
