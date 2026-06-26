@@ -46,6 +46,13 @@
         <a href="/graphics/rocket"><GraphicsProjectCard name="rocket" /></a>
       </div>
     </section>
+
+    <section>
+      <Subtitle>Vibe Coded Projects</Subtitle>
+      <div class="project-cards">
+        <a href="/graphics/cosmos"><GraphicsProjectCard name="cosmos" /></a>
+      </div>
+    </section>
   </div>
 </div>
 

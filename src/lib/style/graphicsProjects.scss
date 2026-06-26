@@ -261,6 +261,17 @@ due to making iframe a javascript object for extra security measures.
     }
   }
 
+  &--cosmos {
+    background-color: $darkblack;
+
+    .project-iframe {
+      iframe {
+        width: 1024px;
+        height: 700px;
+      }
+    }
+  }
+
   iframe {
     border: none;
   }
