@@ -13,7 +13,7 @@
             overflow: hidden; user-select: none;
         }
         #wrapper { position: relative; width: 1024px; height: 700px; }
-        canvas { display: block; background: #0d0d1a; cursor: pointer; }
+        canvas { display: block; border: 2px solid #334; border-radius: 4px; background: #0d0d1a; cursor: pointer; }
         #tooltip { position: absolute; background: #111827; color: #cbd5e1; border: 1px solid #4b5563;
             padding: 8px 12px; border-radius: 4px; font-size: 13px; pointer-events: none; display: none;
             max-width: 280px; line-height: 1.5; z-index: 10; }
@@ -32,7 +32,7 @@
   let mouseDown = false;
   let hoveredButton = null;
   let allButtons = [];
-  let lastClickTime = 0;  // For double-click detection
+  let lastClickTime = 0;
 
   // ==================== AUDIO ====================
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -80,7 +80,7 @@
       contractQueue: [],
       contractBatchStart: 0,
       batchIndex: 0,
-      BATCH_SIZES: [2, 3, 3, 4, 5],
+      BATCH_SIZES: [2, 2, 2, 3, 3],
       activeContract: null,
       mission: null,
       message: '',
@@ -88,23 +88,43 @@
       turnCount: 0,
       difficulty: 1,
       illegalCargo: 0,
+      illegalCargoPoints: { hp: 0, atk: 0, move: 0 },
       patrolActive: false,
       captainId: null,
       skills: { hr: 1, street: 1, haggle: 1, med: 1, train: 1 },
       skillPoints: 2,
-      gameOverReason: '', // 'captain_dead', 'hull', or 'broke'
+      gameOverReason: '',
     };
   }
 
   let G = createGameState();
 
+  // ==================== ILLEGAL CARGO BUFFS ====================
+  function applyIllegalCargoBuffs() {
+    const captain = G.crew.find(c => c.alive && c.id === G.captainId);
+    if (!captain) return;
+    // Track buckets: each 2 illegal cargo gives a random buff
+    const pts = G.illegalCargoPoints;
+    // Reset captain to base stats (remove old buffs)
+    if (pts.hp > 0) { captain.maxHp -= pts.hp * 5; captain.hp = Math.min(captain.hp, captain.maxHp); }
+    if (pts.atk > 0) captain.cmb -= pts.atk * 2;
+    // Recalculate based on current illegal cargo count
+    pts.hp = 0; pts.atk = 0; pts.move = 0;
+    for (let i = 0; i < G.illegalCargo; i++) {
+      const roll = Math.random();
+      if (roll < 0.4) pts.hp++;
+      else if (roll < 0.75) pts.atk++;
+      else pts.move++;
+    }
+    if (pts.hp > 0) { captain.maxHp += pts.hp * 5; captain.hp += pts.hp * 5; }
+    if (pts.atk > 0) captain.cmb += pts.atk * 2;
+    // move buff gives captain +1 action in missions
+  }
+
   // ==================== CREW PAYMENT CALC ====================
   function calcCrewRates(c) {
-    // Compute pay rates based on stats (higher stats = more expensive crew)
     const statTotal = c.eng + c.cmb + c.plt + c.sci;
-    // idleRate: $30 - $100, scaled by statTotal (typical range 4-20)
     const idleRate = Math.round(30 + Math.min(1, statTotal / 20) * 70);
-    // contractMultiplier: 1.25 - 1.75, scaled by statTotal
     const contractMultiplier = Math.round((1.25 + Math.min(1, statTotal / 20) * 0.5) * 100) / 100;
     return { idleRate, contractMultiplier };
   }
@@ -118,19 +138,13 @@
 
   function createCrewMember(cls) {
     let c;
-    if (cls) {
-      c = cls;
-    } else {
+    if (cls) { c = cls; }
+    else {
       const roll = Math.random();
-      if (roll < 0.25) {
-        c = CREW_CLASSES[1]; // 25% Soldier
-      } else if (roll < 0.58) {
-        c = CREW_CLASSES[0]; // 33% Engineer
-      } else if (roll < 0.91) {
-        c = CREW_CLASSES[2]; // 33% Pilot
-      } else {
-        c = { name: 'Crew Staff', icon: '👨‍🚀', color: '#64748b', stats: { eng: 1, cmb: 1, plt: 1, sci: 1 } }; // 9%
-      }
+      if (roll < 0.25) c = CREW_CLASSES[1];
+      else if (roll < 0.58) c = CREW_CLASSES[0];
+      else if (roll < 0.91) c = CREW_CLASSES[2];
+      else c = { name: 'Crew Staff', icon: '👨‍🚀', color: '#64748b', stats: { eng: 1, cmb: 1, plt: 1, sci: 1 } };
     }
     const engineerAbility = c.name === 'Engineer' ? pick(['sentry', 'trap']) : null;
     const medBonus = 1 + (G.skills.med - 1) * 2;
@@ -138,19 +152,14 @@
     let crewHp = 20 + medBonus, crewMaxHp = 20 + medBonus, crewCmb = c.stats.cmb + trainBonus;
     let bonusActions = 0;
     let specialTag = '';
-    // HR skill increases rare variant chances
     const hrBonus = (G.skills.hr - 1) * 0.005;
     if (c.name === 'Pilot') {
-      bonusActions = 1; // All Pilots get 3 actions (2 base + 1 bonus)
-      if (Math.random() < 0.05 + hrBonus) {
-        bonusActions = 3; // Distinguished Pilot: 2 base + 3 bonus = 5 actions
-        specialTag = '⭐Distinguished ';
-      }
+      bonusActions = 1;
+      if (Math.random() < 0.05 + hrBonus) { bonusActions = 3; specialTag = '⭐Distinguished '; }
     }
     if (c.name === 'Soldier' && Math.random() < 0.015 + hrBonus) {
-      crewHp = 40; crewMaxHp = 40; crewCmb = Math.max(10, crewCmb); // Battle-hardened: 40hp, ≥10 atk, 3 actions
-      bonusActions = 1; // 2 base + 1 bonus = 3 actions
-      specialTag = '💀Battle-Hardened ';
+      crewHp = 40; crewMaxHp = 40; crewCmb = Math.max(10, crewCmb);
+      bonusActions = 1; specialTag = '💀Battle-Hardened ';
     }
     const eng = c.stats.eng + rng(-1, 2);
     const cmb = crewCmb + rng(-1, 2);
@@ -163,10 +172,9 @@
       eng, cmb, plt, sci,
       hp: crewHp, maxHp: crewMaxHp, xp: 0,
       deployPos: null, actions: 2, alive: true,
-      powerup: null,
+      powerup: null, illegalBuffActions: 0,
       engineerAbility, abilityUsed: false, bonusActions,
     };
-    // Compute payment rates based on generated stats
     const rates = calcCrewRates(crewObj);
     crewObj.idleRate = rates.idleRate;
     crewObj.contractMultiplier = rates.contractMultiplier;
@@ -184,43 +192,35 @@
       if (batchNum >= 3) c.reward = Math.floor(c.reward * 1.1);
       if (batchNum >= 4) c.reward = Math.floor(c.reward * 1.1);
     });
-    // Update currently visible contracts too
     const start = G.contractBatchStart;
     const size = G.batchIndex < G.BATCH_SIZES.length ? G.BATCH_SIZES[G.batchIndex] : 0;
     G.contracts = G.contractQueue.slice(start, start + size);
   }
   function getBatchForIndex(idx) {
     let sum = 0;
-    for (let b = 0; b < G.BATCH_SIZES.length; b++) {
-      sum += G.BATCH_SIZES[b];
-      if (idx < sum) return b;
-    }
+    for (let b = 0; b < G.BATCH_SIZES.length; b++) { sum += G.BATCH_SIZES[b]; if (idx < sum) return b; }
     return G.BATCH_SIZES.length - 1;
   }
   function generateAllContracts() {
     G.contractQueue = [];
     G.contractBatchStart = 0;
     G.batchIndex = 0;
-    const totalContracts = G.BATCH_SIZES.reduce((a, b) => a + b, 0); // 17
+    const totalContracts = G.BATCH_SIZES.reduce((a, b) => a + b, 0);
     for (let i = 0; i < totalContracts; i++) {
       const type = pick(CONTRACT_TYPES);
       const batchNum = getBatchForIndex(i);
-      // Difficulty scales hard per batch
       const diff = Math.min(5, 1 + batchNum + rng(0, batchNum));
       const risk = type.name === 'Combat Skirmish' ? 1.4 : type.name === 'Salvage Operation' ? 1.2 : 1.0;
       const baseReward = 200 + rng(0, 120);
       const haggleBonus = 1 + (G.skills.haggle - 1) * 0.05;
       let reward = Math.floor(baseReward * risk * haggleBonus);
-      // Slight bump for later batches
       if (batchNum >= 3) reward = Math.floor(reward * 1.1);
       if (batchNum >= 4) reward = Math.floor(reward * 1.1);
       G.contractQueue.push({
-        id: 1000 + i,
-        number: i + 1,
+        id: 1000 + i, number: i + 1,
         type: type.name, icon: type.icon, desc: type.desc,
         difficulty: diff, reward: reward, risk: risk,
-        illegalChance: type.illegalChance,
-        completed: false,
+        illegalChance: type.illegalChance, completed: false,
       });
     }
     G.contracts = G.contractQueue.slice(0, G.BATCH_SIZES[0]);
@@ -229,7 +229,6 @@
   function advanceContractBatch() {
     G.batchIndex++;
     if (G.batchIndex >= G.BATCH_SIZES.length) return;
-    // Sum previous batch sizes for the new start
     let start = 0;
     for (let b = 0; b < G.batchIndex; b++) start += G.BATCH_SIZES[b];
     G.contractBatchStart = start;
@@ -261,26 +260,32 @@
     }
 
     const enemyTypes = [
-      { name: 'Pirate', icon: '☠', color: '#ef4444', hp: 8, atk: 3, xpVal: 10 },
-      { name: 'Drone', icon: '🤖', color: '#f97316', hp: 5, atk: 2, xpVal: 6 },
-      { name: 'Mutant', icon: '👾', color: '#a855f7', hp: 12, atk: 5, xpVal: 18 },
-      { name: 'Raider', icon: '💀', color: '#dc2626', hp: 10, atk: 4, xpVal: 14 },
+      { name: 'Pirate', icon: '\u2620', color: '#ef4444', hp: 8, atk: 3, xpVal: 10, behavior: 'chase' },
+      { name: 'Drone', icon: '\uD83E\uDD16', color: '#f97316', hp: 5, atk: 2, xpVal: 6, behavior: 'steal' },
+      { name: 'Mutant', icon: '\uD83D\uDC7E', color: '#a855f7', hp: 12, atk: 5, xpVal: 18, behavior: 'steal' },
+      { name: 'Raider', icon: '\uD83D\uDC80', color: '#dc2626', hp: 10, atk: 4, xpVal: 14, behavior: 'chase' },
+      { name: 'Sentry Bot', icon: '\uD83D\uDEE1', color: '#6b7280', hp: 14, atk: 6, xpVal: 20, behavior: 'guard' },
     ];
     const enemyCount = 2 + contract.difficulty;
     const enemies = [];
+    const batchIdx = G.batchIndex;
     for (let i = 0; i < enemyCount; i++) {
       let x, y;
       do { x = rng(4, GRID_W - 2); y = rng(1, GRID_H - 2); } while (grid[y][x] !== TILE.EMPTY);
       const et = pick(enemyTypes);
-      enemies.push({ ...et, id: i, x, y, hp: et.hp + contract.difficulty, maxHp: et.hp + contract.difficulty, alive: true });
+      let movesPerTurn = 1;
+      if (batchIdx >= 3 && Math.random() < 0.30) {
+        movesPerTurn = 3;
+      } else if (batchIdx >= 1 && Math.random() < 0.35) {
+        movesPerTurn = 2;
+      }
+      enemies.push({ ...et, id: i, x, y, hp: et.hp + contract.difficulty, maxHp: et.hp + contract.difficulty, alive: true, objStealTurns: 0, holdingObj: false, _stolenObj: null, movesPerTurn });
     }
 
-    // Clear spawn columns
     for (let y = 0; y < GRID_H; y++)
       for (let x = 0; x < 2; x++)
         if (grid[y][x] !== TILE.EMPTY) grid[y][x] = TILE.EMPTY;
 
-    // Place objectives LAST on remaining empty squares (1 or 2 stars)
     const objCount = contract.difficulty <= 2 ? 1 : 2;
     const objectives = [];
     for (let i = 0; i < objCount; i++) {
@@ -290,8 +295,7 @@
       objectives.push({ x, y, collected: false });
     }
 
-    const maxTurns = 8 + contract.difficulty * 3;
-
+    const maxTurns = 8;
     return { grid, objectives, enemies, contract, turn: 0, maxTurns,
       phase: 'player', selectedCrew: null, crewDeployed: [], deployables: [], log: [], won: false, lost: false };
   }
@@ -306,7 +310,9 @@
     available.forEach((c, i) => {
       const bonus = c.bonusActions || 0;
       const fromClass = 2 + bonus;
-      const baseActions = (c.powerup && c.powerup.type === 'speed_up') ? Math.max(3, fromClass) : fromClass;
+      const illegalMoveBonus = (c.id === G.captainId && G.illegalCargoPoints.move > 0) ? G.illegalCargoPoints.move : 0;
+      let baseActions = (c.powerup && c.powerup.type === 'speed_up') ? Math.max(3, fromClass) : fromClass;
+      baseActions += illegalMoveBonus;
       const mbr = { ...c, deployPos: { x: spawnX[i], y: spawnY[i] }, actions: baseActions, alive: true, engineerAbility: c.engineerAbility, abilityUsed: c.abilityUsed };
       if (c.powerup && c.powerup.type === 'hp_up') { mbr.maxHp += 5; mbr.hp = Math.min(mbr.hp + 5, mbr.maxHp); }
       if (c.powerup && c.powerup.type === 'atk_up') { mbr.cmb += 2; }
@@ -370,6 +376,7 @@
     ];
     if (!localStorage.getItem('cosmos_save')) allButtons[1].disabled = true;
     allButtons.forEach(b => b.draw(ctx));
+    drawText('v3.3 — Illegal Cargo Risk · Captain Buffs', W / 2, 620, '#334155', 11, 'center');
   }
 
   // ==================== SCENE: HUB ====================
@@ -464,7 +471,6 @@
     alive.forEach((c, i) => {
       const y = 150 + i * 68;
       drawPanel(50, y, 920, 58, null);
-      // Checkbox for deployment selection
       const isSelected = G.crewDeployedIds.includes(c.id);
       const checked = isSelected ? '✅' : '☐';
       const checkBtn = new Button(50, y + 14, 28, 28, checked, 'toggle_deploy_' + c.id, isSelected ? '#fbbf24' : '#1e293b', isSelected ? '#f59e0b' : '#334155', isSelected ? '#000' : '#64748b');
@@ -473,7 +479,6 @@
       ctx.fillStyle = c.color; ctx.beginPath(); ctx.arc(105, y + 29, 18, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = '#fff'; ctx.font = '20px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.fillText(c.icon, 105, y + 29);
-      // Captain indicator
       const isCaptain = G.captainId === c.id;
       const captainLabel = isCaptain ? '👑 CAPTAIN — ' : '';
       drawText(captainLabel, 135, y + 6, '#fbbf24', 14);
@@ -481,9 +486,9 @@
       const hpPct = c.hp / c.maxHp;
       const hpColor = hpPct > 0.5 ? '#10b981' : hpPct > 0.25 ? '#fbbf24' : '#ef4444';
       const abiStr = c.engineerAbility ? ` | ${c.engineerAbility === 'sentry' ? '🔫 Sentry' : '💣 Trap'}` + (c.abilityUsed ? ' (used)' : '') : '';
-      drawText(`${c.class}  |  HP:${c.hp}/${c.maxHp}${abiStr}`, 135, y + 26, hpColor, 11);
+      const illegalBuffStr = isCaptain && G.illegalCargo > 0 ? ` ⚡+${G.illegalCargoPoints.hp}HP +${G.illegalCargoPoints.atk}ATK +${G.illegalCargoPoints.move}MOVE` : '';
+      drawText(`${c.class}${illegalBuffStr}  |  HP:${c.hp}/${c.maxHp}${abiStr}`, 135, y + 26, hpColor, 11);
       drawText(`XP:${c.xp}  |  ATK:${Math.max(1, Math.floor(c.cmb * hpPct))}`, 360, y + 26, '#64748b', 11);
-      // Payment rates
       const idleRate = c.idleRate || calcCrewRates(c).idleRate;
       const contractRate = Math.round(idleRate * (c.contractMultiplier || calcCrewRates(c).contractMultiplier));
       if (isCaptain) {
@@ -493,7 +498,6 @@
       }
       const pw = c.powerup ? ` ⚡${c.powerup.type.replace('_', ' ').toUpperCase()}` : '';
       drawText(`🔧${c.eng} ⚔${c.cmb} ✈${c.plt} 🔬${c.sci}${pw}`, 135, y + 42, c.powerup ? '#fbbf24' : '#94a3b8', 11);
-      // Heal button
       const missingHp = c.maxHp - c.hp;
       const healCost = missingHp * 5;
       if (missingHp > 0) {
@@ -501,12 +505,10 @@
         if (G.credits < healCost) { healBtn.disabled = true; healBtn.tooltip = `Need ₡${healCost}`; }
         allButtons.push(healBtn); healBtn.draw(ctx);
       }
-      // Fire button
       const fireBtn = new Button(830, y + 14, 75, 28, '🔥 Fire', 'fire_' + c.id, '#ef4444', '#dc2626');
       if (isCaptain) { fireBtn.disabled = true; fireBtn.tooltip = 'Cannot fire the captain!'; }
       else if (totalCrew <= 1) { fireBtn.disabled = true; fireBtn.tooltip = 'Must have at least 1 crew'; }
       allButtons.push(fireBtn); fireBtn.draw(ctx);
-      // Resupply engineer ability button
       if (c.engineerAbility && c.abilityUsed) {
         const resupBtn = new Button(695, y + 14, 200, 28, `🔧 Resupply ${c.engineerAbility} (₡80)`, 'resupply_' + c.id, '#f59e0b', '#fbbf24', '#000');
         if (G.credits < 80) { resupBtn.disabled = true; resupBtn.tooltip = 'Need ₡80'; }
@@ -535,13 +537,19 @@
     drawText(`Upgrades: ${G.ship.upgrades.length > 0 ? G.ship.upgrades.join(', ') : 'None'}`, 60, 285, '#94a3b8', 14);
 
     drawText(`Illegal Cargo: ${G.illegalCargo} 📦`, 60, 330, G.illegalCargo > 0 ? '#ef4444' : '#475569', 15);
+    if (G.illegalCargo >= 8) drawText('⚠ OVER 8 — YOU WILL BE ARRESTED!', 60, 350, '#ef4444', 12);
     if (G.illegalCargo > 0) {
-      const sellBtn = new Button(60, 360, 180, 32, '💰 Sell (₡100 each)', 'sell_cargo', '#f59e0b', '#fbbf24', '#000');
+      const sellBtn = new Button(60, 375, 180, 32, '💰 Sell (₡100 each)', 'sell_cargo', '#f59e0b', '#fbbf24', '#000');
       allButtons.push(sellBtn); sellBtn.draw(ctx);
-      const distBtn = new Button(255, 360, 200, 32, '⚡ Give to Crew (powerup)', 'distribute_cargo', '#8b5cf6', '#a78bfa');
+      const distBtn = new Button(255, 375, 200, 32, '⚡ Give to Crew (powerup)', 'distribute_cargo', '#8b5cf6', '#a78bfa');
       allButtons.push(distBtn); distBtn.draw(ctx);
-      drawText('Sell for credits OR give to random crew for a permanent powerup:', 60, 410, '#64748b', 11);
-      drawText('HP UP: +5 maxHP  |  ATK UP: +2 combat  |  SPEED UP: 3 actions/turn', 60, 430, '#64748b', 11);
+      drawText('Sell for credits OR give to random crew for a permanent powerup:', 60, 420, '#64748b', 11);
+      drawText('HP UP: +5 maxHP  |  ATK UP: +2 combat  |  SPEED UP: 3 actions/turn', 60, 440, '#64748b', 11);
+      // Show captain buffs
+      const pts = G.illegalCargoPoints;
+      if (pts.hp > 0 || pts.atk > 0 || pts.move > 0) {
+        drawText(`👑 CAPTAIN BUFFS: +${pts.hp * 5}HP  +${pts.atk * 2}ATK  +${pts.move}Actions/turn`, 60, 465, '#fbbf24', 12);
+      }
     }
   }
 
@@ -563,7 +571,6 @@
       drawPanel(50, y, 920, 70, null);
       drawText(`${s.icon}  ${s.name}`, 70, y + 10, '#e2e8f0', 15);
       drawText(`${s.desc}`, 70, y + 32, '#64748b', 11);
-      // Level bar
       const barX = 440, barY = y + 12, barW = 200, barH = 18;
       ctx.fillStyle = '#1e293b'; ctx.fillRect(barX, barY, barW, barH);
       const levelPct = G.skills[s.id] / 10;
@@ -589,18 +596,24 @@
     drawText('"Halt! Sector patrol. We need to inspect your vessel."', W / 2, 210, '#cbd5e1', 15, 'center');
 
     if (G.illegalCargo > 0) {
+      if (G.illegalCargo >= 8) {
+        G.scene = 'gameover'; G.gameOverReason = 'arrested'; return;
+      }
       drawText(`You have ${G.illegalCargo} illegal cargo aboard!`, W / 2, 260, '#ef4444', 14, 'center');
+      if (G.illegalCargo >= 6) drawText('⚠ SEVERE: Arrest imminent!', W / 2, 285, '#ef4444', 12, 'center');
       const bribeCost = G.illegalCargo * 40 + 30;
-      drawText(`Bribe cost: ₡${bribeCost}`, W / 2, 290, '#fbbf24', 13, 'center');
+      const fine = Math.floor(G.illegalCargo * 50);
+      drawText(`Bribe: ₡${bribeCost}  |  Fine: ₡${fine}`, W / 2, 310, '#fbbf24', 12, 'center');
+      drawText('55% chance bribe fails — officer demands 2.5× fine!', W / 2, 330, '#ef4444', 11, 'center');
 
-      const bribeBtn = new Button(W / 2 - 140, 330, 280, 40, `💸 Bribe Officer (₡${bribeCost})`, 'bribe', '#f59e0b', '#fbbf24', '#000');
+      const bribeBtn = new Button(W / 2 - 140, 355, 280, 40, `💸 Bribe Officer (₡${bribeCost})`, 'bribe', '#f59e0b', '#fbbf24', '#000');
       if (G.credits < bribeCost) { bribeBtn.disabled = true; bribeBtn.tooltip = 'Not enough credits'; }
       allButtons.push(bribeBtn); bribeBtn.draw(ctx);
 
-      const surrenderBtn = new Button(W / 2 - 140, 385, 280, 40, '😰 Surrender Cargo', 'surrender_cargo', '#ef4444', '#dc2626');
+      const surrenderBtn = new Button(W / 2 - 140, 410, 280, 40, `😰 Surrender & Pay Fine (₡${fine})`, 'surrender_cargo', '#ef4444', '#dc2626');
+      if (G.credits < fine) { surrenderBtn.tooltip = 'Cannot afford — will be arrested!'; }
       allButtons.push(surrenderBtn); surrenderBtn.draw(ctx);
-      const fine = Math.floor(G.illegalCargo * 20);
-      drawText(`Surrendering costs a ₡${fine} fine (less than bribing).`, W / 2, 440, '#64748b', 11, 'center');
+      drawText(`Can't pay the fine? You lose the game!`, W / 2, 465, '#64748b', 11, 'center');
     } else {
       drawText('Your ship is clean. You have nothing to hide.', W / 2, 260, '#10b981', 14, 'center');
       const passBtn = new Button(W / 2 - 80, 330, 160, 40, '✅ Let them inspect', 'pass_patrol', '#2563eb', '#3b82f6');
@@ -614,7 +627,6 @@
     if (!M) return;
     drawStars();
 
-    // Grid
     for (let y = 0; y < GRID_H; y++) {
       for (let x = 0; x < GRID_W; x++) {
         const sx = GRID_OX + x * CELL, sy = GRID_OY + y * CELL;
@@ -645,7 +657,6 @@
       }
     }
 
-    // Enemies
     M.enemies.forEach(e => {
       if (!e.alive) return;
       const sx = GRID_OX + e.x * CELL + CELL / 2, sy = GRID_OY + e.y * CELL + CELL / 2;
@@ -656,7 +667,6 @@
       ctx.fillStyle = '#ef4444'; ctx.fillRect(sx - hpW / 2, sy - 26, hpW * (e.hp / e.maxHp), 4);
     });
 
-    // Deployed crew
     M.crewDeployed.forEach(c => {
       if (!c.alive || !c.deployPos) return;
       const sx = GRID_OX + c.deployPos.x * CELL + CELL / 2, sy = GRID_OY + c.deployPos.y * CELL + CELL / 2;
@@ -673,10 +683,8 @@
       ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(sx, sy, 16, 0, Math.PI * 2); ctx.stroke();
       ctx.globalAlpha = 1.0;
       drawText(c.icon, sx, sy - 6, depleted ? '#888' : '#fff', 14, 'center');
-      // HP bar
       const hpW = 28; ctx.fillStyle = '#000'; ctx.fillRect(sx - hpW / 2, sy - 24, hpW, 4);
       ctx.fillStyle = '#10b981'; ctx.fillRect(sx - hpW / 2, sy - 24, hpW * (c.hp / c.maxHp), 4);
-      // Action dots
       const bonus = c.bonusActions || 0;
       const fromClass = 2 + bonus;
       const maxAct = (c.powerup && c.powerup.type === 'speed_up') ? Math.max(3, fromClass) : fromClass;
@@ -684,17 +692,10 @@
         ctx.fillStyle = a < c.actions ? '#fbbf24' : '#374151';
         ctx.beginPath(); ctx.arc(sx - (maxAct - 1) * 7 + a * 14, sy + 20, 4, 0, Math.PI * 2); ctx.fill();
       }
-      // Powerup indicator
-      if (c.powerup) {
-        drawText('⚡', sx + 14, sy - 20, '#fbbf24', 10, 'center');
-      }
-      // Engineer ability indicator
-      if (c.engineerAbility) {
-        drawText(c.engineerAbility === 'sentry' ? '🔫' : '💣', sx - 14, sy - 20, '#94a3b8', 10, 'center');
-      }
+      if (c.powerup) { drawText('⚡', sx + 14, sy - 20, '#fbbf24', 10, 'center'); }
+      if (c.engineerAbility) { drawText(c.engineerAbility === 'sentry' ? '🔫' : '💣', sx - 14, sy - 20, '#94a3b8', 10, 'center'); }
     });
 
-    // HUD
     drawText(`TURN ${M.turn}/${M.maxTurns}  |  ${M.phase.toUpperCase()} PHASE`, 20, 10, '#fbbf24', 13);
     const turnsLeft = M.maxTurns - M.turn;
     const turnColor = turnsLeft <= 2 ? '#ef4444' : turnsLeft <= 5 ? '#fbbf24' : '#10b981';
@@ -702,7 +703,6 @@
     drawText(`★ ${M.objectives.filter(o => o.collected).length}/${M.objectives.length}`, 550, 10, '#fbbf24', 13);
     drawText(`ENEMIES: ${M.enemies.filter(e => e.alive).length}`, 680, 10, '#ef4444', 13);
 
-    // Selected crew info
     if (M.selectedCrew) {
       const sc = M.selectedCrew;
       drawPanel(10, H - 55, 400, 48, null);
@@ -717,7 +717,6 @@
       drawText('ALL CREW DONE — Press END TURN →', W / 2, H - 15, '#fbbf24', 15, 'center');
     }
 
-    // Buttons
     if (M.phase === 'player') {
       const endBtn = new Button(W - 180, 10, 130, 34, '⏩ END TURN', 'end_turn', '#fbbf24', '#f59e0b', '#000');
       allButtons.push(endBtn); endBtn.draw(ctx);
@@ -725,7 +724,6 @@
     const retreatBtn = new Button(W - 180, 50, 130, 30, '🏃 RETREAT', 'retreat', '#ef4444', '#dc2626');
     allButtons.push(retreatBtn); retreatBtn.draw(ctx);
 
-    // Win/lose overlay
     if (M.won || M.lost) {
       ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(0, 0, W, H);
       const msg = M.won ? '⭐ MISSION COMPLETE!' : 'MISSION FAILED';
@@ -749,6 +747,7 @@
     if (G.gameOverReason === 'captain_dead') reasonText = 'The captain has fallen...';
     else if (G.gameOverReason === 'broke') reasonText = 'You ran out of credits to pay your crew!';
     else if (G.gameOverReason === 'hull') reasonText = 'Your ship\'s hull has been destroyed...';
+    else if (G.gameOverReason === 'arrested') reasonText = 'You were arrested by the patrol! Too much illegal cargo...';
     drawText(reasonText, W / 2, 310, '#94a3b8', 16, 'center');
     drawText(`Final credits: ₡${G.credits}`, W / 2, 340, '#fbbf24', 14, 'center');
     allButtons.push(new Button(W / 2 - 100, 400, 200, 44, '🔄 NEW GAME', 'newgame', '#16a34a', '#22c55e'));
@@ -762,11 +761,10 @@
       G.crew.push(createCrewMember(CREW_CLASSES[0]));
       G.crew.push(createCrewMember(CREW_CLASSES[1]));
       G.crew.push(createCrewMember(CREW_CLASSES[2]));
-      // Randomly assign one of the initial 3 crew as captain
       G.captainId = pick(G.crew.map(c => c.id));
       generateAllContracts();
       G.scene = 'hub';
-      G.patrolActive = false; // No patrol on new game
+      G.patrolActive = false;
       sfxAccept();
     } else if (action === 'continue') {
       loadGame();
@@ -782,20 +780,12 @@
         G.skillPoints--;
         G.skills[skillId]++;
         sfxAccept();
-        // Apply immediate effects
         if (skillId === 'haggle') recalcContractRewards();
         if (skillId === 'med') {
           const medBonus = 2;
-          G.crew.forEach(c => {
-            if (c.alive) {
-              c.maxHp += medBonus;
-              c.hp += medBonus;
-            }
-          });
+          G.crew.forEach(c => { if (c.alive) { c.maxHp += medBonus; c.hp += medBonus; } });
         }
-        if (skillId === 'train') {
-          G.crew.forEach(c => { if (c.alive) c.cmb += 1; });
-        }
+        if (skillId === 'train') { G.crew.forEach(c => { if (c.alive) c.cmb += 1; }); }
         G.message = `Skill upgraded! ${skillId.toUpperCase()} is now level ${G.skills[skillId]}.`;
         G.messageTimer = 60;
       }
@@ -814,16 +804,15 @@
         const missingHp = c.maxHp - c.hp;
         const healCost = missingHp * 5;
         if (G.credits >= healCost && missingHp > 0) {
-          G.credits -= healCost;
-          c.hp = c.maxHp;
+          G.credits -= healCost; c.hp = c.maxHp;
           sfxAccept(); G.message = `${c.firstName} healed to full!`; G.messageTimer = 60;
         }
       }
     } else if (action.startsWith('fire_')) {
       const cid = parseFloat(action.split('_')[1]);
-      if (G.captainId === cid) return; // Cannot fire the captain
+      if (G.captainId === cid) return;
       const totalAlive = G.crew.filter(c => c.alive).length;
-      if (totalAlive <= 1) return; // Must keep at least 1 crew
+      if (totalAlive <= 1) return;
       const c = G.crew.find(cr => cr.id === cid);
       if (c) {
         c.alive = false;
@@ -835,21 +824,16 @@
       const cid = parseFloat(action.split('_')[1]);
       const c = G.crew.find(cr => cr.id === cid);
       if (c && c.engineerAbility && c.abilityUsed && G.credits >= 80) {
-        G.credits -= 80;
-        c.abilityUsed = false;
-        // Engineer keeps the SAME ability they were hired with
+        G.credits -= 80; c.abilityUsed = false;
         sfxAccept(); G.message = `${c.firstName}'s ${c.engineerAbility} resupplied!`; G.messageTimer = 60;
       }
     } else if (action.startsWith('toggle_deploy_')) {
       const cid = parseFloat(action.split('toggle_deploy_')[1]);
       const idx = G.crewDeployedIds.indexOf(cid);
-      if (idx >= 0) {
-        G.crewDeployedIds.splice(idx, 1);
-      } else {
+      if (idx >= 0) { G.crewDeployedIds.splice(idx, 1); }
+      else {
         const selectedCount = G.crewDeployedIds.filter(id => G.crew.some(cr => cr.alive && cr.id === id)).length;
-        if (selectedCount < 5) {
-          G.crewDeployedIds.push(cid);
-        }
+        if (selectedCount < 5) { G.crewDeployedIds.push(cid); }
       }
       sfxClick();
     } else if (action === 'repair') {
@@ -862,8 +846,8 @@
     } else if (action === 'sell_cargo') {
       if (G.illegalCargo > 0) {
         const earnings = G.illegalCargo * 100;
-        G.credits += earnings;
-        G.illegalCargo = 0;
+        G.credits += earnings; G.illegalCargo = 0;
+        applyIllegalCargoBuffs();
         sfxAccept(); G.message = `Sold illegal cargo for ₡${earnings}!`; G.messageTimer = 60;
       }
     } else if (action === 'distribute_cargo') {
@@ -880,6 +864,7 @@
           given.push(`${target.firstName}: ${pwNames[pwType]}`);
         }
         G.illegalCargo = 0;
+        applyIllegalCargoBuffs();
         sfxAccept();
         G.message = `Distributed powerups! ${given.join(' | ')}`; G.messageTimer = 120;
       }
@@ -887,15 +872,31 @@
       const bribeCost = G.illegalCargo * 40 + 30;
       if (G.credits >= bribeCost) {
         G.credits -= bribeCost;
-        G.patrolActive = false;
-        sfxClick(); G.message = 'Officer bribed. They look the other way...'; G.messageTimer = 60;
+        if (Math.random() < 0.55) {
+          const penalty = Math.floor(G.illegalCargo * 50);
+          if (G.credits >= penalty) {
+            G.credits -= penalty; G.patrolActive = false;
+            sfxDamage(); G.message = `Bribe failed! Officer demands ₡${penalty} penalty!`; G.messageTimer = 120;
+          } else {
+            G.credits = 0; G.patrolActive = false; G.illegalCargo = 0;
+            sfxDamage(); G.message = `Bribe failed! Can't pay ₡${penalty} — arrested!`; G.messageTimer = 120;
+            G.scene = 'gameover'; G.gameOverReason = 'arrested';
+          }
+        } else {
+          G.patrolActive = false;
+          sfxClick(); G.message = 'Officer bribed. They look the other way...'; G.messageTimer = 60;
+        }
       }
     } else if (action === 'surrender_cargo') {
-      const fine = Math.floor(G.illegalCargo * 20);
-      G.credits = Math.max(0, G.credits - fine);
-      G.illegalCargo = 0;
-      G.patrolActive = false;
-      sfxDamage(); G.message = `Illegal cargo confiscated. Paid ₡${fine} fine.`; G.messageTimer = 60;
+      const fine = Math.floor(G.illegalCargo * 50);
+      if (G.credits < fine) {
+        G.credits = 0; G.illegalCargo = 0; G.patrolActive = false;
+        sfxDamage(); G.message = `Can't pay ₡${fine} fine — arrested!`; G.messageTimer = 120;
+        G.scene = 'gameover'; G.gameOverReason = 'arrested';
+      } else {
+        G.credits -= fine; G.illegalCargo = 0; G.patrolActive = false;
+        sfxDamage(); G.message = `Illegal cargo confiscated. Paid ₡${fine} fine.`; G.messageTimer = 60;
+      }
     } else if (action === 'pass_patrol') {
       G.patrolActive = false;
       sfxClick(); G.message = 'Clean inspection. You are free to go.'; G.messageTimer = 60;
@@ -906,6 +907,7 @@
         G.contracts.splice(idx, 1);
         G.mission = createMission(G.activeContract);
         deployCrewToMission(G.mission);
+        G.mission.maxTurns += G.mission.crewDeployed.length * 2;
         G.scene = 'mission';
         sfxAccept(); G.message = ''; G.messageTimer = 0;
       }
@@ -913,17 +915,16 @@
       if (G.mission && G.mission.phase === 'player') {
         G.mission.phase = 'enemy'; sfxClick();
         processEnemyTurn();
-        // Process sentries
         processSentryAttacks();
         G.mission.turn++;
-        // Reset player actions
         G.mission.crewDeployed.forEach(c => {
           const bonus = c.bonusActions || 0;
           const fromClass = 2 + bonus;
-          const maxA = (c.powerup && c.powerup.type === 'speed_up') ? Math.max(3, fromClass) : fromClass;
+          const illegalMoveBonus = (c.id === G.captainId && G.illegalCargoPoints.move > 0) ? G.illegalCargoPoints.move : 0;
+          let maxA = (c.powerup && c.powerup.type === 'speed_up') ? Math.max(3, fromClass) : fromClass;
+          maxA += illegalMoveBonus;
           c.actions = maxA;
         });
-        // Hazard damage: 75% chance of 3 damage
         G.mission.crewDeployed.forEach(c => {
           if (c.alive && c.deployPos && G.mission.grid[c.deployPos.y][c.deployPos.x] === TILE.HAZARD) {
             if (Math.random() < 0.75) {
@@ -933,7 +934,6 @@
             }
           }
         });
-        // Turn limit check
         if (G.mission.turn >= G.mission.maxTurns && !G.mission.won) {
           G.mission.lost = true;
           G.mission.log.push('Turn limit reached! Contract failed.');
@@ -950,11 +950,10 @@
     } else if (action === 'return_hub') {
       const deployedIds = G.mission.crewDeployed.map(d => d.id);
 
-      // ===== CREW PAYROLL: Charge all alive crew after every contract =====
       let totalPayroll = 0;
       const payrollLines = [];
       G.crew.forEach(c => {
-        if (!c.alive || c.id === G.captainId) return; // Skip dead crew and captain
+        if (!c.alive || c.id === G.captainId) return;
         const rates = calcCrewRates(c);
         const wasDeployed = deployedIds.includes(c.id);
         const charge = wasDeployed ? Math.round(rates.idleRate * rates.contractMultiplier) : rates.idleRate;
@@ -966,42 +965,40 @@
       if (G.mission.won) {
         G.credits += G.mission.contract.reward;
         G.skillPoints += 2;
-        // Heal/update crew
         G.crew.forEach(c => {
           const deployed = G.mission.crewDeployed.find(d => d.id === c.id);
           if (deployed) {
             c.hp = deployed.hp; c.alive = deployed.alive; c.xp += deployed.xp || 0;
-            // Sync ability-used flag only; never change the ability type
             c.abilityUsed = deployed.abilityUsed || c.abilityUsed;
           }
           if (!c.alive) G.crew = G.crew.filter(cr => cr.id !== c.id);
         });
-        // Chance of finding illegal cargo
         if (Math.random() < G.mission.contract.illegalChance) {
           const amount = rng(1, 3);
           G.illegalCargo += amount;
+          applyIllegalCargoBuffs();
           G.mission.log.push(`Found ${amount} illegal cargo!`);
+          // Check 8+ cargo arrest immediately
+          if (G.illegalCargo >= 8) {
+            G.scene = 'gameover'; G.gameOverReason = 'arrested';
+            sfxDamage(); G.message = 'Over 8 illegal cargo — authorities arrest you!'; G.messageTimer = 180;
+            G.mission = null; G.activeContract = null; return;
+          }
         }
         sfxWin();
       } else {
-        // Sync engineer ability state on mission loss
         G.crew.forEach(c => {
           const deployed = G.mission.crewDeployed.find(d => d.id === c.id);
           if (deployed) {
-            c.hp = Math.max(1, deployed.hp);
-            c.alive = deployed.alive;
+            c.hp = Math.max(1, deployed.hp); c.alive = deployed.alive;
             c.abilityUsed = deployed.abilityUsed;
           }
         });
         G.crew = G.crew.filter(c => c.alive);
         sfxDamage();
-        // Forfeit: put contract back in the board to redo
-        if (G.mission.forfeit) {
-          G.contracts.push(G.mission.contract);
-        }
+        if (G.mission.forfeit) { G.contracts.push(G.mission.contract); }
       }
 
-      // Deduct crew payroll
       G.credits -= totalPayroll;
       const payrollMsg = totalPayroll > 0 ? ` | Crew payroll: ₡${totalPayroll} (${payrollLines.join(', ')})` : '';
 
@@ -1016,40 +1013,36 @@
         G.messageTimer = 180;
       }
 
-      // Ship takes hull damage after EVERY contract (win, lose, or forfeit)
-      const hullDamage = 8 + G.mission.contract.difficulty * rng(3, 5);
+      const hullDamage = 8 + G.mission.contract.difficulty * rng(3, 5) + G.mission.crewDeployed.length * 3;
       G.ship.hull = Math.max(0, G.ship.hull - hullDamage);
       G.mission.log.push(`Ship took ${hullDamage} hull damage!`);
       G.mission = null;
       G.activeContract = null;
       G.scene = 'hub';
-      // Auto-advance batch if empty and more batches remain
       if (G.contracts.length === 0 && G.batchIndex < G.BATCH_SIZES.length - 1) {
         advanceContractBatch();
       }
-      // Check game over conditions
-      // 1. Captain dead → game over
       if (G.captainId && !G.crew.some(c => c.alive && c.id === G.captainId)) {
-        G.scene = 'gameover';
-        G.gameOverReason = 'captain_dead';
+        G.scene = 'gameover'; G.gameOverReason = 'captain_dead';
       }
-      // 2. Ship hull <= 0 → game over
       else if (G.ship.hull <= 0) {
-        G.scene = 'gameover';
-        G.gameOverReason = 'hull';
+        G.scene = 'gameover'; G.gameOverReason = 'hull';
       }
-      // 3. Can't pay crew → game over (credits went negative from payroll)
       else if (G.credits < 0) {
-        G.scene = 'gameover';
-        G.gameOverReason = 'broke';
+        G.scene = 'gameover'; G.gameOverReason = 'broke';
       }
-      // Maybe trigger patrol
       maybeTriggerPatrol();
     }
   }
 
   function maybeTriggerPatrol() {
-    if (G.scene !== 'hub') return; // Only trigger in hub
+    if (G.scene !== 'hub') return;
+    // 8+ auto-arrest — skip patrol, just game over
+    if (G.illegalCargo >= 8) {
+      G.scene = 'gameover'; G.gameOverReason = 'arrested';
+      sfxDamage(); G.message = 'Patrol spots your massive illegal cargo! Arrested!'; G.messageTimer = 180;
+      return;
+    }
     const reduction = (G.skills.street - 1) * 0.03;
     const baseChance = (G.illegalCargo > 0 ? 0.6 : 0.3) * (1 - reduction);
     if (Math.random() < baseChance) {
@@ -1058,43 +1051,300 @@
     }
   }
 
+  // ==================== PATHFINDING (A*) ====================
+  function aStarPath(grid, sx, sy, gx, gy, enemies, crewArr) {
+    // Build block set: walls, sentries, traps are impassable
+    const blocked = new Set();
+    for (let y = 0; y < GRID_H; y++) {
+      for (let x = 0; x < GRID_W; x++) {
+        if (grid[y][x] === TILE.WALL || grid[y][x] === TILE.SENTRY || grid[y][x] === TILE.TRAP) {
+          blocked.add(y * GRID_W + x);
+        }
+      }
+    }
+    // Other enemies block (except self at current pos)
+    enemies.forEach(e => {
+      if (!e.alive) return;
+      blocked.add(e.y * GRID_W + e.x);
+    });
+    // Crew block
+    if (crewArr) {
+      crewArr.forEach(c => {
+        if (!c.alive || !c.deployPos) return;
+        blocked.add(c.deployPos.y * GRID_W + c.deployPos.x);
+      });
+    }
+    // Allow source and goal
+    blocked.delete(sy * GRID_W + sx);
+    blocked.delete(gy * GRID_W + gx);
+
+    if (sx === gx && sy === gy) return []; // already there
+
+    const key = (x, y) => y * GRID_W + x;
+    const openSet = new Map();
+    const cameFrom = new Map();
+    const gScore = new Map();
+    const h = Math.abs(sx - gx) + Math.abs(sy - gy);
+    openSet.set(key(sx, sy), { x: sx, y: sy, f: h });
+    gScore.set(key(sx, sy), 0);
+
+    const dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]];
+
+    while (openSet.size > 0) {
+      // Find node with lowest f-score
+      let current = null, bestF = Infinity;
+      for (const [k, v] of openSet) {
+        if (v.f < bestF) { bestF = v.f; current = v; }
+      }
+      if (!current) break;
+      const ck = key(current.x, current.y);
+      if (current.x === gx && current.y === gy) {
+        // Reconstruct path (reverse) — exclude starting node
+        const path = [];
+        let kk = ck;
+        while (cameFrom.has(kk)) {
+          const prev = cameFrom.get(kk);
+          if (prev.x === sx && prev.y === sy) break;
+          path.push({ x: prev.x, y: prev.y });
+          kk = key(prev.x, prev.y);
+        }
+        path.reverse();
+        // path now goes from first-step-toward-goal to goal (may be empty if adjacent to goal)
+        if (path.length === 0) return [{ x: gx, y: gy }];
+        return path;
+      }
+      openSet.delete(ck);
+      const curG = gScore.get(ck) || 0;
+
+      for (const [dx, dy] of dirs) {
+        const nx = current.x + dx, ny = current.y + dy;
+        if (nx < 0 || nx >= GRID_W || ny < 0 || ny >= GRID_H) continue;
+        const nk = key(nx, ny);
+        if (blocked.has(nk)) continue;
+        const tentG = curG + 1;
+        const prevG = gScore.get(nk);
+        if (prevG === undefined || tentG < prevG) {
+          cameFrom.set(nk, { x: current.x, y: current.y });
+          gScore.set(nk, tentG);
+          const f = tentG + Math.abs(nx - gx) + Math.abs(ny - gy);
+          openSet.set(nk, { x: nx, y: ny, f });
+        }
+      }
+    }
+    return null; // no path
+  }
+
   // ==================== MISSION LOGIC ====================
   function processEnemyTurn() {
     const M = G.mission; if (!M) return;
     M.log.push(`--- Enemy Turn ${M.turn + 1} ---`);
+
+    M.enemies.forEach(e => {
+      if (!e.alive && e._stolenObj) {
+        const obj = e._stolenObj;
+        obj.collected = false;
+        M.grid[obj.y][obj.x] = TILE.OBJECTIVE;
+        M.log.push(`Stolen objective dropped back at (${obj.x},${obj.y})!`);
+        e._stolenObj = null; e.holdingObj = false;
+      }
+    });
+
+    M.enemies.forEach(e => {
+      if (!e.alive || e.behavior !== 'steal' || e.holdingObj) return;
+      const tx = e.x, ty = e.y;
+      const objHere = M.objectives.find(o => !o.collected && o.x === tx && o.y === ty);
+      if (objHere) {
+        e.holdingObj = true;
+        e._stolenObj = objHere;
+        e.objStealTurns = 0;
+        M.log.push(`${e.name} stole an objective!`);
+        return;
+      }
+    });
+
     M.enemies.forEach(e => {
       if (!e.alive) return;
-      let nearest = null, nearestDist = 999;
-      M.crewDeployed.forEach(c => {
-        if (!c.alive || !c.deployPos) return;
-        const d = dist({ x: e.x, y: e.y }, c.deployPos);
-        if (d < nearestDist) { nearestDist = d; nearest = c; }
-      });
-      if (nearestDist <= 1) {
-        const dmg = e.atk + rng(-1, 1);
-        nearest.hp -= dmg;
-        M.log.push(`${e.name} attacks ${nearest.firstName} for ${dmg} damage!`);
-        sfxDamage();
-        if (nearest.hp <= 0) { nearest.alive = false; nearest.deployPos = null; M.log.push(`${nearest.firstName} has fallen!`); }
-      } else {
-        const dirs = [{ dx: 0, dy: -1 }, { dx: 0, dy: 1 }, { dx: -1, dy: 0 }, { dx: 1, dy: 0 }];
-        const dir = pick(dirs);
-        const nx = e.x + dir.dx, ny = e.y + dir.dy;
-        if (nx >= 0 && nx < GRID_W && ny >= 0 && ny < GRID_H && M.grid[ny][nx] !== TILE.WALL && M.grid[ny][nx] !== TILE.SENTRY && M.grid[ny][nx] !== TILE.TRAP) {
-          const blocked = M.crewDeployed.some(c => c.alive && c.deployPos && c.deployPos.x === nx && c.deployPos.y === ny);
-          const enemyBlocked = M.enemies.some(oe => oe !== e && oe.alive && oe.x === nx && oe.y === ny);
-          if (!blocked && !enemyBlocked) {
-            // Check for trap
-            if (M.grid[ny][nx] === TILE.TRAP) {
+
+      const moveCount = e.movesPerTurn || 1;
+      for (let m = 0; m < moveCount; m++) {
+        if (!e.alive) break;
+
+        if (e.behavior === 'steal' && e.holdingObj) {
+          if (m === 0) {
+            e.objStealTurns++;
+            if (e.objStealTurns >= 12) {
+              const obj = e._stolenObj;
+              if (obj) { obj.collected = true; M.grid[obj.y][obj.x] = TILE.EMPTY; }
+              e.holdingObj = false; e._stolenObj = null;
+              M.log.push(`${e.name} escaped with the objective!`);
+            }
+          }
+          let nearestC = null, nearestDist = 999;
+          M.crewDeployed.forEach(c => {
+            if (!c.alive || !c.deployPos) return;
+            const d = dist({ x: e.x, y: e.y }, c.deployPos);
+            if (d < nearestDist) { nearestDist = d; nearestC = c; }
+          });
+          if (nearestC && nearestDist <= 1) {
+            const dmg = e.atk + rng(-1, 1);
+            nearestC.hp -= dmg;
+            M.log.push(`${e.name} slashes ${nearestC.firstName} for ${dmg} while fleeing!`);
+            sfxDamage();
+            if (nearestC.hp <= 0) { nearestC.alive = false; nearestC.deployPos = null; M.log.push(`${nearestC.firstName} has fallen!`); }
+          }
+          const dirs = [{ dx: 0, dy: -1 }, { dx: 0, dy: 1 }, { dx: -1, dy: 0 }, { dx: 1, dy: 0 }];
+          let bestDir = null, bestFlee = -999;
+          const shuffled = dirs.sort(() => Math.random() - 0.5);
+          for (const d of shuffled) {
+            const nx = e.x + d.dx, ny = e.y + d.dy;
+            if (nx < 0 || nx >= GRID_W || ny < 0 || ny >= GRID_H) continue;
+            if (M.grid[ny][nx] === TILE.WALL || M.grid[ny][nx] === TILE.SENTRY || M.grid[ny][nx] === TILE.TRAP) continue;
+            const blockedC = M.crewDeployed.some(c => c.alive && c.deployPos && c.deployPos.x === nx && c.deployPos.y === ny);
+            const blockedE = M.enemies.some(oe => oe !== e && oe.alive && oe.x === nx && oe.y === ny);
+            if (blockedC || blockedE) continue;
+            let fleeDist = 0;
+            if (nearestC) fleeDist = dist({ x: nx, y: ny }, nearestC.deployPos);
+            else fleeDist = 1;
+            if (fleeDist > bestFlee) { bestFlee = fleeDist; bestDir = { x: nx, y: ny }; }
+          }
+          if (bestDir) {
+            if (M.grid[bestDir.y][bestDir.x] === TILE.TRAP) {
               e.hp -= 8;
               M.log.push(`${e.name} stepped on a trap for 8 damage!`);
-              M.grid[ny][nx] = TILE.EMPTY; // Trap consumed
+              M.grid[bestDir.y][bestDir.x] = TILE.EMPTY;
               if (e.hp <= 0) { e.alive = false; M.log.push(`${e.name} destroyed by trap!`); }
-            } else {
+            } else { e.x = bestDir.x; e.y = bestDir.y; }
+          }
+          break;
+        }
+
+        let nearestC = null, nearestDist = 999;
+        M.crewDeployed.forEach(c => {
+          if (!c.alive || !c.deployPos) return;
+          const d = dist({ x: e.x, y: e.y }, c.deployPos);
+          if (d < nearestDist) { nearestDist = d; nearestC = c; }
+        });
+
+        // GUARD behavior: stand on an objective
+        if (e.behavior === 'guard') {
+          const objHere = M.objectives.find(o => !o.collected && o.x === e.x && o.y === e.y);
+          if (objHere) {
+            // Already on an objective — attack nearby crew
+            if (nearestC && nearestDist <= 1) {
+              const dmg = e.atk + rng(-1, 1);
+              nearestC.hp -= dmg;
+              M.log.push(`${e.name} swipes at ${nearestC.firstName} for ${dmg} damage!`);
+              sfxDamage();
+              if (nearestC.hp <= 0) { nearestC.alive = false; nearestC.deployPos = null; M.log.push(`${nearestC.firstName} has fallen!`); }
+              break;
+            }
+            // If target is exactly 2 away, step toward them briefly then return? No — just stay put.
+            break;
+          }
+          // Not on objective — pathfind to nearest objective
+          let bestObj = null, bestObjDist = 999;
+          M.objectives.forEach(o => {
+            if (o.collected) return;
+            const d = dist({ x: e.x, y: e.y }, { x: o.x, y: o.y });
+            if (d < bestObjDist) { bestObjDist = d; bestObj = o; }
+          });
+          if (bestObj) {
+            // Attack crew adjacent first
+            if (nearestC && nearestDist <= 1) {
+              const dmg = e.atk + rng(-1, 1);
+              nearestC.hp -= dmg;
+              M.log.push(`${e.name} swipes at ${nearestC.firstName} for ${dmg} damage!`);
+              sfxDamage();
+              if (nearestC.hp <= 0) { nearestC.alive = false; nearestC.deployPos = null; M.log.push(`${nearestC.firstName} has fallen!`); }
+              break;
+            }
+            const path = aStarPath(M.grid, e.x, e.y, bestObj.x, bestObj.y, M.enemies, M.crewDeployed);
+            if (path && path.length > 0) {
+              const step = path[0];
+              if (M.grid[step.y][step.x] === TILE.TRAP) {
+                e.hp -= 8; M.log.push(`${e.name} stepped on a trap for 8 damage!`);
+                M.grid[step.y][step.x] = TILE.EMPTY;
+                if (e.hp <= 0) { e.alive = false; M.log.push(`${e.name} destroyed by trap!`); }
+                break;
+              }
+              e.x = step.x; e.y = step.y;
+            }
+          }
+          break;
+        }
+
+        // CHASE / STEAL behavior: use A* pathfinding
+        let targetX = null, targetY = null;
+        if (e.behavior === 'chase' && nearestC) {
+          targetX = nearestC.deployPos.x; targetY = nearestC.deployPos.y;
+        } else if (e.behavior === 'steal') {
+          let bestObj = null, bestObjDist = 999;
+          M.objectives.forEach(o => {
+            if (o.collected) return;
+            const d = dist({ x: e.x, y: e.y }, { x: o.x, y: o.y });
+            if (d < bestObjDist) { bestObjDist = d; bestObj = o; }
+          });
+          if (bestObj) { targetX = bestObj.x; targetY = bestObj.y; }
+          else if (nearestC) { targetX = nearestC.deployPos.x; targetY = nearestC.deployPos.y; }
+        }
+
+        if (nearestC && nearestDist <= 1) {
+          const dmg = e.atk + rng(-1, 1);
+          nearestC.hp -= dmg;
+          M.log.push(`${e.name} attacks ${nearestC.firstName} for ${dmg} damage!`);
+          sfxDamage();
+          if (nearestC.hp <= 0) { nearestC.alive = false; nearestC.deployPos = null; M.log.push(`${nearestC.firstName} has fallen!`); }
+          break;
+        }
+
+        if (targetX !== null && targetY !== null) {
+          const path = aStarPath(M.grid, e.x, e.y, targetX, targetY, M.enemies, M.crewDeployed);
+          if (path && path.length > 0) {
+            const step = path[0];
+            if (M.grid[step.y][step.x] === TILE.TRAP) {
+              e.hp -= 8;
+              M.log.push(`${e.name} stepped on a trap for 8 damage!`);
+              M.grid[step.y][step.x] = TILE.EMPTY;
+              if (e.hp <= 0) { e.alive = false; M.log.push(`${e.name} destroyed by trap!`); }
+              break;
+            }
+            e.x = step.x; e.y = step.y;
+          } else {
+            // Fallback: greedy movement if A* fails
+            const dirs = [{ dx: 0, dy: -1 }, { dx: 0, dy: 1 }, { dx: -1, dy: 0 }, { dx: 1, dy: 0 }];
+            dirs.sort((a, b) => {
+              const dA = Math.abs(e.x + a.dx - targetX) + Math.abs(e.y + a.dy - targetY);
+              const dB = Math.abs(e.x + b.dx - targetX) + Math.abs(e.y + b.dy - targetY);
+              return dA - dB;
+            });
+            for (const d of dirs) {
+              const nx = e.x + d.dx, ny = e.y + d.dy;
+              if (nx < 0 || nx >= GRID_W || ny < 0 || ny >= GRID_H) continue;
+              if (M.grid[ny][nx] === TILE.WALL || M.grid[ny][nx] === TILE.SENTRY) continue;
+              const blockedC = M.crewDeployed.some(c => c.alive && c.deployPos && c.deployPos.x === nx && c.deployPos.y === ny);
+              const blockedE = M.enemies.some(oe => oe !== e && oe.alive && oe.x === nx && oe.y === ny);
+              if (blockedC || blockedE) continue;
+              if (M.grid[ny][nx] === TILE.TRAP) {
+                e.hp -= 8; M.log.push(`${e.name} stepped on a trap for 8 damage!`);
+                M.grid[ny][nx] = TILE.EMPTY;
+                if (e.hp <= 0) { e.alive = false; M.log.push(`${e.name} destroyed by trap!`); }
+                break;
+              }
               e.x = nx; e.y = ny;
+              break;
             }
           }
         }
+      }
+    });
+
+    M.enemies.forEach(e => {
+      if (!e.alive && e._stolenObj) {
+        const obj = e._stolenObj;
+        obj.collected = false;
+        M.grid[obj.y][obj.x] = TILE.OBJECTIVE;
+        M.log.push(`Stolen objective dropped back at (${obj.x},${obj.y})!`);
+        e._stolenObj = null; e.holdingObj = false;
       }
     });
   }
@@ -1104,7 +1354,6 @@
     for (let y = 0; y < GRID_H; y++) {
       for (let x = 0; x < GRID_W; x++) {
         if (M.grid[y][x] !== TILE.SENTRY) continue;
-        // Find nearest enemy within 5 tiles
         let best = null, bestDist = 999;
         M.enemies.forEach(e => {
           if (!e.alive) return;
@@ -1124,10 +1373,7 @@
   function checkMissionEnd() {
     const M = G.mission; if (!M) return;
     const allObjDone = M.objectives.every(o => o.collected);
-    if (allObjDone && !M.lost) {
-      M.won = true;
-      M.log.push('All objectives secured! Mission success!');
-    }
+    if (allObjDone && !M.lost) { M.won = true; M.log.push('All objectives secured! Mission success!'); }
     const allCrewDown = M.crewDeployed.every(c => !c.alive);
     if (allCrewDown && !M.won) { M.lost = true; M.log.push('All crew have fallen...'); }
   }
@@ -1140,7 +1386,6 @@
     const isDouble = (now - lastClickTime < 400);
     lastClickTime = now;
 
-    // Engineer double-click: deploy sentry/trap on own tile
     if (isDouble && M.selectedCrew && M.selectedCrew.engineerAbility && !M.selectedCrew.abilityUsed && M.selectedCrew.actions > 0) {
       const sc = M.selectedCrew;
       const tile = M.grid[gy][gx];
@@ -1159,7 +1404,6 @@
       }
     }
 
-    // Attack enemy
     const enemy = M.enemies.find(e => e.alive && e.x === gx && e.y === gy);
     if (enemy && M.selectedCrew && M.selectedCrew.actions > 0) {
       const sc = M.selectedCrew;
@@ -1175,7 +1419,6 @@
       }
     }
 
-    // Collect objective
     const obj = M.objectives.find(o => o.x === gx && o.y === gy && !o.collected);
     if (obj && M.selectedCrew && M.selectedCrew.actions > 0) {
       if (dist(M.selectedCrew.deployPos, { x: gx, y: gy }) <= 1.5) {
@@ -1187,11 +1430,9 @@
       }
     }
 
-    // Select crew
     const crew = M.crewDeployed.find(c => c.alive && c.deployPos && c.deployPos.x === gx && c.deployPos.y === gy);
     if (crew) { M.selectedCrew = crew; sfxClick(); return; }
 
-    // Move
     if (M.selectedCrew && M.selectedCrew.actions <= 0) {
       M.log.push(`${M.selectedCrew.firstName} is out of actions! Select another crew or END TURN.`);
       return;
@@ -1234,6 +1475,7 @@
       credits: G.credits, ship: G.ship, crew: G.crew,
       contractQueue: G.contractQueue, contractBatchStart: G.contractBatchStart,
       contracts: G.contracts, scene: G.scene, illegalCargo: G.illegalCargo,
+      illegalCargoPoints: G.illegalCargoPoints,
       skills: G.skills, skillPoints: G.skillPoints, captainId: G.captainId,
       batchIndex: G.batchIndex, gameOverReason: G.gameOverReason,
     }));
@@ -1248,12 +1490,12 @@
       G.contractBatchStart = data.contractBatchStart || 0;
       G.contracts = data.contracts || [];
       G.illegalCargo = data.illegalCargo || 0;
+      G.illegalCargoPoints = data.illegalCargoPoints || { hp: 0, atk: 0, move: 0 };
       G.skills = data.skills || { hr: 1, street: 1, haggle: 1, med: 1, train: 1 };
       G.skillPoints = data.skillPoints !== undefined ? data.skillPoints : 2;
       G.batchIndex = data.batchIndex || 0;
       G.captainId = data.captainId || null;
       G.gameOverReason = data.gameOverReason || '';
-      // Recalculate rates for any crew that don't have them (backward compat)
       G.crew.forEach(c => {
         if (c.idleRate === undefined) {
           const rates = calcCrewRates(c);
@@ -1262,7 +1504,7 @@
         }
       });
       G.scene = 'hub'; G.message = 'Game loaded!'; G.messageTimer = 60;
-      G.patrolActive = false; // Don't trigger patrol on load
+      G.patrolActive = false;
       maybeTriggerPatrol();
     } catch (e) { console.error('Load failed', e); }
   }
