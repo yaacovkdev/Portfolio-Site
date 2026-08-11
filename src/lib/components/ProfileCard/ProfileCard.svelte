@@ -108,7 +108,7 @@
     </div>
 
     <div class="card-back__panel">
-      <a class="card-back__link" href="mailto:jacob.kochatkov@gmail.com">
+      <a class="card-back__link" href="mailto:jacob@yaacovk.dev">
         <img src={email_icon} alt="linkedin_icon" />
       </a>
       <p class="card-back__content">
