@@ -7,7 +7,7 @@
   <img class="icon" src={icon} alt="icon" />
   <div class="subcard__content">
     <h3 class="text-lg font-semibold">{title}</h3>
-    <p class="text-base">
+    <p class="text-sm">
       <slot />
     </p>
   </div>

@@ -149,17 +149,17 @@
 
     <div class="card__content">
         <ProfileInfoCard title="Fullstack Developer" icon={work_icon}>
-            Fullstack Engineer at <BlueLink href="https://albernionline.ca/" end={true}>Alberni Online</BlueLink><br>
-            Freelancer
+            Software Engineer at <BlueLink href="https://travelcareplans.com/" end={false}>TravelCare Plans</BlueLink><br>
         </ProfileInfoCard>
 
         <ProfileInfoCard title="Past Experience" icon={experience_icon}>
-            Intern Software Engineer at <BlueLink href="https://www.happinessmountain.com/" end={true}>Happiness Mountain Inc</BlueLink><br>
-            Instructor of Computer Science at <BlueLink href="https://regent.bc.ca/" end={true}>Regent Christian Academy</BlueLink>
+            Fullstack Engineer at <BlueLink href="https://albernionline.ca/" end={false}>Alberni Online</BlueLink><br>
+            Intern Software Engineer at <BlueLink href="https://www.happinessmountain.com/" end={false}>Happiness Mountain Inc</BlueLink><br>
+            Instructor of Computer Science at <BlueLink href="https://regent.bc.ca/" end={false}>Regent Christian Academy</BlueLink>
         </ProfileInfoCard>
 
         <ProfileInfoCard title="Bachelor's Degree" icon={bachelors_icon}>
-            BSc. in Computing Science from <BlueLink href="https://twu.ca/" end={true}>Trinity Western University</BlueLink>
+            BSc. in Computing Science from<br> <BlueLink href="https://twu.ca/" end={false}>Trinity Western University</BlueLink>
         </ProfileInfoCard>
 
       <ProfileInfoCard
@@ -167,7 +167,8 @@
         icon={skills_icon}
       >
         Backend, Web, Mobile Development,<br>
-          Python, JS/TS, PHP, C++, Flutter, AWS
+          AWS, JS/TS, PHP, Python, Homelab,<br>
+          Linux, Windows
       </ProfileInfoCard>
 
       <ProfileInfoCard
@@ -175,16 +176,14 @@
         icon={volunteering_icon}
       >
           Worship Team<br>
-          VanJS<br>
-          YVR AI Meetup
+          VanJS
       </ProfileInfoCard>
-
         <ProfileInfoCard
             title="Pursuits"
             icon={project_icon}
         >
             AWS Certification<br>
-            Self-Hosting<br>
+            Self-Hosted AI Solutions<br>
             Public Speaking<br>
             Descrete Mathematics
         </ProfileInfoCard>
