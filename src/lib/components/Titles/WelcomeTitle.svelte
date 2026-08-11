@@ -14,7 +14,10 @@
     return messages[language];
   };
 
-  const setRandomMessageSmall = (messages: Object, keys: String[]): string => {
+  const setRandomMessageSmall = (
+          messages: Object,
+          keys: string[]
+  ): string => {
     if(key_i >= messageKeys.length) key_i = 0;
     const language = keys[key_i++];
     return messages[language];

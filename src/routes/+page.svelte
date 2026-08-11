@@ -6,6 +6,7 @@
     import NewsProjectCard from "$lib/components/NewsProjectCard.svelte";
     import {MainProjectsInfo as projects} from "$lib/data/projects/mainProjects";
     import {setContext} from "svelte";
+    import WelcomeTitle from "$lib/components/Titles/WelcomeTitle.svelte";
 
     selectedNav(1);
     resetNavButton();
@@ -15,6 +16,9 @@
 </script>
 
 <div class="main-content-sections main-limit-width">
+    <section>
+        <WelcomeTitle />
+    </section>
     <section>
         <div class="profile-card-section padding-default no-mobile-padding">
             <ProfileCard />
