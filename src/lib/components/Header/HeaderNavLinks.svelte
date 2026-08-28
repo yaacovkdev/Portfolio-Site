@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from "$app/stores";
     import {shineNav} from "$lib/scripts/selectedNav";
-    const root_paths: String[] = ['/', '/graphics', '/fullstack'];
+    const root_paths: String[] = ['/', '/graphics', '/boolean'];
 
     const firstpath = $page.url.pathname.match(/\/[^\/]*/gm)[0];
 
@@ -26,9 +26,9 @@
 {/if}
 
 {#if localShine == 3}
-    <a class="nav-link nav-link--3 shine" href="/fullstack">Boolean Calculator</a>
+    <a class="nav-link nav-link--3 shine" href="/boolean">Boolean Calculator</a>
 {:else}
-    <a class="nav-link nav-link--3" href="/fullstack">Boolean Calculator</a>
+    <a class="nav-link nav-link--3" href="/boolean">Boolean Calculator</a>
 {/if}
 
 <style lang="scss">
