@@ -9,10 +9,10 @@ Download the Repository
 Open Terminal:
 ```bash
 # create a new project in the current directory
-npm install
+pnpm install
 
 # create a new project in my-app
-npm run dev -- --host --open
+pnpm run dev -- --host --open
 ```
 
 ## Building
@@ -20,14 +20,14 @@ npm run dev -- --host --open
 To create a production version of my app:
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 To preview my app:
 
 ```bash
-npm run preview
+pnpm run preview
 ```
 ## Visit
 
-The site can be visited online at https://yaacov.site
+The site can be visited online at https://www.yaacov.site
